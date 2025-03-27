@@ -10,19 +10,65 @@
 <!-- App body starts -->
           <div class="app-body">
 @foreach ($all_details as $patient)
+
 @endforeach
+
             <!-- Row starts -->
             <div class="row gx-3">
                <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Gestion de la prise en charge de <span style="color: green;"> {{$patient->prenom_patient}} {{$patient->nom_patient}}</span><br>
-                      <span class="badge bg-danger">{{$patient->maux}}</span> A l'arrivée : <span class="badge bg-primary">{{$patient->temp}} °C</span>  @if($patient->new_temp)Actuellement : <span class="badge bg-primary">{{$patient->new_temp}} °C</span>@endif <span class="badge bg-secondary">{{$patient->observation}}</span>
-
+                    <h5 class="card-title"><u>Données du patient</u> <br>
                     </h5>
+                    <div style="position: absolute;
+                           left: 40%;
+                           top: 5px;
+                           transform: translateX(-80%);">
+                     <h5 class="card-title">
+                        <u>Pathologie du patient</u>: <br> <br>
+                      </h5>
+                      <h4>
+                         <span class="badge bg-danger">{{$patient->maux}}
+                          </span> 
+                        </h4>
+                    </div>
+                      <b>Nom </b>: <span style="color: green;"> {{$patient->prenom_patient}} {{$patient->nom_patient}}</span><br>
+                      <b>Sexe</b> : {{ $patient->sexe_patient }} <br>
+                      <b>Âge </b>: {{ $patient->age_formatted }} <br>
+                      <b>Profession</b>:
+                      <div style="position: absolute;
+                      left: 70%;
+                      top: 5px;
+                      transform: translateX(-80%);">
+                    <h5 class="card-title">
+                       <u>Constantes vitales</u> : <br><br>
+                   </h5>
+                    <b> Temp:</b>  <span class="badge bg-success"> {{ $patient->temp }}°C
+                        </span> <br>
+                        @foreach ($constance as $p_constance)
+    
+                      <b>Poids</b> :{{ $p_constance->poids }} Kg <br>
+                      <b>FC</b> : {{ $p_constance->frequence_card }} Pouls/Min <br>
+                      <b>FR</b> : {{ $p_constance->frequence_respi }} SpO2/Min <br>
+                      <b>PA:</b> {{ $p_constance->pression_art}} mmHg <br>
+                      <b>Diurèse</b> : {{ $p_constance->diurese}} Jr <br>
+                      @endforeach 
+                      {{-- Température : <span class="badge bg-primary">{{$patient->temp}} °C</span>   --}}
+
+                      </div>
+                     @if($patient->new_temp)Actuellement : <span class="badge bg-primary">{{$patient->new_temp}} °C</span>
+                     @endif 
+                     <span class="badge bg-secondary">
+                      {{$patient->observation}}
+                    </span>
+
+                    </h5> <br><br><br>
                    @if($user_role_id !=0 && $user_role_id !=1 && $user_role_id !=10)
-                    <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
+                      @if ($patient->etat_traitement == 0)
+                          
+                      <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
                       data-bs-target="#constance">Modifier constances</button>
+                      @endif
 
                     <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
                       data-bs-target="#presc">Délivrer une ordonnance
@@ -33,14 +79,16 @@
                   <div class="card-body">
                     <div class="custom-tabs-container">
                       <ul class="nav nav-tabs justify-content-end" id="customTab5" role="tablist">
-                      {{-- @if($patient->etat_hospitalisation == 0) --}}
-                      @if ($user_role_id !=0 && $user_role_id !=1 && $user_role_id !=10)
+                        @if ($user_role_id !=0 && $user_role_id !=1 && $user_role_id !=10)
+                      @if($patient->etat_hospitalisation == 0)
+                  
                         <li class="nav-item" role="presentation">
                           <a class="nav-link active" id="tab-oneAAAA" data-bs-toggle="tab" href="#oneAAAA" role="tab"
                             aria-controls="oneAAAA" aria-selected="true">
                             <span class="badge bg-primary">Prise en charge</span>
                           </a>
                         </li>
+                      @endif
                       @endif
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-twoAAAA" data-bs-toggle="tab" href="#twoAAAA" role="tab"
@@ -55,7 +103,7 @@
                           </a>
                         </li> -->
                       </ul>
-                      {{-- @if($patient->etat_hospitalisation == 0) --}}
+                      @if($patient->etat_hospitalisation == 0)
                       @if ($user_role_id != 0 && $user_role_id != 1 && $user_role_id != 10)
 
                       <div class="tab-content" id="customTabContent">
@@ -169,10 +217,11 @@
            
                         </div>
                         @endif
-                        @if($user_role_id ==0 || $user_role_id ==1 || $user_role_id ==10)
-                        <div class="tab-pane fade show" id="twoAAAA" role="tabpanel">
-                          @else
+                        @endif
+                        @if($patient->etat_hospitalisation ==0 && $user_role_id ==0 || $user_role_id ==1 || $user_role_id ==10)
                         <div class="tab-pane fade" id="twoAAAA" role="tabpanel">
+                          @else
+                        <div class="tab-pane fade show" id="twoAAAA" role="tabpanel">
                           @endif
                           <div class="row">
                           <div class="col-xl-6 col-sm-6">
@@ -415,7 +464,27 @@
             <div class="control-group hidden-phone">
                 <label class="control-label" for="textarea2">Nouvelle température</label>
 
-                <input type="number" value="36" class="form-control" name="new_temp">
+                <input type="number" min="27" class="form-control" name="new_temp">
+            </div>
+            <div class="control-group hidden-phone">
+                <label class="control-label" for="textarea2">Nouvelle Fréquence Cardiaque</label>
+
+                <input type="number" min="1" class="form-control" name="new_freq_card">
+            </div>
+            <div class="control-group hidden-phone">
+                <label class="control-label" for="textarea2">Nouvelle Fréquence Respiratoire</label>
+
+                <input type="number" min="1" class="form-control" name="new_freq_resp">
+            </div>
+            <div class="control-group hidden-phone">
+                <label class="control-label" for="textarea2">Nouvelle Presion Artérielle</label>
+
+                <input type="number" min="1" class="form-control" name="new_press_art">
+            </div>
+            <div class="control-group hidden-phone">
+                <label class="control-label" for="textarea2">Nouvelle Diurèse</label>
+
+                <input type="number" min="0" class="form-control" name="new_diurese">
             </div>
             </div>
              <div class="modal-footer">

@@ -100,7 +100,7 @@ Repertoire patient
                   <th>Coût de l'analyse assuré</th>
                   <th>Actions</th>
                 </tr>
-              </thead>
+               </thead>
               @php
                                $centre_id=Session::get('centre_id');
                                $analyse=DB::table('tbl_type_analyse')

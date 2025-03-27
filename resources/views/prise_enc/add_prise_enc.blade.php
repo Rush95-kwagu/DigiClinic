@@ -4,6 +4,7 @@
  $user_role_id=Session::get('user_role_id');
  $user_id=Session::get('user_id');
  $centre_id=Session::get('centre_id');
+//  $personnel_id=Session::get('personnel_id');
 ?>
 
           <div class="app-body">
@@ -20,6 +21,7 @@
 			       	<form class="row" action="{{ url('/save-prisenc') }}" method="POST">
 			            {{csrf_field()}}
               <input type="hidden" name="centre_id" value="{{$centre_id}}">
+              {{-- <input type="hidden" name="personnel_id" value="{{$personnel_id}}"> --}}
 			        <div class="col-md-12 mb-3">
 							<label class="classItems" for="selectError1"> Patients </label>
 							<div class="controls col-12">
@@ -38,24 +40,58 @@
 					 <div class="col-md-4 mb-3">
 							<label class="classItems" for="selectError1"> Mal/Maux du patient </label>
 							<div class="controls col-12">
-                          <input type="text" name="maux" class="form-control" id="validationCustomUsername"
+                 <input type="text" name="maux" class="form-control" id="validationCustomUsername"
                             aria-describedby="inputGroupPrepend" required />
-                          </div>
+              </div>
 					</div> 
-
           <div class="col-md-2 mb-3">
-              <label class="classItems" for="selectError1"> Température </label>
+              <label class="classItems" for="selectError1"> Température (°C)</label>
               <div class="controls col-12">
                           <input type="number" min="27" name="temp" class="form-control" id="validationCustomUsername"
                             aria-describedby="inputGroupPrepend" required />
-                          </div>
+              </div>
+          </div> 
+          <div class="col-md-2 mb-3">
+              <label class="classItems" for="selectError1"> Pression artérielle (mmHg) </label>
+              <div class="controls col-12">
+                          <input type="number" name="pression_art" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required />
+              </div>
+          </div> 
+          <div class="col-md-2 mb-3">
+              <label class="classItems" for="selectError1"> Frq. respiratoire (SpO2) </label>
+              <div class="controls col-12">
+                          <input type="number" name="frequence_respi" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required />
+              </div>
+          </div> 
+          <div class="col-md-2 mb-3">
+              <label class="classItems" for="selectError1"> Frq. Cardiq(FC)</label>
+              <div class="controls col-12">
+                          <input type="number" name="frequence_card" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required />
+              </div>
+          </div> 
+          <div class="col-md-3 mb-3">
+              <label class="classItems" for="selectError1"> Diurèse (Jr) </label>
+              <div class="controls col-12">
+                          <input type="number" name="diurese" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required />
+              </div>
+          </div> 
+          <div class="col-md-3 mb-3">
+              <label class="classItems" for="selectError1"> Poids (Kg) </label>
+              <div class="controls col-12">
+                          <input type="number" min="1" name="poids" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required />
+              </div>
           </div> 
 
-					<div class="col-md-6 mb-3">
+					<div class="col-md-4 mb-3">
 							<label class="classItems" for="selectError1"> Observation </label>
 							<div class="controls col-12">
-                          <input type="text" name="observation" value="Néant" class="form-control" id="validationCustom05" required />
-                          </div>
+                <input type="text" name="observation" value="Néant" class="form-control" id="validationCustom05" required />
+              </div>
 					</div> 
 				<div class="col-md-10 mb-3">
 			      <button type="submit" class="btn btn-success btn-pill col-md-4">

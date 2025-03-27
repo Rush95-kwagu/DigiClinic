@@ -27,11 +27,15 @@
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-threeAAA" data-bs-toggle="tab" href="#threeAAA" role="tab"
-                            aria-controls="threeAAA" aria-selected="false">En observation</a>
+                            aria-controls="threeAAA" aria-selected="false">Patients Hospitalisés</a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
                             aria-controls="twoAAA" aria-selected="false">Patients traités</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link" id="tab-fourAAA" data-bs-toggle="tab" href="#fourAAA" role="tab"
+                            aria-controls="fourAAA" aria-selected="false">Patients en Observation</a>
                         </li>
                         
                       </ul>
@@ -107,27 +111,24 @@
                           <!-- Row ends -->
                         </div>
 
-
-
-
                         <div class="tab-pane fade" id="threeAAA" role="tabpanel">
                           <!-- Row starts -->
                           <div class="row gx-3">
                           <div class="col-sm-12">
                             <div class="card mb-3">
                               <div class="card-header">
-                                <h5 class="card-title">Patients en observation</h5>
+                                <h5 class="card-title">Patients hospitalisés</h5>
                               </div>
                               <div class="card-body">
                                 <div class="table-outer">
                                   <div class="table-responsive">
-                                    <table class="table table-striped truncate m-0">
+                                    <table class="table table-striped truncate m-0" id="example2">
                                       <thead>
                                         <tr>
                                           <th>CHAMBRE</th>
                                           <th>LIT</th>
                                           <th>Patient</th>
-                                          <th>Mal/Maux</th>
+                                          <th>Pathologie</th>
                                           <th>Situation matrimonial</th>
                                           <th>Contact à appeller</th>
                                           <th>Spécialiste actuel</th>
@@ -180,8 +181,6 @@
                           <!-- Row ends -->
                         </div>
 
-
-
                         <div class="tab-pane fade" id="twoAAA" role="tabpanel">
                           <!-- Row starts -->
                           <div class="row gx-3">
@@ -193,7 +192,75 @@
                               <div class="card-body">
                                 <div class="table-outer">
                                   <div class="table-responsive">
-                                    <table class="table table-striped truncate m-0">
+                                    <table class="table table-striped truncate m-0" id="example1">
+                                      <thead>
+                                        <tr>
+                                          <th></th>
+                                          <th>Patient</th>
+                                          <th>Mal/Maux</th>
+                                          <th>Situation matrimonial</th>
+                                          <th>Contact à appeller</th>
+                                          <th>Spécialiste actuel</th>
+                                          <th>Date consultation</th>
+                                          <th></th>
+                                          
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      @foreach($all_patient_t as $v_consult)    
+                                        <tr>
+                                          <td>
+                                          </td>
+                                          <td>{{$v_consult->nom_patient}}
+                                          {{$v_consult->prenom_patient}}</td>
+                                          <td>{{$v_consult->maux}}</td>
+                                          <td>{{$v_consult->smatrimonial}}</td>
+                                          <td>{{$v_consult->contact_urgence}}</td>
+                                          <?php 
+                                          $all_specialiste=DB::table('users')
+                                                ->join('personnel','users.email','=','personnel.email')
+                                                ->join('user_roles','users.user_role_id','=','user_roles.user_role_id')
+                                                ->join('tbl_consultation','users.user_id','=','tbl_consultation.user_id')
+                                                ->select('users.*','personnel.*','user_roles.*','tbl_consultation.*')
+                                                ->where('users.user_id',$v_consult->last_consult_user_id)
+                                                ->first();
+                                          ?>   
+                                          <td>
+                                            {{$all_specialiste->designation}}. {{$all_specialiste->prenom}} {{$all_specialiste->nom}}
+                                          </td>
+                                          <td>
+                                            {{$all_specialiste->conslt_created_at}}
+                                          </td>
+                                           <td>
+                                              
+                                              <a title="Dossier medial du patient" class="btn btn-outline-success" href="{{URL::to('traitement-patient/'.$v_consult->id_consultation.'/'.$v_consult->patient_id)}}">
+                                              <i class="ri-file-edit-fill"></i></a>                    
+                                              </td>
+                                        <?php ?>
+                                        </tr>
+                                      @endforeach
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                          <!-- Row ends -->
+                        </div>
+                        <div class="tab-pane fade" id="fourAAA" role="tabpanel">
+                          <!-- Row starts -->
+                          <div class="row gx-3">
+                          <div class="col-sm-12">
+                            <div class="card mb-3">
+                              <div class="card-header">
+                                <h5 class="card-title">Patients en Observation</h5>
+                              </div>
+                              <div class="card-body">
+                                <div class="table-outer">
+                                  <div class="table-responsive">
+                                    <table class="table table-striped truncate m-0" id="example3">
                                       <thead>
                                         <tr>
                                           <th></th>
@@ -255,19 +322,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
-
-
-
-
-
-              
-              
-              
-            
-              
-            
-              
+              </div>           
             
             </div>
             <!-- Row ends -->
@@ -282,6 +337,9 @@
     <script>
       $(document).ready(function() {
       $("#example").DataTable();
+      $("#example1").DataTable();
+      $("#example2").DataTable();
+      $("#example3").DataTable();
     });
       $("select").change(function(){
       if(confirm('Cliquez OK pour envoyer le patient vers le spécialiste')){

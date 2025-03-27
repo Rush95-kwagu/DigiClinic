@@ -6,7 +6,7 @@
  $centre_id=Session::get('centre_id');
 ?>
 
-          <div class="app-body">
+          {{-- <div class="app-body"> --}}
 
             <!-- Row starts -->
             <div class="row gx-3">
@@ -24,44 +24,48 @@
                     <form class="row g-3 needs-validation" id="step2Form" method="POST" action="{{ route('save.step2') }}">
             				{{csrf_field()}}
                     <input type="hidden" name="centre_id" value="{{$centre_id}}">
-                          <div class="col-md-2">
-                        <label for="validationCustom05" class="form-label">Température*</label>
+                        <div class="col-md-4">
+                        <label for="validationCustom05" class="form-label">Température <span style="color: red">*</span></label>
                         <input type="number" min="27" name="temp" class="form-control" id="validationCustom05" required />
                         <div class="invalid-feedback">
                           Entrez la température.
                         </div>
                       </div>
-
-                      
-        <div class="row g-3 needs-validation">
+                        <div class="col-md-4">
+                        <label for="validationCustom05" class="form-label">Pression artérielle <span style="color: red">*</span></label>
+                        <input type="number"  name="pression_art" class="form-control" id="validationCustom05" required />
+                        <div class="invalid-feedback">
+                          Pression artérielle
+                        </div>
+                      </div>
+      <div class="row g-3 needs-validation">
           <div class="col-md-6">
             <label for="phone1">Télephone du patient</label><br>
-            <input type="tel" class="form-control" type="tel" placeholder="Contact Whatsapp/Appel" id="phone1" name="mobile_number" required="" />
+            <input type="tel" class="form-control" type="tel" placeholder="Contact Whatsapp/Appel" id="phone1" name="mobile_number">
             <input type="hidden" id='lnai' name="telephone">
           </div>
 
           <div class="col-md-6">
-            <label for="lnaii">Personne à contacter</label><br>
-            <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_urgence" required="" />
-            <input type="hidden" id='lnaii' name="contact_urgence">
+            <label for="lnaii">Personne à contacter en cas d'urgence</label><br>
+            <input type="tel" class="form-control" 
+              type="tel" placeholder="Personne à contacter en cas d'urgence" 
+              id="phone2" name="mobile_urgence">
+              {{-- <input type="hidden" id='lnaii' name="contact_urgence"> --}}
           </div>
         </div>
-
-
-			          <div class="col-md-4 form-group">
-			            <label for="phone1">Nip</label><br>
-			            <input type="tel" class="form-control" placeholder="Cip" name="nip" required="" />
+           
+         <div class="col-md-4 form-group">
+			            <label for="phone1">Nip / N° CNI</label><br>
+			            <input type="tel" class="form-control" placeholder="Cip" name="nip">
 			            
 			          </div>
-
-
             		  <div class="col-md-4">
-                      <label for="validationCustom01" class="form-label">Nom</label>
+                      <label for="validationCustom01" class="form-label">Nom <span style="color: red">*</span></label>
                         <input type="text" name="nom_patient" class="form-control" id="validationCustom01" >
                         <div class="valid-feedback">Données acceptées</div>
                       </div>
                       <div class="col-md-4">
-                        <label for="validationCustom02" class="form-label">Prénom</label>
+                        <label for="validationCustom02" class="form-label">Prénom<span style="color: red">*</span></label>
                         <input type="text" name="prenom_patient" class="form-control" id="validationCustom02">
                         <div class="valid-feedback">Données acceptées</div>
                       </div>

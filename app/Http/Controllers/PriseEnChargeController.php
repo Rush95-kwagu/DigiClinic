@@ -16,8 +16,9 @@ class PriseEnChargeController extends Controller
 {
     public function UserAuthCheck()
    {
+
     $user_id=Session::get('user_id');
-    if ($user_id) {
+    if ($user_id ) {
         return;
         }
         else 
@@ -360,42 +361,69 @@ class PriseEnChargeController extends Controller
             $tel=$request->telephone;
 
             if ($tel) {
-            $data['telephone']=$request->telephone; 
-            $data['nom_patient']=$request->nom_patient;
-            $data['prenom_patient']=$request->prenom_patient; 
-            $data['nip']=$request->nip; 
-            $data['email_patient']=$request->email_patient; 
-            $data['nationalite']=$request->nationalite;
-            $data['smatrimonial']=$request->smatrimonial; 
-            $data['contact_urgence']=$request->contact_urgence; 
-            $data['datenais']=$request->datenais; 
-            $data['adresse']=$request->adresse; 
-                $get_patient=DB::table('tbl_patient')->where('telephone',$tel)->first();
+            $data =[
+                'telephone'=>$request->telephone, 
+                'nom_patient'=>$request->nom_patient,
+                'prenom_patient'=>$request->prenom_patient, 
+                'nip'=>$request->nip, 
+                'email_patient'=>$request->email_patient, 
+                'nationalite'=>$request->nationalite,
+                'smatrimonial'=>$request->smatrimonial, 
+                'contact_urgence'=>$request->contact_urgence, 
+                'datenais'=>$request->datenais, 
+                'adresse'=>$request->adresse,
+
+            ]; 
+                $get_patient=DB::table('tbl_patient')
+                                ->where('telephone',$tel)
+                                ->first();
 
                   if ($get_patient){
                       return back()->withInput()->with('error', 'Echec de validation : Veuillez rechercher le patient car il existe déjà sous le numéro renseigné');
-                  }
+                  };
 
             $patient_id = DB::table('tbl_patient')->insertGetId($data);
             }else{
             $patient_id=$request->patient_id;
             }
-
             $user_role_id=Session::get('user_role_id');
             $user_id=Session::get('user_id');
-            $datap['user_role_id']=$user_role_id; 
-            $datap['patient_id']=$patient_id; 
-            $datap['user_id']=$user_id; 
-            $datap['id_centre']=$request->centre_id;
-            $datap['maux']=$request->maux; 
-            $datap['temp']=$request->temp; 
-            $datap['observation']=$request->observation; 
+            $datap = [
+                'user_role_id'=>$user_role_id, 
+                'patient_id'=>$patient_id, 
+                'user_id'=>$user_id, 
+                'id_centre'=>$request->centre_id,
+                'maux'=>$request->maux, 
+                'temp'=>$request->temp, 
+                'observation'=>$request->observation,
+                    
+            ];
+ 
+            $constante = [
+                'pression_art'=>$request->pression_art,
+                'frequence_respi'=>$request->frequence_respi,
+                'diurese'=>$request->diurese,
+                'poids'=>$request->poids,
+                'frequence_card'=>$request->frequence_card,
+            ];
+
+            // dd($constante, $datap);
             $id_prise_en_charge = DB::table('tbl_prise_en_charge')->insertGetId($datap);
 
-            $datac['id_prise_en_charge']=$id_prise_en_charge; 
-            $datac['id_centre']=$request->centre_id;
+            $constante = [
+                'patient_id' => $patient_id,
+                'centre_id'=>$request->centre_id,
+                'id_prise_en_charge'=>$id_prise_en_charge,
+                 ];
+
+            DB::table('tbl_constante')->insert($constante);
+
+            $datac =[
+                'id_prise_en_charge'=>$id_prise_en_charge, 
+                'id_centre'=> $request->centre_id 
+            ];
+
             $id_prise_en_charge = DB::table('tbl_caisse_prise_en_charge')->insertGetId($datac);
-            
             
             Alert::success('Info', 'Nouveau patient enregistré dans les prises en charges.');
                return Redirect::to ('/prises-en-charges');
@@ -486,9 +514,10 @@ class PriseEnChargeController extends Controller
             'nom_patient'=>'required|string',
             'prenom_patient'=>'required|string',
             'nip'=>'required|integer',
-            'contact_urgence'=>'required|integer',
+            'contact_urgence'=>'nullable|integer',
             'telephone'=>'required|integer',
             'temp'=>'required|integer',
+            'pression_art' =>'nullable|integer'
 
         ]);
     
@@ -513,7 +542,7 @@ class PriseEnChargeController extends Controller
                 'nip'=>$request->nip,
                 'contact_urgence'=>$request->contact_urgence,
                     ]);
-                    DB::table('tbl_prise_en_charge')->updateOrInsert(
+        DB::table('tbl_prise_en_charge')->updateOrInsert(
                         ['patient_id' => $patientId], // Condition : vérifier si patient_id existe
                         [
                             'temp' => $request->temp,   // Mettre à jour ou insérer la température
@@ -739,13 +768,16 @@ $consultationExists = DB::table('tbl_prise_en_charge')
     {
     $this->UserAuthCheck(); 
     $this->AccueilAuthCheck();
-                           
-    $data['libelle_chambre']=$request->libelle_chambre; 
-    $data['type_chambre']=$request->type_chambre; 
-    $data['service']=$request->id_services; 
-    $data['is_vip']=$request->is_vip; 
+    $centre_id =Session::get('centre_id');                       
+    $data =[
+        'centre_id'=>$centre_id,
+        'libelle_chambre'=> $request->libelle_chambre, 
+        'type_chambre'=> $request->type_chambre, 
+        'services_id'=> $request->services_id, 
+        'is_vip'=> $request->is_vip,
+    ]; 
     $nbre_lits=$request->nbre_lit;
-//   dd($data);
+  dd($data);
   
     $chambre_id = DB::table('tbl_chambre')->insertGetId($data);
 

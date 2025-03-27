@@ -573,7 +573,7 @@ Admin
               </div>
               <!-- Row ends -->
 
-             @elseif($user_role_id ==0 || $user_role_id == 13)
+              @elseif($user_role_id ==0)
 
             <div class="row gx-3">
               <div class="col-xxl-6 col-sm-6">
@@ -1108,6 +1108,7 @@ Admin
       <form onsubmit="confirm('Cliquer OK pour confirmer')" class="row" action="{{ url('/save-chambre') }}" method="POST">
           {{csrf_field()}}
         <div class="col-md-12 mb-3">
+          <input type="hidden" name="centre_id" value="{{ $centre_id }}">
         <label for="validationServer07">Numéro de chambre</label>
           <input id="" type="number" class="form-control border-success" id="validationServer07" name="libelle_chambre">
           <div class="text-success small mt-1">
@@ -1117,7 +1118,7 @@ Admin
 
           <div class="col-md-12 mb-3">
         <label for="validationServer07">Services</label>
-          <select class="form-control" name="service">
+          <select class="form-control" name="services_id">
             @php
                 $all_services = DB::table('services')
                               ->where('centre_id',$centre_id)
