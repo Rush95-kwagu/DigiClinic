@@ -230,20 +230,23 @@ class PriseEnChargeController extends Controller
        
         $centre_id=Session::get('centre_id');
       
+        
+      //  dd($request->all(),Session::get('centre_id'));
 
         $request->validate([
            'libelle_analyse'=>'required|string',
            'prix_analyse'=>'required|integer',
            'prix_analyse_assure'=>'required|integer',
            'centre_id'      => 'required|integer|in:' . Session::get('centre_id'),
+           'category'      => 'required|string|in:HEMATOLOGIE,PARASITOLOGIE,SEROLOGIE,BIOCHIMIE,IMMUNOLOGIE'
           
         ]);
-    //    dd($request->all());
         DB::table('tbl_type_analyse')->insert([
             'libelle_analyse' => $request->input('libelle_analyse'),
             'prix_analyse' => $request->input('prix_analyse'),
             'prix_analyse_assure' => $request->input('prix_analyse_assure'),
             'centre_id'      => $centre_id,
+            'category'      => $request->input('category'),
             'created_at'     => now(),
             'updated_at'     => now(),
         ]);
