@@ -160,66 +160,65 @@ Repertoire patient
 
 
           @section('Datatable')
-          <script>
-            $(document).ready(function () {
-              alert();
-                let selectedAnalyses = [];
-            
-                // Ajouter une analyse
-                $(document).on("click", ".add-analysis", function () {
-                    let element = $("#element").val();
-                    let genre = $("#inputGroupSelect01").val();
-                    let libelle_norme = $("#libelle_norme").val();
-                    let valeur_norme = $("#valeur_norme").val();
-            
-                    // if (selectedAnalyses.includes(prestationId)) {
-                    //     Swal.fire({
-                    //         icon: 'warning',
-                    //         title: 'Erreur',
-                    //         text: 'Cette analyse est déjà ajoutée !',
-                    //     });
-                    //     return;
-                    // }
-            
-                  // selectedAnalyses.push(prestationId);
-                    let newRow = `
-                        <tr >
-                            <td>${element}</td>
-                            <td>${libelle_norme}</td>
-                            <td>${valeur_norme} FCFA</td>
-                            <td>
-                                <button class="btn btn-danger remove-analysis" data-id="${slugify(element)}">Retirer</button>
-                            </td>
-                        </tr>
-                    `;
-                    $("#selected-analyses").append(newRow);
-                    updateTotal();
-                });
-            
-                // Retirer une analyse
-                $(document).on("click", ".remove-analysis", function () {
-                    let prestationId = $(this).data("id");
-                    selectedAnalyses = selectedAnalyses.filter((id) => id !== prestationId);
-                    $(this).closest("tr").remove();
-                    updateTotal();
-                });
+<script>
+  $(document).ready(function () {
+    let selectedAnalyses = [];
 
+    // Ajouter une analyse
+    $(document).on("click", ".add-analysis", function () {
+        let element = $("#element").val().trim();
+        let genre = $("#inputGroupSelect01").val();
+        let libelle_norme = $("#libelle_norme").val().trim();
+        let valeur_norme = $("#valeur_norme").val().trim();
 
-                function slugify(text) {
+        // Validation des champs du formulaire
+        if (!element || !libelle_norme || !valeur_norme || genre === "Sélectionner...") {
+            Swal.fire("Erreur", "Veuillez remplir tous les champs !", "error");
+            return;
+        }
+
+      //  Les données (les éléments sélectionés) sont ajoutées au tableau
+        let newRow = `
+            <tr>
+                <td>${$("#selected-analyses tr").length + 1}</td>
+                <td>${element}</td>
+                <td>${libelle_norme}</td>
+                <td>${valeur_norme} FCFA</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-analysis" data-id="${slugify(element)}">
+                        Retirer
+                    </button>
+                </td>
+            </tr>
+        `;
+        $("#selected-analyses").append(newRow);
+
+        // Réinitialisation des champs
+        $("#element, #libelle_norme, #valeur_norme").val("");
+        $("#inputGroupSelect01").val("Sélectionner...");
+    });
+
+    // Retirer une analyse
+    $(document).on("click", ".remove-analysis", function () {
+        $(this).closest("tr").remove();
+        // N° de colonnes
+        $("#selected-analyses tr").each(function(index) {
+            $(this).find("td:first").text(index + 1);
+        });
+    });
+
+    function slugify(text) {
                   return text.toString().toLowerCase()
-                    // Remplacer les espaces par des tirets
+                    
                     .replace(/\s+/g, '-')
-                    // Supprimer tous les caractères non alphanumériques et les tirets
                     .replace(/[^\w\-]+/g, '')
-                    // Remplacer plusieurs tirets par un seul
                     .replace(/\-\-+/g, '-')
-                    // Supprimer les tirets en début et fin de chaîne
                     .replace(/^-+/, '')
                     .replace(/-+$/, '');
                 }
-              });
-
-          <script>
+});
+</script>
+                
     @endsection
 
        @endsection
