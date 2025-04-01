@@ -157,7 +157,7 @@
                           <div class="col-sm-12">
                             <div class="card mb-3">
                               <div class="card-header">
-                                <h5 class="card-title">Analyses traités</h5>
+                                <h5 class="card-title">Analyses externes</h5>
                               </div>
                               <div class="card-body">
                                 <div class="table-outer">
@@ -193,7 +193,7 @@
                                             2
                                           <td>{{$d_analyse->telephone}}</td>
                                          <td>
-                                            <a title="Reçu de paiement" class="btn btn-outline-success" href="{{ URL::to('edit-resultat/'.$d_analyse->patient_id.'/'.$d_analyse->id_demande)}}"                                                    >
+                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id)}}"                                                    >
                                               <i class="ri-file-edit-fill"></i></a>                    
                                          </td>
                                         </tr>

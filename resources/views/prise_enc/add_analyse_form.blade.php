@@ -84,6 +84,7 @@ Repertoire patient
                         </div>
                       </div>
                       
+                      <input type="hidden" id="normes" value="" name="normes" >
                       
                       {{-- <div class="col-xxl-3 col-lg-4 col-sm-6">
                         <div class="mb-3">
@@ -178,9 +179,15 @@ Repertoire patient
         }
 
       //  Les données (les éléments sélectionés) sont ajoutées au tableau
+        selectedAnalyses.push({
+          element:element,
+          libelle_norme:libelle_norme,
+          valeur_norme:valeur_norme,
+          genre:genre
+        })
         let newRow = `
             <tr>
-                <td>${$("#selected-analyses tr").length + 1}</td>
+                <td rel="${selectedAnalyses.length-1}">${selectedAnalyses.length}</td>
                 <td>${element}</td>
                 <td>${libelle_norme}</td>
                 <td>${valeur_norme} </td>
@@ -191,7 +198,10 @@ Repertoire patient
                 </td>
             </tr>
         `;
+      
         $("#selected-analyses").append(newRow);
+        $("#normes").val(JSON.stringify(selectedAnalyses));
+        console.log($("#normes"))
 
         // Réinitialisation des champs
         $("#element, #libelle_norme, #valeur_norme").val("");
@@ -200,11 +210,14 @@ Repertoire patient
 
     // Retirer une analyse
     $(document).on("click", ".remove-analysis", function () {
+      selectedAnalyses.splice( $(this).closest("tr").attr('rel'),1)
+      $("#normes").val(JSON.stringify(selectedAnalyses));
+
         $(this).closest("tr").remove();
-        // N° de colonnes recalculé
-        $("#selected-analyses tr").each(function(index) {
-            $(this).find("td:first").text(index + 1);
-        });
+        // N° de colonnes
+        // $("#selected-analyses tr").each(function(index) {
+        //     $(this).find("td:first").text(index + 1);
+        // });
     });
 
     // Fonction de suppression des caractères spéciaux avant ajout dans le tableau

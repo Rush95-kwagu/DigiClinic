@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Redirect; 
 use Illuminate\Validation\ValidationException;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ConsultationController extends Controller
 {
@@ -212,6 +214,7 @@ class ConsultationController extends Controller
                 ->orderBy('tbl_analyse.created_at', 'DESC')
 
                 ->get(); 
+
         $all_demand_p=DB::table('tbl_analyse_payed')
                 ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
                 ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
@@ -229,6 +232,113 @@ class ConsultationController extends Controller
                     'all_analyse_t'=>$all_analyse_t,   
                     'all_demand_p'=>$all_demand_p,
                 ));;
+    }
+
+
+    function getPatientAnalyse($id){
+        
+       // Récupérer les informations du patient
+            $data = DB::table('tbl_patient as p')
+            ->leftJoin('tbl_analyse_payed as a', 'p.patient_id', '=', 'a.patient_id')
+            ->leftJoin('tbl_type_analyse as pr', 'a.prestation_id', '=', 'pr.id_type_analyse')
+            ->where('p.patient_id', $id)
+            ->select(
+                'p.patient_id',
+                'p.nom_patient as nom',
+                'p.prenom_patient as prenom'
+            )
+            ->first();
+
+            // Récupérer les analyses du patient
+            $analyses = DB::table('tbl_analyse_payed as a')
+            ->leftJoin('tbl_type_analyse as pr', 'a.prestation_id', '=', 'pr.id_type_analyse')
+            ->where('a.patient_id', $id)
+            ->select(
+                'a.payed_analyse_id as analyse_id',
+                'a.date_paiement',
+                'a.montant_total as montant',
+                'pr.id_type_analyse',
+                'pr.libelle_analyse',
+                'pr.prix_analyse as prix'
+            )
+            ->get();
+
+            // Combiner les résultats
+            $result = [
+            'patient_id' => $data->patient_id,
+            'nom' => $data->nom,
+            'prenom' => $data->prenom,
+            'analyses' => $analyses
+            ];
+
+
+        return view('Analys.patient_analyse_details')->with(array(
+            'patient'=>$result
+        ));
+    }
+
+    function editAnalyseResult($id){
+        
+        $analysis = DB::table('tbl_analyse_payed as a')
+        ->leftJoin('tbl_type_analyse as pr', 'a.prestation_id', '=', 'pr.id_type_analyse')
+        ->where('a.payed_analyse_id', $id)
+        ->select(
+            'a.payed_analyse_id as analyse_id',
+            'a.treated',
+            'a.date_paiement',
+            'a.montant_total as montant',
+            'pr.id_type_analyse',
+            'pr.libelle_analyse',
+            'pr.prix_analyse as prix'
+        )
+        ->first();
+
+            if ( $analysis) {
+                // 2ème requête : Récupérer les paramètres associés à cette analyse
+                $parameters = DB::table('tbl_analyse_parametres')
+                ->where('tbl_type_analyse_id', $analysis->id_type_analyse)
+                ->where('genre', "FEMME")
+                ->select(
+                    'id as parametre_id',
+                    'element',
+                    'libelle_norme',
+                    'valeur_norme',
+                    'genre'
+                )
+                ->get();
+
+            }
+      
+            // Ajouter les paramètres à l'analyse
+            $analysis->parametres = $parameters;          
+
+        return view('Analys.edit_analyse_result')->with(array(
+            'analyse'=>$analysis
+        ));
+    }
+
+
+    function storeResult(Request $request){
+        
+
+        $data=collect();
+        foreach ($request->elements as $key => $value) {
+            $data->push([
+                "element"=>$value,
+                "result"=>$request->results[$key],
+                "norme"=>$request->normes[$key],
+            ]);
+        }
+
+        $pdf = Pdf::loadView('Resultat.pdf-ext', [
+            "patient"=>null,
+            "resultats"=>$data
+            ]);
+            $path=storage_path('app/public/Resultat_' . time(). '_.pdf');
+            
+            $pdf->save($path);
+
+        return back();
     }
 
     public function traitement_analyse($id_analyse,$patient_id)
