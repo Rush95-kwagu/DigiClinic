@@ -222,7 +222,7 @@ class PriseEnChargeController extends Controller
     {
         return view('prise_enc/add_analyse_form');
     }
-
+ 
     public function saveAnalyse(Request $request)
     {
         $this->CaisseAuthCheck();
@@ -231,7 +231,7 @@ class PriseEnChargeController extends Controller
         $centre_id=Session::get('centre_id');
       
         
-      //  dd($request->all(),Session::get('centre_id'));
+       // dd($request->all(),Session::get('centre_id'));
 
         $request->validate([
            'libelle_analyse'=>'required|string',
@@ -241,7 +241,7 @@ class PriseEnChargeController extends Controller
            'category'      => 'required|string|in:HEMATOLOGIE,PARASITOLOGIE,SEROLOGIE,BIOCHIMIE,IMMUNOLOGIE'
           
         ]);
-        DB::table('tbl_type_analyse')->insert([
+      $result=  DB::table('tbl_type_analyse')->insertGetId([
             'libelle_analyse' => $request->input('libelle_analyse'),
             'prix_analyse' => $request->input('prix_analyse'),
             'prix_analyse_assure' => $request->input('prix_analyse_assure'),
@@ -250,7 +250,18 @@ class PriseEnChargeController extends Controller
             'created_at'     => now(),
             'updated_at'     => now(),
         ]);
-    return redirect()->back()->with('PersonnalAdded', 'Informations sauvegardées avec succès');
+        $normes=json_decode($request->normes);
+
+        foreach ($normes as $key => $value) {
+            $result=  DB::table('tbl_analyse_parametres')->insert([
+                'element' => $value->element,
+                'libelle_norme' => $value->libelle_norme,
+                'valeur_norme' => $value->valeur_norme,
+                'genre' => $value->genre
+            ]);
+        }
+        
+        return redirect()->back()->with('PersonnalAdded', 'Informations sauvegardées avec succès');
     }
 
     public function editAnalyse($id)

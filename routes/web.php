@@ -117,6 +117,9 @@ Route::post('modifier-constante', [ConsultationController::class,('update_consta
 
 //Analyses
 Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses')]);
+Route::get('gestion-analyses/{id}', [ConsultationController::class,('getPatientAnalyse')]);
+Route::get('store-analyses-result/{id}', [ConsultationController::class,('editAnalyseResult')]);
+Route::post('store-analyses-result', [ConsultationController::class,('storeResult')]);
 Route::get('traitement-analyse/{id_analyse}/{patient_id}', [ConsultationController::class,('traitement_analyse')]);
 Route::get('get-reactif/{user_id}/{id_analyse}', [SalesController::class, 'get_reactif']);
 Route::post('/store-tabreactif',[SalesController::class, 'store_tabreactif']);
