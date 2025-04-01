@@ -126,7 +126,6 @@ class ConsultationController extends Controller
 
     public function consultation()
     {
-        
         $this->SpecialisteAuthCheck();
         $user_id=Session::get('user_id');
         $centre_id=Session::get('centre_id');
@@ -259,43 +258,30 @@ class ConsultationController extends Controller
         $this->SpecialisteAuthCheck();
         $user_id=Session::get('user_id');
     
-
-        // $all_details=DB::table('tbl_prise_en_charge')
-        //         ->leftjoin('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
-        //         ->leftjoin('tbl_consultation','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
-        //         ->leftjoin('tbl_ordo_consultation','tbl_ordo_consultation.id_consultation','=','tbl_consultation.id_consultation')
-        //         ->where('tbl_prise_en_charge.patient_id',$patient_id)
-        //         ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*','tbl_ordo_consultation.*')
-        //         ->orderBy('created_at','DESC')
-        //         ->get();
         $all_details = DB::table('tbl_prise_en_charge')
-        ->leftjoin('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
-        ->leftjoin('tbl_consultation', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')
-        ->leftjoin('tbl_ordo_consultation', 'tbl_ordo_consultation.id_consultation', '=', 'tbl_consultation.id_consultation')
-        ->where('tbl_prise_en_charge.patient_id', $patient_id)
-        ->select(
-            'tbl_prise_en_charge.*',
-            'tbl_patient.*',
-            'tbl_consultation.*',
-            'tbl_ordo_consultation.*',
-            'tbl_patient.datenais as patient_birthdate'
-        )
-        ->orderBy('tbl_prise_en_charge.created_at', 'DESC')
-        ->get()
-        ->map(function ($item) {
+            ->leftjoin('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
+            ->leftjoin('tbl_consultation', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')
+            ->leftjoin('tbl_ordo_consultation', 'tbl_ordo_consultation.id_consultation', '=', 'tbl_consultation.id_consultation')
+            ->where('tbl_prise_en_charge.patient_id', $patient_id)
+            ->select(
+                    'tbl_prise_en_charge.*',
+                    'tbl_patient.*',
+                    'tbl_consultation.*',
+                    'tbl_ordo_consultation.*',
+                    'tbl_patient.datenais as patient_birthdate'
+                    )
+            ->orderBy('tbl_prise_en_charge.created_at', 'DESC')
+            ->get()
+            ->map(function ($item) {
             // Calcul de l'âge pour chaque résultat
             if (!empty($item->patient_birthdate)) {
                 $birthdate = Carbon::parse($item->patient_birthdate);
                 $age = $birthdate->diff(Carbon::now());
-                
-                // Formatage selon l'âge
                 if ($age->y < 1) {
                     $item->age_formatted = $age->m . ' mois';
                 } else {
                     $item->age_formatted = $age->y . ' ans et ' . $age->m . ' mois';
                 }
-                
-                // Optionnel: ajouter l'âge en jours pour les très jeunes patients
                 if ($age->y < 1 && $age->m < 1) {
                     $item->age_formatted = $age->d . ' jours';
                 }
@@ -305,15 +291,29 @@ class ConsultationController extends Controller
             
             return $item;
         });
-        $constance = DB::table('tbl_constante')
-                        ->leftjoin('tbl_prise_en_charge','tbl_constante.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
-                        ->where('tbl_constante.patient_id',$patient_id)
-                        ->select('tbl_constante.*')
-                        ->get();
+        // $constance = DB::table('tbl_constante')
+        //                 ->leftjoin('tbl_prise_en_charge','tbl_constante.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
+        //                 ->where('tbl_constante.patient_id',$patient_id)
+        //                 ->select('tbl_constante.*')
+        //                 ->get();
+        $last_constance = DB::table('tbl_constantes')
+                        ->join('tbl_consultation','tbl_constantes.id_consultation','=','tbl_consultation.id_consultation')
+                        ->where('tbl_constantes.patient_id',$patient_id)
+                        ->select(
+                            'tbl_constantes.type',
+                            'tbl_constantes.valeur',
+                            'tbl_constantes.unite',
+                            'tbl_constantes.created_at')
+                        ->orderBy('created_at', 'DESC')
+                        ->get()
+                        ->groupBy('type')
+                        ->map (function($items){
+                            return $items->first();
+                        });                
         return view('Consult.traitement_patient')->with(array(
                     'all_details'=>$all_details,                         
                     'id_consultation'=>$id_consultation,  
-                    'constance'=>$constance,
+                    'last_constance'=>$last_constance,
                 ));;
     }
 

@@ -593,8 +593,6 @@ class SalesController extends Controller
 
     }
 
-
-
     public function all_provision()
     {
         $this->PharmacieAuthCheck();
@@ -609,9 +607,21 @@ class SalesController extends Controller
                 ->with(array(
                     'all_appro'=>$all_appro,               
                 ));         
-
     }
 
+    public function all_appro_reactif()
+    {
+        $this->PharmacieAuthCheck();
+        $all_appro=DB::table('tbl_appro_reactif')
+                ->join('tbl_reactif','tbl_appro_reactif.reactif_id','=','tbl_reactif.reactif_id')
+                ->select('tbl_reactif.*','tbl_appro_reactif.*')
+                ->get();
+        return view ('Reactif.all_appro_reactif')
+                ->with(array(
+                    'all_appro'=>$all_appro,               
+                ));         
+
+    }
 
      public function faire_appro()
     {
@@ -619,6 +629,11 @@ class SalesController extends Controller
         return view('Pharmacie.make_appro');
     }
 
+     public function faire_appro_reactif()
+    {
+      $this->PharmacieAuthCheck();
+        return view('Reactif.make_appro_reactif');
+    }
 
 
     public function post_caisse(Request $request)
@@ -653,6 +668,39 @@ class SalesController extends Controller
         return Redirect::to('/faire-appro');
     }
 
+
+    public function post_caisse_reactif(Request $request)
+    {
+      $this->PharmacieAuthCheck();
+      $stock=$request->stock;
+      $reactif_id=$request->reactif_id;
+      $stock_defective=$request->stock_defective;
+      $comments=$request->comments;
+      $reactif_info=DB::table('tbl_reactif')
+        ->where('reactif_id',$reactif_id)
+        ->first();
+
+        $get_stock=$reactif_info->stock;
+        $new_stock=$get_stock + $stock;
+       
+        
+            DB::table('tbl_reactif')
+                ->where('reactif_id',$reactif_id)
+                ->update(['stock'=>$new_stock]);
+          
+            
+        $data=array();
+        $data['reactif_id']=$reactif_id;
+        $data['stock']=$stock;
+        $data['stock_defective']=$stock_defective;
+        $data['comments']=$comments; 
+        DB::table('tbl_appro_reactif')
+                ->insert($data);
+
+        Session::put('message','Approvisionnement effectué avec succès!!');
+        return Redirect::to('/faire-appro-reactif');
+    }
+
      public function get_reactif(Request $request, $user_id, $id_analyse)
     {
         $this->LaboAuthCheck();
@@ -679,7 +727,6 @@ class SalesController extends Controller
         ]);
 
     }
-
 
     public function store_tabreactif(Request $request)
     {
@@ -738,7 +785,6 @@ class SalesController extends Controller
         }
 
     }
-
 
     public function delete_tabreactif($id)
     {

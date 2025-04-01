@@ -166,10 +166,10 @@ Repertoire patient
 
     // Ajouter une analyse
     $(document).on("click", ".add-analysis", function () {
-        let element = $("#element").val().trim();
+        let element = $("#element").val();
         let genre = $("#inputGroupSelect01").val();
-        let libelle_norme = $("#libelle_norme").val().trim();
-        let valeur_norme = $("#valeur_norme").val().trim();
+        let libelle_norme = $("#libelle_norme").val();
+        let valeur_norme = $("#valeur_norme").val();
 
         // Validation des champs du formulaire
         if (!element || !libelle_norme || !valeur_norme || genre === "Sélectionner...") {
@@ -183,7 +183,7 @@ Repertoire patient
                 <td>${$("#selected-analyses tr").length + 1}</td>
                 <td>${element}</td>
                 <td>${libelle_norme}</td>
-                <td>${valeur_norme} FCFA</td>
+                <td>${valeur_norme} </td>
                 <td>
                     <button class="btn btn-danger btn-sm remove-analysis" data-id="${slugify(element)}">
                         Retirer
@@ -201,12 +201,13 @@ Repertoire patient
     // Retirer une analyse
     $(document).on("click", ".remove-analysis", function () {
         $(this).closest("tr").remove();
-        // N° de colonnes
+        // N° de colonnes recalculé
         $("#selected-analyses tr").each(function(index) {
             $(this).find("td:first").text(index + 1);
         });
     });
 
+    // Fonction de suppression des caractères spéciaux avant ajout dans le tableau
     function slugify(text) {
                   return text.toString().toLowerCase()
                     

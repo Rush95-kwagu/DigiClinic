@@ -46,7 +46,7 @@
   <body>
 
     <!-- Loading starts -->
-    <div id="loading-wrapper">
+    {{-- <div id="loading-wrapper">
       <div class='spin-wrapper'>
         <div class='spin'>
           <div class='inner'></div>
@@ -67,7 +67,7 @@
           <div class='inner'></div>
         </div>
       </div>
-    </div>
+    </div> --}}
     <!-- Loading ends -->
 
     <!-- Page wrapper starts -->
@@ -530,7 +530,9 @@
                   <li>
                     <a href="{{URL::to('approvisionnement')}}">Appro Pharmacie</a>
                   </li>
-
+                  <li>
+                    <a href="{{URL::to('appro-reactif')}}">Appro Réactif</a>
+                  </li>
                 </ul>
               </li>
               {{-- <li class="treeview">
@@ -539,6 +541,27 @@
                   <span class="menu-text">Revenus</span>
                 </a>
               </li> --}}
+              @elseif($user_role_id == 35)
+              <li class="active current-page">
+                <a href="{{URL::to('/dashboard')}}">
+                  <i class="ri-home-6-line"></i>
+                  <span class="menu-text">Mon tableau de bord</span>
+                </a>
+                
+              </li>
+              <li class="treeview">
+                <a href="#!">
+                  <i class="ri-money-dollar-circle-line"></i>
+                  <span class="menu-text">{{Session::get('role')}} </span>
+                </a>
+               
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="{{URL::to('consultations')}}">Espace Hospitalisations</a>
+                  </li>
+                 </ul>
+              </li>
+              
               @elseif($user_role_id == 2 || $user_role_id == 3  || $user_role_id == 7 || $user_role_id == 5 || $user_role_id == 6 || $user_role_id == 8 )
 
               <li class="treeview">
@@ -1216,12 +1239,6 @@ edit1.addEventListener('keyup', () => {
         texte1.innerHTML = edit1.innerHTML
 })
 </script>
-<script>
-  $(document).ready(function() {
-      console.log("jQuery est bien chargé !");
-  });
-</script>
-
 
 </body>
 

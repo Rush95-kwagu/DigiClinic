@@ -89,6 +89,69 @@ Admin
                             <?php  ?>
                             </div>
                           </div>
+                        @elseif($user_role_id == 35)
+
+                          <div class="d-flex align-items-center">
+                            <a href="{{URL::to('prises-en-charges')}}">
+                            <div class="icon-box lg bg-arctic rounded-2 me-3">
+                              <i class="ri-surgical-mask-line fs-4"></i>
+                            </div>
+                            </a>
+                            <div class="d-flex flex-column">
+                              <?php
+                                   $nbr_conslt_imp=DB::table('tbl_caisse_prise_en_charge')
+                                          ->where('frais_consultation',NULL)
+                                          ->where('id_centre',$centre_id)
+                                          ->count();
+                              ?>
+                              <h2 class="m-0 lh-1">{{$nbr_conslt_imp}}</h2>
+
+
+                              <p class="m-0"> Patient à hospitaliser</p>
+                              
+                            <?php  
+                            
+                            ?>
+                            </div>
+                          </div>
+                          <div class="d-flex align-items-center">
+                            <a href="{{URL::to('prises-en-charges')}}">
+                            <div class="icon-box lg bg-lime rounded-2 me-3">
+                              <i class="ri-stethoscope-line fs-4"></i>
+                            </div>
+                            </a>
+                            <div class="d-flex flex-column">
+                              <?php
+                              $nbr_hosp_imp=DB::table('tbl_caisse_prise_en_charge')
+                                        ->where('frais_hospitalisation',NULL)
+                                        ->where('id_centre',$centre_id)
+                                        ->count();
+                          ?>
+                              <h2 class="m-0 lh-1">{{$nbr_hosp_imp}}</h2>
+
+
+                              <p class="m-0"> Patients en Hospitalisation</p>
+                            <?php  ?>
+                            </div>
+                          <div class="d-flex align-items-center">
+                            <a href="{{route('patient.repertoire')}}">
+                            <div class="icon-box lg bg-lime rounded-2 me-3">
+                              <i class="ri-user-line fs-4"></i>
+                            </div>
+                            </a>
+                            <div class="d-flex flex-column">
+                            <?php
+                                $list_patient=DB::table('tbl_patient')
+                                          ->where('id_centre',$centre_id)
+                                          ->count();
+                            ?>
+                              <h2 class="m-0 lh-1">{{$list_patient}}</h2>
+
+
+                              <p class="m-0"> Patients en Observation</p>
+                            <?php  ?>
+                            </div>
+                          </div>
                         @elseif($user_role_id == 1)
                         <div class="d-flex align-items-center">
                             <a href="{{URL::to('caisse-consultations')}}">
@@ -151,7 +214,7 @@ Admin
                             <?php  ?>
                             </div>
                           </div>
-                        @elseif($user_role_id == 13)
+                        @elseif($user_role_id == 35)
                         <div class="d-flex align-items-center">
                             <a href="{{URL::to('caisse-consultations')}}">
                             <div class="icon-box lg bg-lime rounded-2 me-3">
@@ -192,9 +255,6 @@ Admin
                             <?php  ?>
                             </div>
                           </div>
-
-
-                          
                             </div>
                           </div>
                          @elseif($user_role_id == 2 || $user_role_id == 3 || $user_role_id == 5 || $user_role_id == 6 || $user_role_id == 7 || $user_role_id == 8 )
@@ -341,8 +401,6 @@ Admin
                             </div>
                           </div>
                         </div>
-
-
                         @endif
 
 
@@ -573,7 +631,7 @@ Admin
               </div>
               <!-- Row ends -->
 
-              @elseif($user_role_id ==0)
+              @elseif($user_role_id ==35)
 
             <div class="row gx-3">
               <div class="col-xxl-6 col-sm-6">
@@ -589,8 +647,6 @@ Admin
                     <span class="badge rounded-pill bg-warning">+</span>
                     <i class="ri-hotel-bed-line"></i>
                     </button>
-
-
                   </div>
                   <div class="card-body">
                     <div id="carouselSurgeries" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -623,8 +679,6 @@ Admin
                               ->select('tbl_chambre.*','tbl_lits.*')
                               ->count();
                       ?>
-
-
                       <div class="carousel-item {{$key == 0 ? 'active' : ''}}" data-bs-interval="3000">
                           <div class="grid gap-2 p-1">
                             <div class="g-col-12">
@@ -659,8 +713,6 @@ Admin
                                     echo 'border-danger text-danger';
                                   }
                                   ?> ">
-
-
                                   <?php
                                   if($nbre_lits == $nbre_lits_libre)
                                   {
@@ -733,6 +785,8 @@ Admin
                     ->groupBy('tbl_prise_en_charge.patient_id')
                     ->orderBy('etat_consultation','DESC')
                     ->get();
+
+                    // dd($all_patient_h);
                   ?>
                   <div class="table-responsive">
                     <table class="table m-0 align-middle">

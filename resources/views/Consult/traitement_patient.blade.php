@@ -43,15 +43,11 @@
                     <h5 class="card-title">
                        <u>Constantes vitales</u> : <br><br>
                    </h5>
-                    <b> Temp:</b>  <span class="badge bg-success"> {{ $patient->temp }}°C
-                        </span> <br>
-                        @foreach ($constance as $p_constance)
+                   
+                        @foreach($last_constance as $type => $constante)
     
-                      <b>Poids</b> :{{ $p_constance->poids }} Kg <br>
-                      <b>FC</b> : {{ $p_constance->frequence_card }} Pouls/Min <br>
-                      <b>FR</b> : {{ $p_constance->frequence_respi }} SpO2/Min <br>
-                      <b>PA:</b> {{ $p_constance->pression_art}} mmHg <br>
-                      <b>Diurèse</b> : {{ $p_constance->diurese}} Jr <br>
+                      <b>{{ $type }}</b> : {{ $constante->valeur }} {{ $constante->unite }} <br>
+                      
                       @endforeach 
                       {{-- Température : <span class="badge bg-primary">{{$patient->temp}} °C</span>   --}}
 
@@ -64,10 +60,11 @@
 
                     </h5> <br><br><br>
                    @if($user_role_id !=0 && $user_role_id !=1 && $user_role_id !=10)
-                      @if ($patient->etat_traitement == 0)
+                      @if ($patient->etat_traitement != 0)
                           
-                      <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
-                      data-bs-target="#constance">Modifier constances</button>
+                      <button type="button" class="btn btn-light float-right" data-bs-toggle="modal" data-bs-target="#constantesModal">
+                        Nouvelles Constantes
+                      </button>
                       @endif
 
                     <button type="button" class="btn btn-light float-right" data-bs-toggle="modal"
@@ -445,59 +442,87 @@
 
 
 
-<div class="modal fade" id="constance" data-bs-backdrop="static" data-bs-keyboard="false"
-                      tabindex="-1" aria-labelledby="prescLabel" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modifier les contantes du patient</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modall" aria-label="Annuler"></button>
-            </div>
-            <form action="{{ url('/modifier-constante') }}" method="POST">
-                            {{csrf_field()}}
-            <div class="modal-body">
-            <h4>Veuillez renseignez les nouvelles constantes</h4>
-            <br>
-            <input type="hidden" name="id_consultation" value="{{$id_consultation}}">
-           
+<div class="modal fade" id="constantesModal" tabindex="-1" aria-labelledby="constantesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="constantesModalLabel">Gestion des constantes médicales</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="constantesForm">
+          @csrf
+          <div class="row">
+            <div class="col-md-4 mb-3">
 
-            <div class="control-group hidden-phone">
-                <label class="control-label" for="textarea2">Nouvelle température</label>
+              {{-- <input type="hidden" name="id_consultation" value="{{$id_consultation}}"> --}}
+              <input type="hidden" name="id_prise_en_charge" value="{{$patient->id_prise_en_charge}}">
+              <input type="hidden" name="patient_id" value="{{ $patient->patient_id }}">
+              <input type="hidden" name="centre_id" value="{{ $centre_id }}">
+              <input type="hidden" name="id_consultation" value="{{$id_consultation}}">
 
-                <input type="number" min="27" class="form-control" name="new_temp">
-            </div>
-            <div class="control-group hidden-phone">
-                <label class="control-label" for="textarea2">Nouvelle Fréquence Cardiaque</label>
-
-                <input type="number" min="1" class="form-control" name="new_freq_card">
-            </div>
-            <div class="control-group hidden-phone">
-                <label class="control-label" for="textarea2">Nouvelle Fréquence Respiratoire</label>
-
-                <input type="number" min="1" class="form-control" name="new_freq_resp">
-            </div>
-            <div class="control-group hidden-phone">
-                <label class="control-label" for="textarea2">Nouvelle Presion Artérielle</label>
-
-                <input type="number" min="1" class="form-control" name="new_press_art">
-            </div>
-            <div class="control-group hidden-phone">
-                <label class="control-label" for="textarea2">Nouvelle Diurèse</label>
-
-                <input type="number" min="0" class="form-control" name="new_diurese">
-            </div>
-            </div>
-             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Fermer
-                </button>
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
-                  Oui, confirmer
-                </button>
+              <label class="classItems" for="selectError1"><b>Constantes</b><span style="color: red">*</span></label>
+              <div class="controls col-12">
+                <select class="form-control form-select" name="constantes" id="constante-select">
+                  <option value="" selected>Sélectionner une constante</option>
+                  <option value="TENSION ARTERIELLE">Tension Artérielle</option>
+                  <option value="FREQUENCE CARDIAQUE">Fréquence Cardiaque</option>
+                  <option value="FREQUENCE RESPIRATOIRE">Fréquence Respiratoire</option>
+                  <option value="TEMPERATURE">Température</option>
+                  <option value="SATURATION O2">Saturation O2</option>
+                  <option value="GLYCEMIE CAPILLAIRE">Glycémie Capillaire</option>
+                  <option value="GLYCEMIE A JEUN">Glycémie à Jeun</option>
+                  <option value="GLYCEMIE POST PRANDIALE">Glycémie Post Prandiale</option>
+                  <option value="POIDS">Poids</option>
+                  <option value="TAILLE">Taille</option>
+                </select>
               </div>
-            </form>
-        </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+              <label class="classItems" for="selectError1"><b>Valeur</b><span style="color: red">*</span></label>
+              <div class="controls col-12">
+                <input type="text" name="valeur" class="form-control" id="valeur-constante" placeholder="Valeur">
+              </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+              <label class="classItems" for="selectError1"><b>Unité</b><span style="color: red">*</span></label>
+              <div class="controls col-12">
+                <input type="text" name="unite" class="form-control" id="unite-constante" placeholder="Unité" readonly>
+              </div>
+            </div>
+            
+            <div class="col-md-2 mb-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary" id="add-constante">Ajouter</button>
+            </div>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Constante</th>
+                  <th>Valeur</th>
+                  <th>Unité</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="constantes-container">
+                <!-- Les constantes ajoutées apparaîtront ici -->
+              </tbody>
+            </table>
+          </div>
+          
+          <input type="hidden" id="constante-count" name="constante_count" value="0">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-success" id="save-constantes">Enregistrer</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Include the Quill library -->
@@ -513,6 +538,11 @@
         document.getElementById('ordonnance_consultation').value = quill.root.innerHTML;
     });
 </script>
+@push('js')
+<script src="{{ asset('frontend/js/NewConstantes.js') }}"></script>
+    
+@endpush
+
 @endsection
 
 

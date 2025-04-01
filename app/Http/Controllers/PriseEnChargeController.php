@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -360,138 +361,184 @@ class PriseEnChargeController extends Controller
     {
         $this->UserAuthCheck(); 
         $this->AccueilAuthCheck();
-            
-            $tel=$request->telephone;
-
-            if ($tel) {
-            $data =[
-                'telephone'=>$request->telephone, 
-                'nom_patient'=>$request->nom_patient,
-                'prenom_patient'=>$request->prenom_patient, 
-                'nip'=>$request->nip, 
-                'email_patient'=>$request->email_patient, 
-                'nationalite'=>$request->nationalite,
-                'smatrimonial'=>$request->smatrimonial, 
-                'contact_urgence'=>$request->contact_urgence, 
-                'datenais'=>$request->datenais, 
-                'adresse'=>$request->adresse,
-
-            ]; 
-                $get_patient=DB::table('tbl_patient')
-                                ->where('telephone',$tel)
+        
+        // Validation des données de base
+        $validated = $request->validate([
+            'centre_id' => 'required|integer',
+            'maux' => 'required|string',
+            'patient_id' => 'required_without:telephone|integer|nullable',
+            'telephone' => 'required_without:patient_id|string|nullable',
+            'constante_count' => 'required|integer|min:0',
+            'constantes.*.type' => 'required|string',
+            'constantes.*.valeur' => 'required|numeric',
+            'constantes.*.unite' => 'required|string'
+        ]);
+    
+        // Gestion du patient (existant ou nouveau)
+        if ($request->telephone) {
+            $existingPatient = DB::table('tbl_patient')
+                                ->where('telephone', $request->telephone)
                                 ->first();
-
-                  if ($get_patient){
-                      return back()->withInput()->with('error', 'Echec de validation : Veuillez rechercher le patient car il existe déjà sous le numéro renseigné');
-                  };
-
-            $patient_id = DB::table('tbl_patient')->insertGetId($data);
-            }else{
-            $patient_id=$request->patient_id;
+    
+            if ($existingPatient) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Ce patient existe déjà. Veuillez le sélectionner dans la liste.');
             }
-            $user_role_id=Session::get('user_role_id');
-            $user_id=Session::get('user_id');
-            $datap = [
-                'user_role_id'=>$user_role_id, 
-                'patient_id'=>$patient_id, 
-                'user_id'=>$user_id, 
-                'id_centre'=>$request->centre_id,
-                'maux'=>$request->maux, 
-                'temp'=>$request->temp, 
-                'observation'=>$request->observation,
-                    
+    
+            $patientData = [
+                'telephone' => $request->telephone,
+                'nom_patient' => $request->nom_patient,
+                'prenom_patient' => $request->prenom_patient,
+                'nip' => $request->nip,
+                'email_patient' => $request->email_patient,
+                'nationalite' => $request->nationalite,
+                'smatrimonial' => $request->smatrimonial,
+                'contact_urgence' => $request->contact_urgence,
+                'datenais' => $request->datenais,
+                'adresse' => $request->adresse,
             ];
- 
-            $constante = [
-                'pression_art'=>$request->pression_art,
-                'frequence_respi'=>$request->frequence_respi,
-                'diurese'=>$request->diurese,
-                'poids'=>$request->poids,
-                'frequence_card'=>$request->frequence_card,
-            ];
-
-            // dd($constante, $datap);
-            $id_prise_en_charge = DB::table('tbl_prise_en_charge')->insertGetId($datap);
-
-            $constante = [
-                'patient_id' => $patient_id,
-                'centre_id'=>$request->centre_id,
-                'id_prise_en_charge'=>$id_prise_en_charge,
-                 ];
-
-            DB::table('tbl_constante')->insert($constante);
-
-            $datac =[
-                'id_prise_en_charge'=>$id_prise_en_charge, 
-                'id_centre'=> $request->centre_id 
-            ];
-
-            $id_prise_en_charge = DB::table('tbl_caisse_prise_en_charge')->insertGetId($datac);
+    
+            $patient_id = DB::table('tbl_patient')->insertGetId($patientData);
+        } else {
+            $patient_id = $request->patient_id;
+        }
+    
+        // Enregistrement de la prise en charge
+        // Tble:(tbl_prise_en_charge)
+        $priseEnChargeData = [
+            'user_role_id' => Session::get('user_role_id'),
+            'patient_id' => $patient_id,
+            'user_id' => Session::get('user_id'),
+            'id_centre' => $request->centre_id,
+            'maux' => $request->maux,
+            'observation' => $request->observation,
+            'created_at' => now(),
+            'updated_at' => now()
+        ];
+    
+        DB::beginTransaction();
+    
+        try {
+            $id_prise_en_charge = DB::table('tbl_prise_en_charge')
+                                    ->insertGetId($priseEnChargeData);
+    
+            // Enregistrement des constantes
+            // Tbale: (tbl_constantes)
+            foreach ($request->constantes as $constante) {
+                DB::table('tbl_constantes')->insert([
+                    'id_prise_en_charge' => $id_prise_en_charge,
+                    'centre_id'=>$request->centre_id,
+                    'patient_id' => $patient_id,
+                    'constante_count'=>$request->constante_count,
+                    'user_id' => Session::get('user_id'),   
+                    'type' => $constante['type'],
+                    'valeur' => $constante['valeur'],
+                    'unite' => $constante['unite'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+    
+            // Enregistrement dans la caisse
+            // table:(tbl_caisse_prise_en_chareg)
+            DB::table('tbl_caisse_prise_en_charge')->insert([
+                'id_prise_en_charge' => $id_prise_en_charge,
+                'id_centre' => $request->centre_id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+    
+            DB::commit();
+    
+            Alert::success('Succès', 'Prise en charge enregistrée avec succès.');
+            return redirect('/prises-en-charges');
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erreur lors de l\'enregistrement: '.$e->getMessage());
             
-            Alert::success('Info', 'Nouveau patient enregistré dans les prises en charges.');
-               return Redirect::to ('/prises-en-charges');
+            Alert::error('Erreur', 'Une erreur est survenue lors de l\'enregistrement.');
+            return back()->withInput();
+        }
     }
    
     public function saveStep1(Request $request)
-    {
-        $this->UserAuthCheck(); 
-        $this->AccueilAuthCheck();
+ {
+   
+    $this->UserAuthCheck(); 
+    $this->AccueilAuthCheck();
     
-        $request->validate([
-            'maux' => 'required|string',
-            'observation' => 'required|string',
-            'sexe_patient' => 'required|in:F,M',
-        ]);
+    $request->validate([
+        'maux' => 'required|string',
+        'observation' => 'required|string',
+        'sexe_patient' => 'required|in:F,M',
+    ]);
 
-        $user_id=Session::get('user_id'); 
-        $userCentre = DB::table('users')
-            ->join('tbl_centre', 'users.id_centre', '=', 'tbl_centre.id_centre') 
-            ->where('users.user_id', $user_id)
-            ->select('users.user_id', 'users.id_centre', 'users.user_role_id', 'tbl_centre.nom_centre') 
-            ->first();
-    
-        if (!$userCentre) {
-            return back()->with('error', 'Erreur : Impossible de récupérer le centre de l’utilisateur.');
-        }
-    
-    //    Génération N° du dossier des patients
-    // Extraire les trois premières lettres du deuxième mot du centre 
-    $centreWords = explode(' ', $userCentre->nom_centre); // Séparer les mots du nom du centre
+    $user_id = Session::get('user_id'); 
+    $userCentre = DB::table('users')
+        ->join('tbl_centre', 'users.id_centre', '=', 'tbl_centre.id_centre') 
+        ->where('users.user_id', $user_id)
+        ->select('users.user_id', 'users.id_centre', 'users.user_role_id', 'tbl_centre.nom_centre') 
+        ->first();
+
+    if (!$userCentre) {
+        return back()->with('error', 'Erreur : Impossible de récupérer le centre de l\'utilisateur.');
+    }
+
+    // Numéro de dossier 
+    $centreWords = explode(' ', $userCentre->nom_centre);
     $centreAbbreviation = isset($centreWords[1]) 
         ? strtoupper(substr($centreWords[1], 0, 3)) 
         : strtoupper(substr($centreWords[0], 0, 3)); 
 
-    $dateTime = Carbon::now('Africa/Lagos')->format('Y/m/d/Hi'); 
-    $numeroDossier = $centreAbbreviation . '/' . str_replace('/', '/', $dateTime); 
-        $patientData = [
-            'sexe_patient' => $request->sexe_patient,
-            'dossier_numero' => $numeroDossier,
-            'pcreated_at' => now(),
-            'pupdated_at' => now(),
-        ];
-        // dd($patientData);
-        $patient_id = DB::table('tbl_patient')->insertGetId($patientData);
-       
-        $priseEnChargeData = [
+    $dateTime = Carbon::now('Africa/Lagos')->format('Y/m/d/Hi');
+    $numeroDossier = $centreAbbreviation . '/' . str_replace('/', '/', $dateTime);
+
+    // Nouveau Pateint
+    $patient_id = DB::table('tbl_patient')->insertGetId([
+        'sexe_patient' => $request->sexe_patient,
+        'dossier_numero' => $numeroDossier,
+        'id_centre' => $userCentre->id_centre, 
+        'statut' => 'incomplet', 
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    
+    // Nouvelle prise en charge (version originale)
+    $id_prise_en_charge = DB::table('tbl_prise_en_charge')
+        ->insertGetId([
         'patient_id' => $patient_id, 
         'maux' => $request->maux,
         'observation' => $request->observation,
         'user_id' => $userCentre->user_id, 
         'id_centre' => $userCentre->id_centre, 
         'user_role_id' => $userCentre->user_role_id, 
+        'etape' => 1, 
         'created_at' => now(),
         'updated_at' => now(),
-        ];
-    
-    //   dd($priseEnChargeData);
-        DB::table('tbl_prise_en_charge')->insert($priseEnChargeData);
-    
-      if ($request->has('next')) {
-        session(['patient_id' => $patient_id]);
-            return redirect()->route('save.step2');
-        }
-        Alert::success('Info', 'Données enregistrées avec succès. Vous pourrez compléter les informations ultérieurement.');
-         return Redirect::to ('/prises-en-charges');
+    ]);
+
+    // Préparation pour l'étape 2
+    if ($request->has('next')) {
+        // Stockage en session des informations clés
+        session([
+            'step1_data' => [
+                'patient_id' => $patient_id,
+                'prise_en_charge_id' => $id_prise_en_charge,
+                'dossier_numero' => $numeroDossier,
+                'sexe_patient' => $request->sexe_patient,
+                'id_centre' => $userCentre->id_centre, 
+
+            ]
+        ]);
+        
+        return redirect()->route('save.step2')
+               ->with('numero_dossier', $numeroDossier);
+    }
+
+    Alert::success('Info', 'Dossier créé avec succès. Vous pourrez compléter les informations ultérieurement.');
+    return redirect('/prises-en-charges');
     }
 
     public function showStep2Form()
@@ -503,59 +550,111 @@ class PriseEnChargeController extends Controller
 
        public function saveStep2(Request $request)
     {
-        $this->UserAuthCheck(); 
+        $this->UserAuthCheck();
         $this->AccueilAuthCheck();
-    
-       
-        $request->validate([
-            'email_patient' => 'nullable|email',
-            'adresse' => 'required|string',
-            'datenais' => 'required|date',
-            'smatrimonial'=>'required|string',
-            'nationalite'=>'required|string',
-            'gsang'=>'required|string',
-            'nom_patient'=>'required|string',
-            'prenom_patient'=>'required|string',
-            'nip'=>'required|integer',
-            'contact_urgence'=>'nullable|integer',
-            'telephone'=>'required|integer',
-            'temp'=>'required|integer',
-            'pression_art' =>'nullable|integer'
 
-        ]);
+    // Récupération des données de l'étape 1
+    $step1Data = session('step1_data');
     
-       $patientId = session('patient_id');
-    
-        if (!$patientId) {
-            return redirect()->route('save.step1')->with('error', 'Impossible de compléter les informations. Veuillez recommencer.');
-        }
-    
+    if (!$step1Data) {
+        return redirect()->route('save.step1')
+               ->with('error', 'Session expirée. Veuillez recommencer la saisie.');
+    }
+
+    // Validation des données 
+    $validatedData = $request->validate([
+        'nom_patient' => 'required|string|max:100',
+        'prenom_patient' => 'required|string|max:100',
+        'datenais' => 'required|date',
+        'telephone' => 'required|string|max:20',
+        'email_patient' => 'nullable|email|max:100',
+        'adresse' => 'required|string|max:255',
+        'nationalite' => 'required|string|max:50',
+        'smatrimonial' => 'required|string|max:20',
+        'contact_urgence' => 'required|string|max:20',
+        'gsang' => 'nullable|string|max:3',
+        'nip' => 'required|string|max:50|unique:tbl_patient,nip,'.$step1Data['patient_id'].',patient_id',
+        
+        // Validation des constantes
+        'constante_count' => 'required|integer|min:1',
+        'constantes.*.type' => 'required|string',
+        'constantes.*.valeur' => 'required|numeric',
+        'constantes.*.unite' => 'required|string',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+        // Mise à jour des informations du patient
         DB::table('tbl_patient')
-            ->where('patient_id', $patientId)
+            ->where('patient_id', $step1Data['patient_id'])
             ->update([
+                'nom_patient' => $request->nom_patient,
+                'prenom_patient' => $request->prenom_patient,
+                'datenais' => $request->datenais,
+                'telephone' => $request->telephone,
                 'email_patient' => $request->email_patient,
                 'adresse' => $request->adresse,
-                'datenais' => $request->datenais,
-                'smatrimonial' => $request->smatrimonial,
                 'nationalite' => $request->nationalite,
-                'gsang'=>$request->gsang,
-                'telephone'=>$request->telephone,
-                'nom_patient'=>$request->nom_patient,
-                'prenom_patient'=>$request->prenom_patient,
-                'nip'=>$request->nip,
-                'contact_urgence'=>$request->contact_urgence,
-                    ]);
-        DB::table('tbl_prise_en_charge')->updateOrInsert(
-                        ['patient_id' => $patientId], // Condition : vérifier si patient_id existe
-                        [
-                            'temp' => $request->temp,   // Mettre à jour ou insérer la température
-                            'updated_at' => now(),
-                        ]
-                    );
+                'smatrimonial' => $request->smatrimonial,
+                'contact_urgence' => $request->contact_urgence,
+                'gsang' => $request->gsang,
+                'nip' => $request->nip,
+                'statut' => 'complet',
+                'updated_at' => now()
+            ]);
+
+        // Enregistrement des constantes
+        foreach ($request->constantes as $constante) {
+            DB::table('tbl_constantes')->insert([
+                'id_prise_en_charge' => $step1Data['prise_en_charge_id'],
+                'patient_id' => $step1Data['patient_id'],
+                'centre_id' =>$step1Data['id_centre'],
+                'type' => $constante['type'],
+                'valeur' => $constante['valeur'],
+                'unite' => $constante['unite'],
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+
+        // Mise à jour de la prise en charge
+        DB::table('tbl_prise_en_charge')
+            ->where('id_prise_en_charge', $step1Data['prise_en_charge_id'])
+            ->update([
+                'etape' => 2,
+                'updated_at' => now()
+            ]);
+
+        // Enregistrement dans la caisse
+        // table:(tbl_caisse_prise_en_charge)
+        DB::table('tbl_caisse_prise_en_charge')->insert([
+            'id_prise_en_charge' => $step1Data['prise_en_charge_id'],
+            'id_centre' => $step1Data['id_centre'],
+            'statut' => 'complet',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::commit();
+
+        // Suppression de la session
+        session()->forget('step1_data');
+
+        Alert::success('Succès', 'Dossier patient complété avec succès.');
+        return redirect('/prises-en-charges');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error("Erreur étape 2 - Patient ID: {$step1Data['patient_id']} - " . $e->getMessage());
+        
+        return back()
+            ->withInput()
+            ->with('error', 'Erreur lors de l\'enregistrement: ' . $e->getMessage());
     
-        session()->forget('patient_id');
-        Alert::success('Info', 'Données enregistrées avec succès.');
-        return Redirect::to ('/prises-en-charges');
+    }
+
+
     }
     public function patientEdit($id_prise_en_charge, $patient_id)
     {
@@ -792,10 +891,8 @@ $consultationExists = DB::table('tbl_prise_en_charge')
 
     Alert::success('Info', 'Nouvelle chambre enregistrée');
     return Redirect::to ('/dashboard');
-                
-
+     
     }
-
 
     public function hospitaliser(Request $request)
     {
@@ -829,9 +926,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                  ->select('users.user_id', 'users.id_centre', 'users.user_role_id', 'tbl_centre.nom_centre') 
                  ->first();
 
-    // if (!$userCentre) {
-    //         return back()->with('error', 'Erreur : Impossible de récupérer le centre de l’utilisateur.');
-    //             }
+   
     $centreWords = explode(' ', $userCentre->nom_centre); // Séparer les mots du nom du centre
     $centreAbbreviation = isset($centreWords[1]) 
         ? strtoupper(substr($centreWords[1], 0, 3)) 
@@ -944,5 +1039,64 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                     'all_patient_u'=>$all_patient_u,             
                 ));
     }
-
+    public function save_constantes(Request $request, $id_consultation, $patient_id)
+    {
+        DB::beginTransaction();
+        try {
+            // Validation adaptée
+            $validated = $request->validate([
+                'id_prise_en_charge' => 'required|integer',
+                'patient_id' => 'required|integer',
+                'centre_id' => 'required|integer',
+                'id_consultation' => 'required|integer',
+                'constante_count' => 'required|integer|min:1',
+                'constantes' => 'required|array|min:1',
+                'constantes.*.type' => 'required|string|max:255',
+                'constantes.*.valeur' => 'required|numeric',
+                'constantes.*.unite' => 'required|string|max:50'
+            ]);
+    
+            // Vérification cohérence des IDs
+            if ($validated['id_consultation'] != $id_consultation || $validated['patient_id'] != $patient_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Incohérence dans les identifiants'
+                ], 400);
+            }
+    
+            // Traitement des constantes
+            foreach ($validated['constantes'] as $constante) {
+                // Exemple d'enregistrement - adaptez à votre modèle
+                DB::table('tbl_constantes')->insert([
+                    'id_consultation' => $id_consultation,
+                    'centre_id'=>$request->centre_id,
+                    'patient_id' => $patient_id,
+                    'constante_count'=>$request->constante_count,
+                    'user_id' => Session::get('user_id'),   
+                    'type' => $constante['type'],
+                    'valeur' => $constante['valeur'],
+                    'unite' => $constante['unite'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+    
+            DB::commit();
+            return response()->json(['success' => true]);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erreur enregistrement constantes: '.$e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'enregistrement: '.$e->getMessage()
+            ], 500);
+        }
+    }
 }

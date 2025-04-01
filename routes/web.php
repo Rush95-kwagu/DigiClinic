@@ -113,7 +113,10 @@ Route::post('send-consult', [ConsultationController::class,('send_consult')]);
 Route::get('consultations', [ConsultationController::class,('consultation')]);
 Route::get('traitement-patient/{id_consultation}/{patient_id}', [ConsultationController::class,('traitement_patient')]);
 Route::post('save-traitement', [ConsultationController::class,('save_traitement')]);
-Route::post('modifier-constante', [ConsultationController::class,('update_constante')]);
+// Route::post('modifier-constante', [ConsultationController::class,('update_constante')]);
+// Route::post('modifier-constante', [PriseEnChargeController::class,('save_constantes')]);
+Route::post('traitement-patient/{id_consultation}/{patient_id}/modifier-constante', [PriseEnChargeController::class, 'save_constantes'])
+     ->name('modifier.constante');
 
 //Analyses
 Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses')]);
@@ -185,6 +188,15 @@ Route::get('/etat-stock/',[SalesController::class, 'etat_stock']);
 Route::get('approvisionnement/',[SalesController::class, 'all_provision']);
 Route::get('faire-appro/',[SalesController::class, 'faire_appro']);
 Route::post('/post-appro/',[SalesController::class, 'post_caisse']);
+
+
+//Gestion des réactifs 
+Route::get('appro-reactif/',[SalesController::class, 'all_appro_reactif']);
+Route::get('faire-appro-reactif/',[SalesController::class, 'faire_appro_reactif']);
+Route::post('post-appro-reactif/',[SalesController::class, 'post_caisse_reactif']);
+
+Route::get('etat-stock-reactif/',[SalesController::class, 'etat_stock_reactif']);
+
 
 
 Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
