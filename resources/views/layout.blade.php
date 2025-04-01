@@ -41,6 +41,22 @@
     <link rel="stylesheet" href="{{asset('/frontend/vendor/dropzone/dropzone.min.css')}}">
     <link rel="stylesheet" href="{{asset('/frontend/vendor/quill/quill.core.css')}}">
      @yield('gstatic')
+
+     <style>
+      .sup-badge {
+        font-size: 0.7em;
+        vertical-align: super;
+        margin-left: 2px;
+        background-color: #dc3545;
+        border-radius: 50%;
+        min-width: 1.8em;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 1.8em;
+        color: white;
+    }
+    </style>
   </head>
 
   <body>

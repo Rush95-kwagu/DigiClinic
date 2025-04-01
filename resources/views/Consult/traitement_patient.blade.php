@@ -60,7 +60,7 @@
 
                     </h5> <br><br><br>
                    @if($user_role_id !=0 && $user_role_id !=1 && $user_role_id !=10)
-                      @if ($patient->etat_traitement != 0)
+                      @if ($patient->etat_traitement == 0)
                           
                       <button type="button" class="btn btn-light float-right" data-bs-toggle="modal" data-bs-target="#constantesModal">
                         Nouvelles Constantes
@@ -109,7 +109,11 @@
                               <div class="collapse" id="collapse-from-validation">
                                 
                               </div>
-                             <form onsubmit="confirm('Cliquez ok pour cloturer le traitement')" class="form-horizontal" method="post" action="{{url('/save-traitement')}}" enctype="multipart/form-data">
+                             <form onsubmit="confirm('Cliquez ok pour cloturer le traitement')" 
+                                      class="form-horizontal" 
+                                      method="post" 
+                                      action="{{url('/save-traitement')}}" 
+                                      enctype="multipart/form-data">
                                     {{csrf_field()}}
                            
                                 <div class="form-row">
@@ -144,9 +148,13 @@
                                   <div class="controls">
                                   <select id="myDropdown" class="form-select btn btn-outline-" name="specialiste">
                                   <option selected>Mettre en observation ou Affecter à un spécialiste</option>
+                                       <optgroup label="Hospitalisation">
+                                         <option value="0">Mise en Hospitalisation</option>
+                                       </optgroup>
                                         <optgroup label="Observation">
-                                          <option value="0">Mise en observation</option>
+                                          <option value="2">Mise en observation</option>
                                         </optgroup>
+                                        
 
                                          <optgroup label="Spécialistes">
                                          
@@ -414,7 +422,7 @@
             <form action="{{ url('/make-ordonnance') }}" method="POST">
                             {{csrf_field()}}
             <div class="modal-body">
-            <h4>Veuillez renseignez votre ordonnance</h4>
+            <h4>Veuillez éditer votre ordonnance</h4>
             <br>
             <input type="hidden" name="id_consultation" value="{{$id_consultation}}">
             <input type="hidden" name="id_prise_en_charge" value="{{$patient->id_prise_en_charge}}">

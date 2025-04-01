@@ -25,19 +25,39 @@
                       <ul class="nav nav-tabs justify-content-center" id="customTab4" role="tablist">
                         <li class="nav-item" role="presentation">
                           <a class="nav-link active" id="tab-oneAAA" data-bs-toggle="tab" href="#oneAAA" role="tab"
-                            aria-controls="oneAAA" aria-selected="true">Patients en attente</a>
+                            aria-controls="oneAAA" aria-selected="true">
+                            Patients en attente
+                            <sup class="badge bg-danger ms-1">
+                              {{ $totalNewDemand }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
-                            aria-controls="twoAAA" aria-selected="false">Patients en consultation</a>
+                            aria-controls="twoAAA" aria-selected="false">
+                            Patients en consultation
+                            <sup class="badge bg-warning ms-1">
+                              {{ $totalPatient_H }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-fourAAA" data-bs-toggle="tab" href="#fourAAA" role="tab"
-                            aria-controls="twoAAA" aria-selected="false">En urgence</a>
+                            aria-controls="twoAAA" aria-selected="false">
+                            En urgence
+                            <sup class="badge bg-danger ms-1">
+                              {{ $totalPatient_U }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-threeAAA" data-bs-toggle="tab" href="#threeAAA" role="tab"
-                            aria-controls="threeAAA" aria-selected="false">En observation</a>
+                            aria-controls="threeAAA" aria-selected="false">
+                            En Hospitalisation
+                            <sup class="badge bg-warning ms-1">
+                              {{ $totalPatient_H }}
+                            </sup>
+                          </a>
                         </li>
                         
                       </ul>

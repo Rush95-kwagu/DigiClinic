@@ -23,19 +23,41 @@
                       <ul class="nav nav-tabs justify-content-center" id="customTab4" role="tablist">
                         <li class="nav-item" role="presentation">
                           <a class="nav-link active" id="tab-oneAAA" data-bs-toggle="tab" href="#oneAAA" role="tab"
-                            aria-controls="oneAAA" aria-selected="true">Patients en attente</a>
+                            aria-controls="oneAAA" aria-selected="true">
+                            Patients en attente
+                              <sup class="badge bg-warning ms-1">
+                                {{ $totalPatient_nt }}
+                              </sup>
+                                      
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-threeAAA" data-bs-toggle="tab" href="#threeAAA" role="tab"
-                            aria-controls="threeAAA" aria-selected="false">Patients Hospitalisés</a>
+                            aria-controls="threeAAA" aria-selected="false">
+                            Patients Hospitalisés
+                            <sup class="badge bg-danger ms-1">
+                              {{ $totalPatient_h }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
-                            aria-controls="twoAAA" aria-selected="false">Patients traités</a>
+                            aria-controls="twoAAA" aria-selected="false">
+                            Patients traités
+                            <sup class="badge bg-success ms-2">
+                              {{ $totalPatient_t }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-fourAAA" data-bs-toggle="tab" href="#fourAAA" role="tab"
-                            aria-controls="fourAAA" aria-selected="false">Patients en Observation</a>
+                            aria-controls="fourAAA" aria-selected="false">
+                            Patients en Observation
+                         
+                            <sup class="badge bg-warning ms-2">
+                              {{ $totalPatient_ob }}
+                            </sup>
+                          </a>
                         </li>
                         
                       </ul>
@@ -46,7 +68,8 @@
                              <div class="col-sm-12">
                                 <div class="card mb-3">
                                   <div class="card-header">
-                                    <h5 class="card-title">Patients non traités</h5>
+                                    <h5 class="card-title">Patients non traités 
+                                    </h5>
                                   </div>
                                   <div class="card-body">
                                     <div class="">
@@ -275,7 +298,7 @@
                                         </tr>
                                       </thead>
                                       <tbody>
-                                      @foreach($all_patient_t as $v_consult)    
+                                      @foreach($all_patient_ob as $v_consult)    
                                         <tr>
                                           <td>
                                           </td>

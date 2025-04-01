@@ -106,12 +106,6 @@ class ConsultationController extends Controller
             $prenom=$get_user_role->prenom;
             $nom=$get_user_role->nom;
 
-            // $data = [
-            //     'id_demande'=> $id_demande, 
-            //     'user_id'=> $user_id,
-            //     'user_role_id'=> $user_role_id, ];
-            
-            // DB::table('tbl_demande_ext')->insertGetId($data);
 
             $datad = [
                     'last_demande_user_id'=> $user_id 
@@ -131,18 +125,19 @@ class ConsultationController extends Controller
         $this->SpecialisteAuthCheck();
         $user_id=Session::get('user_id');
         $centre_id=Session::get('centre_id');
-        $all_patient_nt=DB::table('tbl_consultation')
-                ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')              
-                ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
-                ->where('etat_traitement',0)
-                ->where([
-                      ['tbl_consultation.user_id',$user_id],
-                      ['tbl_prise_en_charge.id_centre',$centre_id],
-                  ]) 
-               
-                ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*')
-                ->orderBy('etat_consultation','DESC')
-                ->get(); 
+        $all_patient_nt = DB::table('tbl_consultation')
+                        ->join('tbl_prise_en_charge', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')              
+                        ->join('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
+                        ->where('etat_traitement', 0)
+                        ->where([
+                            ['tbl_consultation.user_id', $user_id],
+                            ['tbl_prise_en_charge.id_centre', $centre_id],
+                             ])
+                        ->select('tbl_prise_en_charge.*', 'tbl_patient.*', 'tbl_consultation.*')
+                        ->orderBy('etat_consultation', 'DESC')
+                        ->get();
+        $totalPatient_nt = $all_patient_nt->count();
+
 
         $all_patient_t=DB::table('tbl_consultation')
                 ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')             
@@ -157,6 +152,9 @@ class ConsultationController extends Controller
                 ->orderBy('etat_consultation','DESC')
                 ->get();
 
+        $totalPatient_t = $all_patient_t->count();
+
+
         $all_patient_h=DB::table('tbl_consultation')
                   ->join('tbl_lits','tbl_consultation.id_lit','=','tbl_lits.id_lit')
                   ->join('tbl_chambre','tbl_lits.id_chambre','=','tbl_chambre.id_chambre')
@@ -169,13 +167,37 @@ class ConsultationController extends Controller
                   ->orderBy('etat_consultation','DESC')
                   ->get();
 
+        $totalPatient_h = $all_patient_h->count();
+
+        $all_patient_ob=DB::table('tbl_consultation')
+                ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')             
+                ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
+                ->where([
+              ['tbl_consultation.user_id',$user_id],
+              ['tbl_prise_en_charge.id_centre',$centre_id],
+          ]) 
+        ->where('tbl_prise_en_charge.etat_hospitalisation',2)
+        ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*')
+        ->groupBy('tbl_prise_en_charge.patient_id')
+        ->orderBy('etat_consultation','DESC')
+        ->get();
+
+        $totalPatient_ob = $all_patient_ob->count();
+                  
+
 
 
         return view('Consult.patients_nt')->with(array(
                     'all_patient_nt'=>$all_patient_nt,             
                     'all_patient_t'=>$all_patient_t,             
-                    'all_patient_h'=>$all_patient_h,             
-                ));;
+                    'all_patient_h'=>$all_patient_h, 
+                    'all_patient_ob'=>$all_patient_ob, 
+                    'totalPatient_ob' => $totalPatient_ob,            
+                    'totalPatient_nt' => $totalPatient_nt,            
+                    'totalPatient_t' => $totalPatient_t,
+                    'totalPatient_h' => $totalPatient_h            
+
+                ));
     }
 
     public function gestion_analyses()
@@ -401,11 +423,7 @@ class ConsultationController extends Controller
             
             return $item;
         });
-        // $constance = DB::table('tbl_constante')
-        //                 ->leftjoin('tbl_prise_en_charge','tbl_constante.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
-        //                 ->where('tbl_constante.patient_id',$patient_id)
-        //                 ->select('tbl_constante.*')
-        //                 ->get();
+        
         $last_constance = DB::table('tbl_constantes')
                         ->join('tbl_consultation','tbl_constantes.id_consultation','=','tbl_consultation.id_consultation')
                         ->where('tbl_constantes.patient_id',$patient_id)
@@ -499,171 +517,192 @@ class ConsultationController extends Controller
 
     public function save_traitement(Request $request)
     {
-        $this->UserAuthCheck(); 
+        $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
 
-        $etat_hospitalisation=$request->etat_hospitalisation;
-        $id_consultation=$request->id_consultation;
-        $id_prise_en_charge=$request->id_prise_en_charge;
-        $ordonnance=$request->ordonnance;
-        $user_id=$request->specialiste;
-        $patient_id=$request->patient_id;
-        $observation=$request->observation;
-        $diagnostic=$request->diagnostic;
+        // Récupération des données
+        $decision = $request->specialiste;
+        $id_consultation = $request->id_consultation;
+        $id_prise_en_charge = $request->id_prise_en_charge;
+        $patient_id = $request->patient_id;
+        $ordonnance = $request->ordonnance;
+        $observation = $request->observation;
+        $diagnostic = $request->diagnostic;
+        $file = $request->file('fichier_joint');
 
-        $file=$request->file('fichier_joint');
-    
-        
-        if ($etat_hospitalisation == 0 && $user_id > 0) {
-        $get_user_role=DB::table('users')
-            ->join('personnel','users.email','=','personnel.email')
-            ->select('users.*','personnel.*')
-            ->where('user_id',$user_id)
-            ->first();
+        // Données de base pour la consultation
+        $consultData = [
+            'diagnostic' => $diagnostic,
+            'observation' => $observation,
+            'etat_traitement' => 1 // Toujours à 1 quand traité
+        ];
 
-            $user_role_id=$get_user_role->user_role_id;
-            $qualification=$get_user_role->qualification;
-            $prenom=$get_user_role->prenom;
-            $nom=$get_user_role->nom;
-
+        // Gestion fichier joint
+        if ($file) {
+            $file_name = $file->getClientOriginalName();
+            $upload_path = "Uploads/consultations/";
+            $file_url = $upload_path.$file_name;
             
-            
-            $datau['diagnostic']=$diagnostic;
-            $datau['observation']=$observation;
-            $datau['etat_traitement']=1;
-                if ($file) {
-                $file_name=$file->getClientOriginalName();
-                $ext=strtolower($file->getClientOriginalExtension());
-                $file_full_name=$file_name;
-                $upload_path= "Uploads/consultations/";
-                $file_url=$upload_path.$file_full_name;
-                
-                $success=$file->move($upload_path,$file_full_name);
-                if ($success) {
-            $datau['fichier_joint']=$file_url;
-                    }
-                }      
-            DB::table('tbl_consultation')
-                ->where('id_consultation',$id_consultation)
-                ->update($datau);
-
-            $datap['last_consult_user_role_id']=$user_role_id; 
-            $datap['last_consult_user_id']=$user_id; 
-            DB::table('tbl_prise_en_charge')
-                ->where('id_prise_en_charge',$id_prise_en_charge)
-                ->update($datap);
-
-            $datac['user_id']=$user_id; 
-            $datac['user_role_id']=$user_role_id;
-            $datac['id_prise_en_charge']=$id_prise_en_charge;
-            DB::table('tbl_consultation')->insertGetId($datac);
-            
-
-            Alert::success('Info', 'Patient affecté pour consultation vers '.$qualification.' '.$prenom.' '.$nom);
-               return Redirect::to ('/consultations');
-        }elseif ($etat_hospitalisation == 1 || $user_id == 0) {
-            
-        $get_patient=DB::table('tbl_patient')
-            ->where('patient_id',$patient_id)
-            ->first();
-            $prenom_patient=$get_patient->prenom_patient;
-            $nom_patient=$get_patient->nom_patient;
-
-            if ($user_id == 0) {
-            $data['is_hospitalisation']=1;
+            if ($file->move($upload_path, $file_name)) {
+                $consultData['fichier_joint'] = $file_url;
             }
-            $data['diagnostic']=$diagnostic;
-            $data['observation']=$observation;
-            $data['etat_traitement']=1;
-    
-                if ($file) {
-                $file_name=$file->getClientOriginalName();
-                $ext=strtolower($file->getClientOriginalExtension());
-                $file_full_name=$file_name;
-                $upload_path= "Uploads/consultations/";
-                $file_url=$upload_path.$file_full_name;
-                
-                $success=$file->move($upload_path,$file_full_name);
-                if ($success) {
-            $data['fichier_joint']=$file_url;
-                    }
-                }      
-            DB::table('tbl_consultation')
-                ->where('id_consultation',$id_consultation)
-                ->update($data);
-
-            
-            $datap['etat_hospitalisation']=$etat_hospitalisation;
-            DB::table('tbl_prise_en_charge')
-                ->where('id_prise_en_charge',$id_prise_en_charge)
-                ->update($datap);
-
-
-
-        if ($etat_hospitalisation == 1) {
-            // code...
-        
-        
-        $today=date('YmdHis');
-        $num_ordo=$id_prise_en_charge.'-'.$id_consultation.'-'.$today;
-        $data=array();
-        $data['id_consultation']=$id_consultation;
-        $data['ordonnance_consultation']=$ordonnance;
-        $data['num_ordo']=$num_ordo;
-
-        $id_ordo=DB::table('tbl_ordo_consultation')->insertGetId($data);
-
-        $ordo_info=DB::table('tbl_ordo_consultation')
-                  ->leftjoin('tbl_consultation','tbl_consultation.id_consultation','=','tbl_ordo_consultation.id_consultation')
-                  ->leftjoin('tbl_prise_en_charge','tbl_prise_en_charge.id_prise_en_charge','=','tbl_consultation.id_prise_en_charge')
-                  ->leftjoin('tbl_patient','tbl_patient.patient_id','=','tbl_prise_en_charge.patient_id')
-                  ->select('tbl_ordo_consultation.*','tbl_consultation.*','tbl_prise_en_charge.*','tbl_patient.*')
-                  ->where('tbl_ordo_consultation.id_consultation',$id_ordo)
-                  ->first(); 
-
-
-                $message='L\'ordonnance a été généré avec succès';
-                Alert::success('Info', 'Prise en charge du patient '.$prenom_patient.' '.$nom_patient.' terminée. Le traitement est cloturé');
-                 return Redirect::to('ordonnance/'.$id_ordo)->with(array(
-                    'message'=>$message,
-                    
-                    'ordo_info'=>$ordo_info,                       
-                                                   
-                ));   
         }
 
-                Alert::success('Info', 'Prise en charge du patient '.$prenom_patient.' '.$nom_patient.' terminée. Le traitement est cloturé');
-               return Redirect::to ('/consultations');
+        // Décision de traitement
+        switch ($decision) {
+            case '0': // Hospitalisation
+                return $this->traiterHospitalisation(
+                    $patient_id,
+                    $id_consultation,
+                    $id_prise_en_charge,
+                    $consultData,
+                    $request->etat_hospitalisation,
+                    $ordonnance
+                );
 
-        
+            case '2': // Observation
+                return $this->traiterObservation(
+                    $id_consultation,
+                    $id_prise_en_charge,
+                    $consultData
+                );
+
+            default: // Affectation spécialiste
+                return $this->traiterSpecialiste(
+                    $decision,
+                    $id_consultation,
+                    $id_prise_en_charge,
+                    $consultData
+                );
         }
     }
 
-
-    public function get_ordo($ordo_id)
+    /**
+     * Traitement pour la mise en observation
+     */
+    protected function traiterObservation($id_consultation, $id_prise_en_charge, $consultData)
     {
+        DB::transaction(function () use ($id_consultation, $id_prise_en_charge, $consultData) {
+            // tbl_consultation
+            DB::table('tbl_consultation')
+                ->where('id_consultation', $id_consultation)
+                ->update(array_merge($consultData, [
+                    'etat_traitement' => 1,
+                    'is_hospitalisation' => 0
+                ]));
 
+            // tbl_prise_en_charge
+            DB::table('tbl_prise_en_charge')
+                ->where('id_prise_en_charge', $id_prise_en_charge)
+                ->update([
+                    'etat_hospitalisation' => 2,
+                    'etat_consultation' => 1,
+                    // 'is_hospitalisation' => 0
+                ]);
+        });
 
-
-    $ordo_info=DB::table('tbl_ordo_consultation')
-                  ->leftjoin('tbl_consultation','tbl_consultation.id_consultation','=','tbl_ordo_consultation.id_consultation')
-                  ->leftjoin('tbl_prise_en_charge','tbl_prise_en_charge.id_prise_en_charge','=','tbl_consultation.id_prise_en_charge')
-                  ->leftjoin('tbl_patient','tbl_patient.patient_id','=','tbl_prise_en_charge.patient_id')
-                  ->select('tbl_ordo_consultation.*','tbl_consultation.*','tbl_prise_en_charge.*','tbl_patient.*')
-                  ->where('id_ordo_traitement',$ordo_id)
-                  ->first(); 
- 
-
-      return view ('Consult.ordonnance')
-                ->with(array(
-                   
-                    'ordo_info'=>$ordo_info,                       
-                                                    
-                ));
-
-      
+        Alert::success('Succès', 'Patient mis en observation');
+        return Redirect::to('/consultations');
     }
 
+    /**
+     * Traitement pour l'hospitalisation
+     */
+    protected function traiterHospitalisation(
+        $patient_id,
+        $id_consultation,
+        $id_prise_en_charge,
+        $consultData,
+        $etat_hospitalisation,
+        $ordonnance
+    ) {
+        $patient = DB::table('tbl_patient')
+            ->where('patient_id', $patient_id)
+            ->first();
+
+        DB::transaction(function () use ($id_consultation, $id_prise_en_charge, $consultData) {
+            // tbl_consultation
+            DB::table('tbl_consultation')
+                ->where('id_consultation', $id_consultation)
+                ->update(array_merge($consultData, [
+                    'etat_consultation' => 0,
+                    'is_hospitalisation' => 1
+                ]));
+
+            // tbl_prise_en_charge
+            DB::table('tbl_prise_en_charge')
+                ->where('id_prise_en_charge', $id_prise_en_charge)
+                ->update([
+                    'etat_hospitalisation' => 1,
+                    'etat_consultation' => 0,
+                    // 'is_hospitalisation' => 1,
+                    'last_consult_user_id' => null,
+                    'last_consult_user_role_id' => null
+                ]);
+        });
+
+        // Génération ordonnance si clôture
+        if ($etat_hospitalisation == 1) {
+            $today = date('YmdHis');
+            $num_ordo = $id_prise_en_charge.'-'.$id_consultation.'-'.$today;
+            
+            $id_ordo = DB::table('tbl_ordo_consultation')->insertGetId([
+                'id_consultation' => $id_consultation,
+                'ordonnance_consultation' => $ordonnance,
+                'num_ordo' => $num_ordo
+            ]);
+
+            return Redirect::to('ordonnance/'.$id_ordo)
+                ->with('success', 'Patient hospitalisé avec ordonnance');
+        }
+
+        Alert::success('Succès', 'Patient mis en hospitalisation');
+        return Redirect::to('/consultations');
+    }
+
+    /**
+     * Affectation à un spécialiste
+     */
+    protected function traiterSpecialiste($user_id, $id_consultation, $id_prise_en_charge, $consultData)
+    {
+        $specialiste = DB::table('users')
+            ->join('personnel', 'users.email', '=', 'personnel.email')
+            ->where('user_id', $user_id)
+            ->first();
+
+        DB::transaction(function () use ($user_id, $id_consultation, $id_prise_en_charge, $consultData, $specialiste) {
+            // tbl_consultation
+            DB::table('tbl_consultation')
+                ->where('id_consultation', $id_consultation)
+                ->update(array_merge($consultData, [
+                    'etat_consultation' => 0,
+                    'is_hospitalisation' => 0
+                ]));
+
+            // tbl_prise_en_charge
+            DB::table('tbl_prise_en_charge')
+                ->where('id_prise_en_charge', $id_prise_en_charge)
+                ->update([
+                    'etat_hospitalisation' => 0,
+                    'etat_consultation' => 0,
+                    // 'is_hospitalisation' => 0,
+                    'last_consult_user_id' => $user_id,
+                    'last_consult_user_role_id' => $specialiste->user_role_id
+                ]);
+
+            // Nouvelle consultation pour le spécialiste
+            DB::table('tbl_consultation')->insert([
+                'user_id' => $user_id,
+                'user_role_id' => $specialiste->user_role_id,
+                'id_prise_en_charge' => $id_prise_en_charge,
+                'etat_consultation' => 0,
+                'is_hospitalisation' => 0
+            ]);
+        });
+
+        Alert::success('Succès', "Patient affecté à {$specialiste->qualification} {$specialiste->prenom} {$specialiste->nom}");
+        return Redirect::to('/consultations');
+    }
 
     public function make_ordonance (Request $request){
 

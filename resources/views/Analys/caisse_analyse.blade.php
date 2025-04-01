@@ -25,11 +25,21 @@
                       <ul class="nav nav-tabs justify-content-center" id="customTab4" role="tablist">
                         <li class="nav-item" role="presentation">
                           <a class="nav-link active" id="tab-oneAAA" data-bs-toggle="tab" href="#oneAAA" role="tab"
-                            aria-controls="oneAAA" aria-selected="true">Analyses Impayées</a>
+                            aria-controls="oneAAA" aria-selected="true">
+                            Analyses Impayées
+                            <sup class="badge bg-warning ms-2">
+                              {{ $total_demand_np }}
+                            </sup>
+                          </a>
                         </li>
                         <li class="nav-item" role="presentation">
                           <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
-                            aria-controls="twoAAA" aria-selected="false">Analyses payées</a>
+                            aria-controls="twoAAA" aria-selected="false">
+                            Analyses payées
+                            <sup class="badge bg-success ms-2">
+                              {{ $total_demand_p }}
+                            </sup>
+                          </a>
                         </li>
                         
                       </ul>

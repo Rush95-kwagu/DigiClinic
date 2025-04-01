@@ -66,6 +66,8 @@ class PriseEnChargeController extends Controller
     {
         $this->UserAuthCheck();
         $this->AccueilAuthCheck();
+        $user_id=Session::get('user_id');
+
         $centre_id=Session::get('centre_id');
         $all_prisenc=DB::table('tbl_prise_en_charge')
                 ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
@@ -81,6 +83,7 @@ class PriseEnChargeController extends Controller
                 ->where('tbl_prise_en_charge.id_centre',$centre_id)
                 ->select('tbl_prise_en_charge.*','tbl_patient.*')
                 ->get();
+          $totalNewDemand = $all_consult ->count();      
 
         $all_patient_h=DB::table('tbl_consultation')
                   ->join('tbl_lits','tbl_consultation.id_lit','=','tbl_lits.id_lit')
@@ -93,18 +96,41 @@ class PriseEnChargeController extends Controller
                   ->groupBy('tbl_prise_en_charge.patient_id')
                   ->orderBy('etat_consultation','DESC')
                   ->get();
+        $totalPatient_H = $all_patient_h ->count();
+
 
         $all_patient_u = DB::table('tbl_prise_en_charge')
                    ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
                     ->where('nom_patient', '')
                     ->orderBy('pcreated_at')
                     ->get();
+        $totalPatient_U = $all_patient_u->count();  
+
+         $all_patient_ob=DB::table('tbl_consultation')
+                    ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')             
+                    ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
+                    ->where([
+                  ['tbl_consultation.user_id',$user_id],
+                  ['tbl_prise_en_charge.id_centre',$centre_id],
+              ]) 
+            ->where('tbl_prise_en_charge.etat_hospitalisation',2)
+            ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*')
+            ->groupBy('tbl_prise_en_charge.patient_id')
+            ->orderBy('etat_consultation','DESC')
+            ->get();
+            
+            $totalPatient_ob = $all_patient_ob->count();
 
         return view('prise_enc.all_prise_enc')->with(array(
                     'all_prisenc'=>$all_prisenc,             
                     'all_consult'=>$all_consult,             
                     'all_patient_h'=>$all_patient_h,             
-                    'all_patient_u'=>$all_patient_u,             
+                    'all_patient_u'=>$all_patient_u,
+                    'all_patient_ob'=>$all_patient_ob,            
+                    'totalNewDemand'=>$totalNewDemand,
+                    'totalPatient_H' => $totalPatient_H,
+                    'totalPatient_U' => $totalPatient_U,
+                    'totalPatient_ob'=>$totalPatient_ob               
                 ));
     }
     public function caisse_analyses()
@@ -787,6 +813,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 ->where('tbl_demande_ext.centre_id',$centre_id)
                 ->select('tbl_demande_ext.*','services.service as nom_service','tbl_patient.*')
                 ->get(); 
+        $total_demand_np = $all_demand_np ->count();
 
         $all_demand_p=DB::table('tbl_demande_ext')
                 ->join('tbl_patient','tbl_demande_ext.patient_id','=','tbl_patient.patient_id')
@@ -795,7 +822,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 ->where('tbl_demande_ext.centre_id',$centre_id)
                 ->select('tbl_demande_ext.*','services.service as nom_service','tbl_patient.*')
                 ->get(); 
-      
+        $total_demand_p = $all_demand_p->count();
         $all_consultp=DB::table('tbl_caisse_prise_en_charge')
                 ->join('tbl_prise_en_charge','tbl_caisse_prise_en_charge.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
                 ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
@@ -810,6 +837,9 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                     'all_consultp'=>$all_consultp,
                     'all_demand_p' =>$all_demand_p,             
                     'all_demand_np'=>$all_demand_np,
+                    'total_demand_np'=>$total_demand_np,
+                    'total_demand_p'=>$total_demand_p,
+                                    
                 ));;
     }
 
@@ -890,7 +920,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
         'is_vip'=> $request->is_vip,
     ]; 
     $nbre_lits=$request->nbre_lit;
-  dd($data);
+//   dd($data);
   
     $chambre_id = DB::table('tbl_chambre')->insertGetId($data);
 
@@ -1004,6 +1034,8 @@ $consultationExists = DB::table('tbl_prise_en_charge')
     {
         $this->UserAuthCheck();
         $this->AccueilAuthCheck();
+        $user_id=Session::get('user_id');
+
         // $this->CaisseAuthCheck();
         $centre_id=Session::get('centre_id');
         $new_demand=DB::table('tbl_demande_ext')
@@ -1015,7 +1047,8 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 ->where('tbl_demande_ext.centre_id',$centre_id)
                 ->select('tbl_demande_ext.*','services.service as nom_service','tbl_patient.*')
                 // ->orderBy('etat_consultation','DESC')
-                ->get(); 
+                ->get();
+          $totalNewDemand = $new_demand ->count();       
 
         $all_demand=DB::table('tbl_demande_ext')
                 ->join('tbl_patient','tbl_demande_ext.patient_id','=','tbl_patient.patient_id')
@@ -1024,6 +1057,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 ->where('tbl_demande_ext.centre_id',$centre_id)
                 ->select('tbl_demande_ext.*','services.service as nom_service','tbl_patient.*')
                 ->get();
+        $totalDemand = $all_demand ->count();
 
         $all_patient_h=DB::table('tbl_consultation')
                   ->join('tbl_lits','tbl_consultation.id_lit','=','tbl_lits.id_lit')
@@ -1046,8 +1080,11 @@ $consultationExists = DB::table('tbl_prise_en_charge')
         return view('Analys.all_demande_ext')->with(array(
                     'new_demand'=>$new_demand,             
                     'all_demand'=>$all_demand,             
-                    'all_patient_h'=>$all_patient_h,             
-                    'all_patient_u'=>$all_patient_u,             
+                    'all_patient_h'=>$all_patient_h, 
+                    'all_patient_u'=>$all_patient_u,
+                    'totalNewDemand'=>$totalNewDemand,
+                    'totalDemand'=>$totalDemand, 
+                             
                 ));
     }
     public function save_constantes(Request $request, $id_consultation, $patient_id)
