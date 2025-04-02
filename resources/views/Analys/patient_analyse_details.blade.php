@@ -34,7 +34,11 @@
                         <td>{{ $analyse->prestation_nom ?? 'Non spécifiée' }}</td>
                         <td>{{ $analyse->prix ?? 'Non spécifié' }}</td>
                         <td>
-                            <a class="btn btn-sm btn-primary" href="{{URL::to('store-analyses-result/'.$analyse->analyse_id )}}" type="button" >Ajouter un résultat</a>
+                            <a class="btn btn-sm btn-primary" href="{{URL::to('store-analyses-result/'.$analyse->analyse_id.'/'.$patient['patient_id'] )}}" type="button" >Ajouter un résultat</a>
+
+                            @if ($analyse->id_resultat)
+                            <a class="btn btn-sm btn-warning" target="_blank" href="{{env('APP_URL')}}/storage/{{$analyse->path}}" type="button" >Voir le résultat</a>   
+                            @endif
                             <!-- Formulaire caché pour ajouter un résultat -->
                              <!-- Modal to add analysis result -->
                           
