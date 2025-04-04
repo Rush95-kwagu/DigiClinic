@@ -638,7 +638,7 @@ Admin
                 <div class="card mb-3">
                   <div class="card-header">
                     <h5 class="card-title">Hospitalisations
-                    <a href="{{route('room.index')}}" class="float-right btn btn-warnig">
+                    <a href="{{URL::to('allotted/room')}}" class="float-right btn btn-warnig">
                       <span class="badge rounded-pill bg-success"><i class="ri-menu-line"></i></span>
                       <i class="ri-hotel-bed-line"></i>
                     </a>
@@ -654,7 +654,7 @@ Admin
 
                       <?php
                         $rooms=DB::table('tbl_chambre')
-                              ->where('id_centre',$centre_id)
+                              ->where('centre_id',$centre_id)
                               ->get()
                       ?>
                       @foreach($rooms as $key => $v_room)
@@ -664,7 +664,7 @@ Admin
                         $nbre_lits=DB::table('tbl_lits')
                               ->join('tbl_chambre','tbl_lits.id_chambre','=','tbl_chambre.id_chambre')
                               ->where('tbl_lits.id_chambre',$v_room->id_chambre)
-                              ->where('id_centre',$centre_id)
+                              ->where('tbl_lits.centre_id',$centre_id)
                               ->select('tbl_chambre.*','tbl_lits.*')
                               ->count();
 
@@ -673,7 +673,7 @@ Admin
                               ->where('tbl_lits.id_chambre',$v_room->id_chambre)
                               ->where([
                                     ['tbl_lits.statut',0],
-                                    ['id_centre',$centre_id],
+                                    ['tbl_lits.centre_id',$centre_id],
                                 ])
 
                               ->select('tbl_chambre.*','tbl_lits.*')
@@ -837,7 +837,7 @@ Admin
                               ->join('tbl_chambre','tbl_lits.id_chambre','=','tbl_chambre.id_chambre')
                               ->where('tbl_lits.statut',0)
                               ->where([
-                                      ['id_centre',$centre_id],
+                                      ['tbl_lits.centre_id',$centre_id],
                                       ['is_vip',0],
                                       ])
                               ->select('tbl_chambre.*','tbl_lits.*')
@@ -857,7 +857,7 @@ Admin
                               ->join('tbl_chambre','tbl_lits.id_chambre','=','tbl_chambre.id_chambre')
                               ->where('tbl_lits.statut',0)
                               ->where([
-                                      ['id_centre',$centre_id],
+                                      ['tbl_lits.centre_id',$centre_id],
                                       ['is_vip',1],
                                       ])
                               ->select('tbl_chambre.*','tbl_lits.*')
@@ -927,222 +927,7 @@ Admin
       </div>
             <!-- Row ends -->
             <!-- Row starts -->
-      {{-- <div class="row gx-3">
-        <div class="col-sm-12">
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="card-title">Appointments</h5>
-            </div>
-            <div class="card-body">
-
-              <!-- Table starts -->
-              <div class="table-outer">
-                <div class="table-responsive">
-                  <table class="table m-0 align-middle">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Patient Name</th>
-                        <th>Age</th>
-                        <th>Consulting Doctor</th>
-                        <th>Department</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Disease</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>001</td>
-                        <td>
-                          Deena Cooley
-                        </td>
-                        <td>65</td>
-                        <td>
-                          <img src="{{asset('assets/images/user.png')}}" class="img-shadow img-2x rounded-5 me-1"
-                            alt="Hospital Admin Template">
-                          Vicki Walsh
-                        </td>
-                        <td>Surgeon</td>
-                        <td>05/23/2024</td>
-                        <td>9:30AM</td>
-                        <td>Diabeties</td>
-                        <td>
-                          <div class="d-inline-flex gap-1">
-                            <button class="btn btn-success btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Accepted">
-                              <i class="ri-checkbox-circle-line"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Reject" disabled>
-                              <i class="ri-close-circle-line"></i>
-                            </button>
-                            <a href="edit-appointment.html" class="btn btn-outline-info btn-sm"
-                              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Appointment">
-                              <i class="ri-edit-box-line"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>002</td>
-                        <td>
-                          Jerry Wilcox
-                        </td>
-                        <td>73</td>
-                        <td>
-                          <img src="{{asset('assets/images/user1.png')}}" class="img-shadow img-2x rounded-5 me-1"
-                            alt="Hospital Admin Template">
-                          April Gallegos
-                        </td>
-                        <td>Gynecologist</td>
-                        <td>05/23/2024</td>
-                        <td>9:45AM</td>
-                        <td>Fever</td>
-                        <td>
-                          <div class="d-inline-flex gap-1">
-                            <button class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Accept" disabled>
-                              <i class="ri-checkbox-circle-line"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top"
-                              data-bs-title="Rejected">
-                              <i class="ri-close-circle-line"></i>
-                            </button>
-                            <a href="edit-appointment.html" class="btn btn-outline-info btn-sm"
-                              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Appointment">
-                              <i class="ri-edit-box-line"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>003</td>
-                        <td>
-                          Eduardo Kramer
-                        </td>
-                        <td>84</td>
-                        <td>
-                          <img src="{{asset('assets/images/user2.png')}}" class="img-shadow img-2x rounded-5 me-1"
-                            alt="Hospital Admin Template">
-                          Basil Frost
-                        </td>
-                        <td>Psychiatrists</td>
-                        <td>05/23/2024</td>
-                        <td>10:00AM</td>
-                        <td>Cold</td>
-                        <td>
-                          <div class="d-inline-flex gap-1">
-                            <button class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Accept">
-                              <i class="ri-checkbox-circle-line"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Reject">
-                              <i class="ri-close-circle-line"></i>
-                            </button>
-                            <a href="edit-appointment.html" class="btn btn-outline-info btn-sm"
-                              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Appointment">
-                              <i class="ri-edit-box-line"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>004</td>
-                        <td>
-                          Jason Compton
-                        </td>
-                        <td>56</td>
-                        <td>
-                          <img src="{{asset('assets/images/user4.png')}}" class="img-shadow img-2x rounded-5 me-1"
-                            alt="Hospital Admin Template">
-                          Nannie Guerrero
-                        </td>
-                        <td>Urologist</td>
-                        <td>05/23/2024</td>
-                        <td>10:15AM</td>
-                        <td>Prostate</td>
-                        <td>
-                          <div class="d-inline-flex gap-1">
-                            <button class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Accept">
-                              <i class="ri-checkbox-circle-line"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Reject">
-                              <i class="ri-close-circle-line"></i>
-                            </button>
-                            <a href="edit-appointment.html" class="btn btn-outline-info btn-sm"
-                              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Appointment">
-                              <i class="ri-edit-box-line"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>005</td>
-                        <td>
-                          Emmitt Bryan
-                        </td>
-                        <td>49</td>
-                        <td>
-                          <img src="{{asset('assets/images/user5.png')}}" class="img-shadow img-2x rounded-5 me-1"
-                            alt="Hospital Admin Template">
-                          Daren Andrade
-                        </td>
-                        <td>Cardiology</td>
-                        <td>05/23/2024</td>
-                        <td>10:30AM</td>
-                        <td>Asthma</td>
-                        <td>
-                          <div class="d-inline-flex gap-1">
-                            <button class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Accept">
-                              <i class="ri-checkbox-circle-line"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip"
-                              data-bs-placement="top" data-bs-title="Reject">
-                              <i class="ri-close-circle-line"></i>
-                            </button>
-                            <a href="edit-appointment.html" class="btn btn-outline-info btn-sm"
-                              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Appointment">
-                              <i class="ri-edit-box-line"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <!-- Table ends -->
-
-            </div>
-          </div>
-        </div>
-        <div class="col-xxl-6 col-sm-12">
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="card-title">Income</h5>
-            </div>
-            <div class="card-body">
-              <div id="income"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xxl-6 col-sm-12">
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="card-title">Pharmacy Orders</h5>
-            </div>
-            <div class="card-body">
-              <div id="orders"></div>
-            </div>
-          </div>
-        </div>
-      </div> --}}
+    
       <!-- Row ends -->
     </div>
   <!-- App body ends -->
@@ -1159,7 +944,7 @@ Admin
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-      <form onsubmit="confirm('Cliquer OK pour confirmer')" class="row" action="{{ url('/save-chambre') }}" method="POST">
+      <form id="form-chambre" class="row" action="{{ url('/save-chambre') }}" method="POST">
           {{csrf_field()}}
         <div class="col-md-12 mb-3">
           <input type="hidden" name="centre_id" value="{{ $centre_id }}">
@@ -1248,12 +1033,26 @@ Admin
       }
       else $("select option:selected").prop("selected", false);
     });
-    </script>
-    </script>
-
-
     
-
+  
+    </script> 
+<script>
+  document.getElementById("form-chambre").addEventListener("submit", function(event) {
+    event.preventDefault();
+    Swal.fire({
+        title: "Confirmer l'enregistrement ?",
+        text: "Cliquez sur OK pour enregistrer cette chambre.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Oui, enregistrer",
+        cancelButtonText: "Annuler"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.submit(); // Soumet le formulaire si l'utilisateur confirme
+        }
+    });
+});
+</script>
 @endsection
 
 <script type="text/javascript">
@@ -1266,21 +1065,21 @@ Admin
     var data = google.visualization.arrayToDataTable(barMens);
 
     var options = {
-            colors: ['#9E6DE0'],
-            animation: {
-            duration: 1000,
-
-            startup: true //This is the new option
-            },        title: 'Ventes mensulles de la pharmacie ',
-
-                                      curveType: 'function',
-                                      legend: { position: 'bottom' }
-                                    };
-                                    var chart = new google.visualization.BarChart(document.getElementById('lineChartbarMens'));
+              colors: ['#9E6DE0']
+              animation: {
+                  duration: 1000,
+                  startup: true //This is the new option
+                     }      
+             title: 'Ventes mensulles de la pharmacie ',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+                  };
+    var chart = new google.visualization.BarChart(document.getElementById('lineChartbarMens'));
                                     chart.draw(data, options);
                                   }
+                                  
       
-  </script> 
+</script> 
 
 
   <script type="text/javascript">
@@ -1331,4 +1130,6 @@ Admin
       }
 </script> 
 
+
 @endsection
+

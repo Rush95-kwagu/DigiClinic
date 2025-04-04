@@ -127,16 +127,17 @@ class ConsultationController extends Controller
         $user_id=Session::get('user_id');
         $centre_id=Session::get('centre_id');
         $all_patient_nt = DB::table('tbl_consultation')
-                        ->join('tbl_prise_en_charge', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')              
-                        ->join('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
-                        ->where('etat_traitement', 0)
-                        ->where([
-                            ['tbl_consultation.user_id', $user_id],
-                            ['tbl_prise_en_charge.id_centre', $centre_id],
-                             ])
-                        ->select('tbl_prise_en_charge.*', 'tbl_patient.*', 'tbl_consultation.*')
-                        ->orderBy('etat_consultation', 'DESC')
-                        ->get();
+        ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')
+        ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
+        ->where('is_hospitalisation',1)
+        ->where([
+              ['id_lit',null],
+              ['tbl_prise_en_charge.id_centre',$centre_id],
+          ])
+        ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*')
+        ->groupBy('tbl_prise_en_charge.patient_id')
+        ->orderBy('etat_consultation','DESC')
+        ->get();
         $totalPatient_nt = $all_patient_nt->count();
 
 
@@ -156,17 +157,26 @@ class ConsultationController extends Controller
         $totalPatient_t = $all_patient_t->count();
 
 
-        $all_patient_h=DB::table('tbl_consultation')
-                  ->join('tbl_lits','tbl_consultation.id_lit','=','tbl_lits.id_lit')
-                  ->join('tbl_chambre','tbl_lits.id_chambre','=','tbl_chambre.id_chambre')
-                  ->join('tbl_prise_en_charge','tbl_consultation.id_prise_en_charge','=','tbl_prise_en_charge.id_prise_en_charge')              
-                  ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
-                  ->where('is_hospitalisation',1)
-                  ->where('tbl_prise_en_charge.id_centre',$centre_id)
-                  ->select('tbl_prise_en_charge.*','tbl_patient.*','tbl_consultation.*','tbl_chambre.*','tbl_lits.*')
-                  ->groupBy('tbl_prise_en_charge.patient_id')
-                  ->orderBy('etat_consultation','DESC')
-                  ->get();
+        $all_patient_h = DB::table('tbl_consultation')
+        ->join('tbl_lits', 'tbl_consultation.id_lit', '=', 'tbl_lits.id_lit')
+        ->join('tbl_chambre', 'tbl_lits.id_chambre', '=', 'tbl_chambre.id_chambre')
+        ->join('tbl_prise_en_charge', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')              
+        ->join('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
+        ->where('is_hospitalisation', 1)
+        ->where('tbl_prise_en_charge.id_centre', $centre_id)
+        ->select(
+            'tbl_prise_en_charge.*',
+            'tbl_prise_en_charge.patient_id', 
+            'tbl_patient.*',
+            
+            'tbl_consultation.id_consultation',
+            'tbl_consultation.is_hospitalisation',
+            'tbl_chambre.libelle_chambre',
+            'tbl_lits.lit'
+        )
+        ->groupBy('tbl_prise_en_charge.patient_id')
+        ->orderBy('is_hospitalisation', 'DESC')
+        ->get();
 
         $totalPatient_h = $all_patient_h->count();
 
@@ -185,9 +195,6 @@ class ConsultationController extends Controller
 
         $totalPatient_ob = $all_patient_ob->count();
                   
-
-
-
         return view('Consult.patients_nt')->with(array(
                     'all_patient_nt'=>$all_patient_nt,             
                     'all_patient_t'=>$all_patient_t,             
@@ -442,12 +449,31 @@ class ConsultationController extends Controller
                 ));;
     }
     
-    public function traitement_patient($id_consultation,$patient_id)
+    public function traitement_patient($id_consultation, $patient_id)
     {
+        $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
-        $user_id=Session::get('user_id');
+
+        $patient_data = $this->getPatientData($patient_id);
+        
+        if (!$patient_data->first()) {
+            abort(404, 'Patient non trouvé');
+        }
     
-        $all_details = DB::table('tbl_prise_en_charge')
+        
+        $last_constance = $this->getLastConstantes($patient_id);
+    
+        return view('Consult.traitement_patient', [
+            'all_details' => $patient_data,
+            'id_consultation' => $id_consultation,
+            'last_constance' => $last_constance,
+            'patient' => $patient_data->first() 
+        ]);
+    }
+    
+    private function getPatientData($patient_id)
+    {
+        return DB::table('tbl_prise_en_charge')
             ->leftjoin('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
             ->leftjoin('tbl_consultation', 'tbl_consultation.id_prise_en_charge', '=', 'tbl_prise_en_charge.id_prise_en_charge')
             ->leftjoin('tbl_ordo_consultation', 'tbl_ordo_consultation.id_consultation', '=', 'tbl_consultation.id_consultation')
@@ -462,44 +488,42 @@ class ConsultationController extends Controller
             ->orderBy('tbl_prise_en_charge.created_at', 'DESC')
             ->get()
             ->map(function ($item) {
-            // Calcul de l'âge pour chaque résultat
-            if (!empty($item->patient_birthdate)) {
-                $birthdate = Carbon::parse($item->patient_birthdate);
-                $age = $birthdate->diff(Carbon::now());
-                if ($age->y < 1) {
-                    $item->age_formatted = $age->m . ' mois';
+                if (!empty($item->patient_birthdate)) {
+                    $birthdate = Carbon::parse($item->patient_birthdate);
+                    $age = $birthdate->diff(Carbon::now());
+                    
+                    if ($age->y < 1 && $age->m < 1) {
+                        $item->age_formatted = $age->d . ' jours';
+                    } elseif ($age->y < 1) {
+                        $item->age_formatted = $age->m . ' mois';
+                    } else {
+                        $item->age_formatted = $age->y . ' ans et ' . $age->m . ' mois';
+                    }
                 } else {
-                    $item->age_formatted = $age->y . ' ans et ' . $age->m . ' mois';
+                    $item->age_formatted = 'Date de naissance inconnue';
                 }
-                if ($age->y < 1 && $age->m < 1) {
-                    $item->age_formatted = $age->d . ' jours';
-                }
-            } else {
-                $item->age_formatted = 'Date de naissance inconnue';
-            }
-            
-            return $item;
-        });
-        
-        $last_constance = DB::table('tbl_constantes')
-                        ->join('tbl_consultation','tbl_constantes.id_consultation','=','tbl_consultation.id_consultation')
-                        ->where('tbl_constantes.patient_id',$patient_id)
-                        ->select(
-                            'tbl_constantes.type',
-                            'tbl_constantes.valeur',
-                            'tbl_constantes.unite',
-                            'tbl_constantes.created_at')
-                        ->orderBy('created_at', 'DESC')
-                        ->get()
-                        ->groupBy('type')
-                        ->map (function($items){
-                            return $items->first();
-                        });                
-        return view('Consult.traitement_patient')->with(array(
-                    'all_details'=>$all_details,                         
-                    'id_consultation'=>$id_consultation,  
-                    'last_constance'=>$last_constance,
-                ));;
+                
+                return $item;
+            });
+    }
+    
+    private function getLastConstantes($patient_id)
+    {
+        return DB::table('tbl_constantes')
+            ->join('tbl_consultation', 'tbl_constantes.id_consultation', '=', 'tbl_consultation.id_consultation')
+            ->where('tbl_constantes.patient_id', $patient_id)
+            ->select(
+                'tbl_constantes.type',
+                'tbl_constantes.valeur',
+                'tbl_constantes.unite',
+                'tbl_constantes.created_at'
+            )
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->groupBy('type')
+            ->map(function($items) {
+                return $items->first();
+            });
     }
 
     public function save_analyse_traitement (Request $request)
@@ -761,6 +785,29 @@ class ConsultationController extends Controller
         return Redirect::to('/consultations');
     }
 
+    public function get_ordo($ordo_id)
+    {
+
+
+
+    $ordo_info=DB::table('tbl_ordo_consultation')
+                  ->leftjoin('tbl_consultation','tbl_consultation.id_consultation','=','tbl_ordo_consultation.id_consultation')
+                  ->leftjoin('tbl_prise_en_charge','tbl_prise_en_charge.id_prise_en_charge','=','tbl_consultation.id_prise_en_charge')
+                  ->leftjoin('tbl_patient','tbl_patient.patient_id','=','tbl_prise_en_charge.patient_id')
+                  ->select('tbl_ordo_consultation.*','tbl_consultation.*','tbl_prise_en_charge.*','tbl_patient.*')
+                  ->where('id_ordo_traitement',$ordo_id)
+                  ->first(); 
+ 
+
+      return view ('Consult.ordonnance')
+                ->with(array(
+                   
+                    'ordo_info'=>$ordo_info,                       
+                                                    
+                ));
+
+      
+    }
     public function make_ordonance (Request $request){
 
         $id_consultation=$request->id_consultation;

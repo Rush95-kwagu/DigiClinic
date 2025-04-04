@@ -44,9 +44,14 @@ class RoomController extends Controller
         
         return view('room.index');
     }
+
     public function allottedRoom()
     {
         $this->UserAuthCheck();
+        
+
+        // $room_allotted = DB::table('tbl_chambre')
+        //                     ->join('tbl_')
 
         return view('room.allotted-room');
     }

@@ -5,6 +5,7 @@
 @php
 $user_role_id=Session::get('user_role_id');
 $user_id=Session::get('user_id');
+$centre_id=Session::get('centre_id')
   
 @endphp
 
@@ -24,13 +25,30 @@ $user_id=Session::get('user_id');
                     <!-- Row starts -->
                     <div class="row gx-3">
 
-                   @if (session()->has('ServiceCreated'))
-                   <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">Service Créé</h4>
-                    <p>{{session()->get('DepartementCreated')}}</p>
-                    <hr />
-                    <p class="mb-0"><a href="{{route('services.index')}}">Retour à la liste</a> </p>
-                   </div>
+                      @if (session()->has('ServiceCreated'))
+                      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                      <script>
+                          document.addEventListener('DOMContentLoaded', function () {
+                              Swal.fire({
+                                  title: 'Service créé avec succès',
+                                  text: 'Voulez-vous ajouter un autre ?',
+                                  icon: 'success',
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Oui',
+                                  cancelButtonText: 'Non',
+                                  reverseButtons: true,
+                                  confirmButtonColor: '#28a745',
+                                  cancelButtonColor: '#dc3545'
+                              }).then((result) => {
+                                  if (!result.isConfirmed) {
+                                      window.location.href = "{{ route('services.index') }}";
+                                  }
+                                  
+                              });
+                          });
+                      </script>
+                 
+                  
                 </div>
 
                    @endif
@@ -38,9 +56,10 @@ $user_id=Session::get('user_id');
 
                         @if (!session()->has('ServiceCreated'))
                         <div class="col-xxl-3 col-lg-4 col-sm-6">
-                          <form action="{{route('services.store')}}" method="POST">
+                          <form id="service-form" action="{{route('services.store')}}" method="POST">
                               @csrf
                         <div class="mb-3">
+                          <input type="hidden" name="centre_id" value="{{ $centre_id }}">
                           <label class="form-label" for="specialite">Spécialité <span
                             class="text-danger">*</span></label>
                           <input type="text" class="form-control" id="a1" name="specialite" placeholder="Spécialité" required>
@@ -75,13 +94,11 @@ $user_id=Session::get('user_id');
                               class="text-danger">*</span></label>
                           <div class="m-0">
                             <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="status" id="status"
-                               >
+                              <input class="form-check-input" type="radio" name="status" id="status" value="1">
                               <label class="form-check-label" for="status">Oui</label>
                             </div>
                             <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="status" id="status"
-                                >
+                              <input class="form-check-input" type="radio" name="status" id="status" value="0">
                               <label class="form-check-label" for="status">Non</label>
                             </div>
                           </div>
@@ -91,13 +108,16 @@ $user_id=Session::get('user_id');
                         <div class="mb-3">
                           <label class="form-label" for="chef_service">Chef service<span
                             class="text-danger">*</span></label>
-                          <select class="form-select"  id="personnel_id" name="chef_service" required>
+                          <select class="form-select" name="chef_service" required>
                             @php
                                 $personnel = DB::table('personnel')->get();
-                            @endphp
-                            <option value="">---Nommer un chef---</option>
+                                @endphp
+                            <option value="" selected>---Nommer un chef---</option>
+                            {{-- @php
+                                // dd($personnel);
+                            @endphp --}}
                                 @foreach($personnel as $chef_serv)
-                                    <option value="{{ $chef_serv->id }}">Dr. {{ $chef_serv->nom }} {{ $chef_serv->prenom }}</option>
+                                    <option value="{{ $chef_serv->personnel_id }}">Dr. {{ $chef_serv->nom }} {{ $chef_serv->prenom }}</option>
                                 @endforeach
                           </select>
                         </div>
@@ -133,4 +153,23 @@ $user_id=Session::get('user_id');
 
           </div>
           <!-- App body ends -->
+          <script>
+            document.getElementById("service-form")
+            .addEventListener("submit", function(event) {
+              event.preventDefault();
+              Swal.fire({
+        title: "Confirmer l'enregistrement ?",
+        // text: "Cliquez sur OK pour enregistrer cette chambre.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Oui, enregistrer",
+        cancelButtonText: "Annuler"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.submit(); 
+        }
+    });
+});
+</script>
+          </script>
 @endsection

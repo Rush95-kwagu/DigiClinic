@@ -85,10 +85,11 @@ class ServiceController extends Controller
             'telephone'=>['string','required'],
             'email'=>['string','email','required'],
             'status'=>['string','required'],
-            'chef_service' => 'string','nullable|exists:personnel,personnel_id',
+            'chef_service' => 'int','nullable|exists:personnel,personnel_id',
+            'centre_id'=>'required|int',
 
         ]);
-           
+        //    dd($request->all());
         Service::create($request->all());
         return redirect()->back()->with('ServiceCreated','Le service a été crée avec succès');
 

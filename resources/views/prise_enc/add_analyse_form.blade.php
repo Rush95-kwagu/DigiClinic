@@ -54,14 +54,15 @@ Repertoire patient
                            
                             
                             <input type="hidden" name="centre_id" value="{{ Session::get('centre_id') }}">
+                            <input type="hidden" name="user_id" value="{{ Session::get('user_id')}}">
                           <label class="form-label" for="a1">Nom de l'analyse'</label>
-                          <input type="text" class="form-control" name="libelle_analyse" id="a1" placeholder="Entrez le nom de l'analyse">
+                          <input type="text" class="form-control" name="nom_prestation" id="a1" placeholder="Entrez le nom de l'analyse">
                         </div>
                       </div>
                       <div class="col-xxl-3 col-lg-4 col-sm-6">
                         <div class="mb-3">
                           <label class="form-label" for="a2">Coût de l'analyse</label>
-                          <input type="number" class="form-control" name="prix_analyse" id="a2" placeholder="Entrez le coût">
+                          <input type="number" class="form-control" name="tarif" id="a2" placeholder="Entrez le coût">
                           </div>
                       </div>
                       <div class="col-xxl-3 col-lg-4 col-sm-6">

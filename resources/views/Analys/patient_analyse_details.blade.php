@@ -5,16 +5,34 @@
  $user_id=Session::get('user_id');
 ?>
 
-    <h1>Informations sur le patient</h1>
+<!-- App body starts -->
+<div class="app-body">
 
-    <div>
+    <!-- Row starts -->
+    <div class="row gx-3">
+       <div class="col-sm-12">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="card-title">Informations sur le patient</h5>
+          </div>
+    {{-- <h1>Informations sur le patient</h1> --}}
+
+    <div class="card-body">
         <h2>Nom : {{ $patient['nom'] }} {{ $patient['prenom'] }}</h2>
         <p><strong>Âge :</strong> {{ $patient['age'] ?? 'non défini'}}</p>
-    </div>
-
-    <h3>Analyses</h3>
-    @if (count($patient['analyses']) > 0)
-        <table class="table table-hover table-stripped table-sm">
+    
+        <div class="row gx-3">
+            <div class="col-sm-12">
+              <div class="card mb-3">
+                <div class="card-header">
+                  <h5 class="card-title">Analyses traités</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-outer">
+                    <div class="table-responsive">
+                        @if (count($patient['analyses']) > 0)
+                        <table class="table table-striped table-bordered" id="example2">
+        {{-- <table class="table table-hover table-stripped table-sm"> --}}
             <thead>
                 <tr>
                     <th>Analyse ID</th>
@@ -51,7 +69,7 @@
         <p>Aucune analyse trouvée pour ce patient.</p>
     @endif
 
-
+</div>
 @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
 
 @section('Datatable')

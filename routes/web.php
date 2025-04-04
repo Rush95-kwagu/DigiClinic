@@ -111,7 +111,7 @@ Route::get('/directeur/center/{id}/{nom}-{prenom}', [ServiceController::class, '
 //Consultation
 Route::post('send-consult', [ConsultationController::class,('send_consult')]);
 Route::get('consultations', [ConsultationController::class,('consultation')]);
-Route::get('traitement-patient/{id_consultation}/{patient_id}', [ConsultationController::class,('traitement_patient')]);
+Route::get('traitement-patient/{id_consultation}/{patient_id}', [ConsultationController::class,('traitement_patient')])->name('traitement-patient');
 Route::post('save-traitement', [ConsultationController::class,('save_traitement')]);
 // Route::post('modifier-constante', [ConsultationController::class,('update_constante')]);
 // Route::post('modifier-constante', [PriseEnChargeController::class,('save_constantes')]);

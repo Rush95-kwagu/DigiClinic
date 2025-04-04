@@ -72,7 +72,7 @@
                           @php
                             
                              $all_services = DB::table('services')
-                                          ->join('personnel', 'services.chef_service','=','personnel.id')
+                                          ->join('personnel', 'services.chef_service','=','personnel.personnel_id')
                                           ->select('services.*','personnel.nom as chef_service_nom','personnel.prenom as chef_service_prenom')
                                           ->get();             
 
@@ -81,7 +81,7 @@
 
 
                           <tr>
-                            <td>{{$service->id}}</td>
+                            <td>{{$service->services_id}}</td>
                             <td>{{$service->service}}</td>
                             
                             <td>
@@ -122,7 +122,7 @@
                                   data-bs-target="#delRow">
                                   <i class="ri-delete-bin-line"></i>
                                 </button>
-                                <a href="{{route('services.edit',$service->id)}}" class="btn btn-outline-success btn-sm rounded-5"
+                                <a href="{{route('services.edit',$service->services_id)}}" class="btn btn-outline-success btn-sm rounded-5"
                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifier les informartions du service">
                                   <i class="ri-edit-box-line"></i>
                                 </a>
@@ -152,7 +152,7 @@
                             <div class="d-flex justify-content-end gap-2">
                               <a href="#" class="btn btn-secondary" data-bs-dismiss="modal"
                                 aria-label="Close">Non</a>
-                                  <form action="{{route('services.destroy',$service->id)}}" method="POST">
+                                  <form action="{{route('services.destroy',$service->services_id)}}" method="POST">
                                             @csrf
                                             @method('DELETE')
 

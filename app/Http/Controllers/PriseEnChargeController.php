@@ -42,7 +42,7 @@ class PriseEnChargeController extends Controller
     public function ChefAuthCheck()
    {
     $user_role_id=Session::get('user_role_id');
-    if ($user_role_id == 11) {
+    if ($user_role_id == 35) {
         return;
         }
         else 
@@ -256,23 +256,28 @@ class PriseEnChargeController extends Controller
         // $user = Auth::user();
        
         $centre_id=Session::get('centre_id');
+        $user_id=Session::get('user_id');
       
         
        // dd($request->all(),Session::get('centre_id'));
 
         $request->validate([
-           'libelle_analyse'=>'required|string',
-           'prix_analyse'=>'required|integer',
+           'nom_prestation'=>'required|string',
+           'tarif'=>'required|integer',
            'prix_analyse_assure'=>'required|integer',
            'centre_id'      => 'required|integer|in:' . Session::get('centre_id'),
+           'user_id'        => 'required|integer|in:' . Session::get('user_id'),
            'category'      => 'required|string|in:HEMATOLOGIE,PARASITOLOGIE,SEROLOGIE,BIOCHIMIE,IMMUNOLOGIE'
           
+
         ]);
-      $result=  DB::table('tbl_type_analyse')->insertGetId([
-            'libelle_analyse' => $request->input('libelle_analyse'),
-            'prix_analyse' => $request->input('prix_analyse'),
+        // dd($request->all());
+      $result=  DB::table('tbl_prestation')->insertGetId([
+            'nom_prestation' => $request->input('nom_prestation'),
+            'tarif' => $request->input('tarif'),
             'prix_analyse_assure' => $request->input('prix_analyse_assure'),
             'centre_id'      => $centre_id,
+            'user_id'        => $user_id,
             'category'      => $request->input('category'),
             'created_at'     => now(),
             'updated_at'     => now(),
@@ -910,7 +915,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
     public function save_chambre(Request $request)
     {
     $this->UserAuthCheck(); 
-    $this->AccueilAuthCheck();
+    $this->ChefAuthCheck();
     $centre_id =Session::get('centre_id');                       
     $data =[
         'centre_id'=>$centre_id,
@@ -938,7 +943,9 @@ $consultationExists = DB::table('tbl_prise_en_charge')
     public function hospitaliser(Request $request)
     {
     $this->UserAuthCheck(); 
-    $this->AccueilAuthCheck();
+    // $this->AccueilAuthCheck();
+    $this->ChefAuthCheck();
+
 
     $id_consultation=$request->id_consultation;
     $id_lit=$request->id_lit;
@@ -952,7 +959,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
             ->update(['statut'=>1]);
 
      Alert::success('Info', 'Le patient a été hospitalisé.');
-               return Redirect::to ('/dashboard');
+               return redirect()->back();
     }
 
     public function save_demande_ext(Request $request)

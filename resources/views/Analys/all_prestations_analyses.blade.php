@@ -103,21 +103,25 @@ Repertoire patient
                </thead>
               @php
                                $centre_id=Session::get('centre_id');
-                               $analyse=DB::table('tbl_type_analyse')
-                                            ->where('service',"LABORATOIRE")
-                                            ->get();
+                               $analyse = DB::table('tbl_prestation')
+                                      ->join('tbl_centre', 'tbl_prestation.centre_id', '=', 'tbl_centre.id_centre')
+                                      ->where([
+                                            ['tbl_prestation.service', '=', 'LABORATOIRE'],
+                                            ['tbl_prestation.centre_id', '=', $centre_id]
+                                           ])
+                                      ->get();
                           @endphp
               <tbody>
                 @foreach ($analyse as $all_analyses)
                 <tr>
-                  <td>{{$all_analyses->libelle_analyse}}</td>
-                  <td>{{$all_analyses->prix_analyse}} FCFA</td>
+                  <td>{{$all_analyses->nom_prestation}}</td>
+                  <td>{{$all_analyses->tarif}} FCFA</td>
                   <td>{{$all_analyses->prix_analyse_assure}} FCFA</td>
                   <td>
                     <button class="btn btn-outline-success btn-sm add-analysis" 
-                        data-id="{{$all_analyses->id_type_analyse}}" 
-                        data-libelle="{{$all_analyses->libelle_analyse}}" 
-                        data-prix="{{$all_analyses->prix_analyse}}">
+                        data-id="{{$all_analyses->prestation_id}}" 
+                        data-libelle="{{$all_analyses->nom_prestation}}" 
+                        data-prix="{{$all_analyses->tarif}}">
                           Sélectionner
                 </button>
 

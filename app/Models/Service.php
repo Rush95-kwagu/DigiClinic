@@ -13,12 +13,13 @@ class Service extends Model
     protected $table ='services';
 
     protected $fillable = [
-        'nom',
+        'service',
         'email',
         'telephone',
-        'nbre_chambre',
         'status',
-        'personnel_id'    
+        'specialite',
+        'chef_service',
+        'centre_id'    
     ];
 
     public function chef()
