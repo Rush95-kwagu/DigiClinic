@@ -274,7 +274,6 @@ class ConsultationController extends Controller
             'analyses' => $analyses
             ];
 
-
         return view('Analys.patient_analyse_details')->with(array(
             'patient'=>$result
         ));

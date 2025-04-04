@@ -19,6 +19,7 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\PriseEnChargeController;
 use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\MedecinGeneralistController;
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -73,6 +74,9 @@ Route::post('complements-information/{patient_id}', [PriseEnChargeController::cl
 Route::post('/make-ordonnance', [ConsultationController::class,('make_ordonance')]);
 Route::get('/ordonnance/{ordo_id}', [ConsultationController::class,('get_ordo')]);
 
+
+//agenda
+Route::resource('agendas', AgendaController::class);
 
 // Patient
 Route::resource('patient', PatientController::class);
