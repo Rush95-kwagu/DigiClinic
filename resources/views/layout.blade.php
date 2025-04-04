@@ -126,7 +126,7 @@
 
           <!-- Header actions starts -->
           <div class="d-lg-flex d-none gap-2">
-
+          <a class="header-icon" href="{{URL::to('agendas')}}"> <i class="fa fa-calendar text-white" aria-hidden="true"></i> </a>
             <!-- Select country dropdown starts -->
             <!-- <div class="dropdown">
               <a class="dropdown-toggle header-icon" href="#!" role="button" data-bs-toggle="dropdown"
