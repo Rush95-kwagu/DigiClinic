@@ -957,6 +957,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
 
     public function save_demande_ext(Request $request)
     {
+    
     $this->UserAuthCheck(); 
     $this->AccueilAuthCheck();
     $user_role_id=Session::get('user_role_id');
@@ -992,7 +993,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
 // dd($data);
 
                 $get_patient=DB::table('tbl_patient')->where('telephone',$tel)->first();
-
+  
                   if ($get_patient){
                       return back()->withInput()->with('error', 'Echec de validation : Veuillez rechercher le patient car il existe déjà sous le numéro renseigné');
                   }

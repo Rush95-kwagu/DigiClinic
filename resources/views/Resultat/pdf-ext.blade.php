@@ -12,10 +12,14 @@
     </style>
 </head>
 <body>
+
+
     <h1>Résultats des analyses</h1>
-    <p><strong>Patient :</strong> {{ $patient?->nom_patient }} {{ $patient?->prenom_patient }}</p>
+    <p><strong>Patient :</strong> {{ $patient }}</p>
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
 
+
+    @if ($resultats)
     <table>
         <thead>
             <tr>
@@ -34,5 +38,24 @@
             @endforeach
         </tbody>
     </table>
+    @else
+    <table>
+        <thead>
+            <tr>
+                <th>Elément</th>
+                <th>Résultat</th>
+                <th>Référence</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $element }}</td>
+                <td>{{ $decision }}</td>
+                <td>{{ $observation }}</td>
+            </tr>
+        </tbody>
+    </table>
+    @endif
+ 
 </body>
 </html>
