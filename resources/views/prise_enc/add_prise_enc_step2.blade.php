@@ -5,7 +5,21 @@
  $user_id=Session::get('user_id');
  $centre_id=Session::get('centre_id');
 ?>
-
+<style>
+  .table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    }
+    .table th {
+      background-color: #f0f0f0;
+      }
+      h3{
+        text-align:center; 
+        background-color:rgb(39, 103, 242); 
+        color:white; border-radius:5%
+      }
+</style>
           {{-- <div class="app-body"> --}}
 
             <!-- Row starts -->
@@ -16,61 +30,117 @@
                     <h5 class="card-title">Consultations - Enregistrer des prises en charge de patients</h5>
                 </div>
 
-			    <div class="card-body" id="enleverE">
-			       
+			             <div class="card-body" id="enleverE">
 			
-                  {{-- Début seconde partie du formulaire --}}
-                   <div class="card-body" style="display:block; "id="step2">
+                 <div class="card-body" style="display:block; "id="step2">
                     <form class="row g-3 needs-validation" id="step2Form" method="POST" action="{{ route('save.step2') }}">
             				{{csrf_field()}}
                     <input type="hidden" name="centre_id" value="{{$centre_id}}">
-                        <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Température <span style="color: red">*</span></label>
-                        <input type="number" min="27" name="temp" class="form-control" id="validationCustom05" required />
-                        <div class="invalid-feedback">
-                          Entrez la température.
-                        </div>
-                      </div>
-                        <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Pression artérielle <span style="color: red">*</span></label>
-                        <input type="number"  name="pression_art" class="form-control" id="validationCustom05" required />
-                        <div class="invalid-feedback">
-                          Pression artérielle
-                        </div>
-                      </div>
-      <div class="row g-3 needs-validation">
-          <div class="col-md-6">
-            <label for="phone1">Télephone du patient</label><br>
-            <input type="tel" class="form-control" type="tel" placeholder="Contact Whatsapp/Appel" id="phone1" name="mobile_number">
-            <input type="hidden" id='lnai' name="telephone">
-          </div>
+                    <h3>Relever les constantes</h3>
+                    <div class="col-md-3 mb-3">
 
-          <div class="col-md-6">
-            <label for="lnaii">Personne à contacter en cas d'urgence</label><br>
-            <input type="tel" class="form-control" 
-              type="tel" placeholder="Personne à contacter en cas d'urgence" 
-              id="phone2" name="mobile_urgence">
-              {{-- <input type="hidden" id='lnaii' name="contact_urgence"> --}}
-          </div>
-        </div>
-           
-         <div class="col-md-4 form-group">
-			            <label for="phone1">Nip / N° CNI</label><br>
+                      <label class="classItems" for="selectError1"> <b>Constantes</b><span style="color: red">*</span></label>
+                      <div class="controls col-12">
+                        <select class="form-control form-select" name="constantes" id="constante-select">
+                          <option value="" selected>Sélectionner une constante</option>
+                          <option value="TENSION ARTERIELLE">Tension Artérielle</option>
+                          <option value="FREQUENCE CARDIAQUE">Fréquence Cardiaque</option>
+                          <option value="FREQUENCE RESPIRATOIRE">Fréquence Respiratoire</option>
+                          <option value="TEMPERATURE">Température</option>
+                          <option value="SATURATION O2">Saturation O2</option>
+                          <option value="GLYCEMIE CAPILLAIRE">Glycémie Capillaire</option>
+                          <option value="GLYCEMIE A JEUN">Glycémie à Jeun</option>
+                          <option value="GLYCEMIE POST PRANDIALE">Glycémie Post Prandiale</option>
+                          <option value="POIDS">Poids</option>
+                          <option value="TAILLE">Taille</option>
+                        </select>
+                      </div>
+                  </div> 
+                  <div class="col-md-2 mb-3">
+                      <label class="classItems" for="selectError1"> <b>Valeur</b><span style="color: red">*</span></label>
+                      <div class="controls col-12">
+                        <input type="text" name="valeur" class="form-control" id="valeur-constante" placeholder="Valeur">
+                      </div>
+                  </div> 
+                  <div class="col-md-2 mb-3">
+                      <label class="classItems" for="selectError1"> <b>Unité </b><span style="color: red">*</span></label>
+                      <div class="controls col-12">
+                    <input type="text" name="unite" class="form-control" id="unite-constante" placeholder="Unité" readonly>
+        
+                      </div>
+                  </div> 
+                  <div class="col-md-3 mb-3">
+                    
+                      <label class="classItems" for="selectError1">  </label>
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" id="add-constante">Ajouter la constante</button>
+                    
+                      </div>
+                  </div> 
+                  <div class="table-responsive">
+                    <table class="table ">
+                      <thead>
+                          <tr>
+                              <th>Constante</th>
+                              <th>Valeur</th>
+                              <th>Unité</th>
+                              <th>Action</th>
+                          </tr>
+                      </thead>
+                      <tbody id="constantes-container">
+                          <!-- Les constantes ajoutées apparaîtront ici -->
+                      </tbody>
+                  </table>
+                  </div> 
+                  <br>
+                  <br>
+                    <h3>Renseignements complémentaires du patient</h3>
+               <div class="col-md-4 form-group">
+			            <label for="phone1"><b>Nip / N°Pièce d'identité</b><span style="color: red">*</span></label><br>
 			            <input type="tel" class="form-control" placeholder="Cip" name="nip">
 			            
 			          </div>
             		  <div class="col-md-4">
-                      <label for="validationCustom01" class="form-label">Nom <span style="color: red">*</span></label>
+                      <label for="validationCustom01" class="form-label"><b>Nom</b><span style="color: red">*</span></label>
                         <input type="text" name="nom_patient" class="form-control" id="validationCustom01" >
                         <div class="valid-feedback">Données acceptées</div>
                       </div>
                       <div class="col-md-4">
-                        <label for="validationCustom02" class="form-label">Prénom<span style="color: red">*</span></label>
+                        <label for="validationCustom02" class="form-label"><b>Prénom</b><span style="color: red">*</span></label>
                         <input type="text" name="prenom_patient" class="form-control" id="validationCustom02">
                         <div class="valid-feedback">Données acceptées</div>
                       </div>
                       <div class="col-md-4">
-                        <label for="validationCustomUsername" class="form-label">Email</label>
+                        {{-- <label for="phone1"><b>Télephone du patient</b><span style="color: red">*</span></label><br>
+                         <input type="tel" class="form-control" type="tel" placeholder="Contact Whatsapp/Appel" id="phone1" name="mobile_number">
+                         <input type="hidden" id='lnai' name="telephone"> --}}
+                         <label for="phone1">Télephone du patient</label><br>
+                         <input type="tel" class="form-control" type="tel" placeholder="Contact Whatsapp/Appel" id="phone1" name="mobile_number" required="" />
+                         <input type="hidden" id='lnai' name="telephone">
+                   </div>
+                      <div class="col-md-4">
+                        <label for="validationCustom05" class="form-label"><b>Date de naissance</b><span style="color:red">*</span></label>
+                        <input type="date" name="datenais" class="form-control" id="validationCustom05"/>
+                        <div class="invalid-feedback">
+                          Entrez la date de naissance du patient.
+                        </div>
+                      </div>
+                      
+                   <div class="col-md-4">
+                    <label for="validationCustom05" class="form-label"><b>Nationalité</b> <span style="color: red">*</span></label>
+                    <input type="text" name="nationalite" class="form-control" id="validationCustom05"/>
+                    <div class="invalid-feedback">
+                      Entrez la nationnalité du patient.
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="lnaii"><b>Personne à contacter</b><span style="color: red">*</span></label><br>
+            <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_urgence" required="" />
+            <input type="hidden" id='lnaii' name="contact_urgence">
+                 
+               </div>
+                      <div class="col-md-4">
+                        <label for="validationCustomUsername" class="form-label"><b>Email</b></label>
                         <div class="input-group has-validation">
                           <span class="input-group-text" id="inputGroupPrepend">@</span>
                           <input type="text" name="email_patient" class="form-control" id="validationCustomUsername"
@@ -81,7 +151,7 @@
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <label for="validationCustom03" class="form-label">Adresse</label>
+                        <label for="validationCustom03" class="form-label"><b>Adresse de résidence</b></label>
                         <input type="text" name="adresse" class="form-control" id="validationCustom03"/>
                         <div class="invalid-feedback">
                           Entrez l'adresse du patient.
@@ -89,41 +159,24 @@
                       </div>
                       
                       <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Groupe Sanguin</label>
+                        <label for="validationCustom05" class="form-label"><b>Groupe Sanguin</b><span style="color:red">*</span></label>
                         <input type="text" name="gsang" class="form-control" id="validationCustom05"/>
                         <div class="invalid-feedback">
                           Entrez le groupe sanguin du patient.
                         </div>
                       </div>
-
                       <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Nationalité</label>
-                        <input type="text" name="nationalite" class="form-control" id="validationCustom05"/>
-                        <div class="invalid-feedback">
-                          Entrez la nationnalité du patient.
-                        </div>
-                      </div>
-
-                      <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Situation matrimoniale</label>
+                        <label for="validationCustom05" class="form-label"><b>Situation matrimoniale</b><span style="color: red">*</span></label>
                         <input type="text" name="smatrimonial" class="form-control" id="validationCustom05"/>
                         <div class="invalid-feedback">
                           Entrez la situation matrimoniale du patient.
                         </div>
                       </div>
-
-                      <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Date de naissance</label>
-                        <input type="date" name="datenais" class="form-control" id="validationCustom05"/>
-                        <div class="invalid-feedback">
-                          Entrez la date de naissance du patient.
-                        </div>
-                      </div>
-
-                      <div class="col-12">
-                        <button class="btn btn-primary" type="submit">
-                          Valider
-                        </button>
+                  <input type="hidden" id="constante-count" name="constante_count" value="0">
+                      <button class="btn btn-primary" type="submit">
+                        Enregistrer les données
+                      </button>
+                        
                         {{-- <a  class="btn btn-danger btn-pill" href="javascript:window.location.reload(history.go(-1))">Revenir à la sélection</a> --}}
                       </div>
                     </form>
@@ -243,4 +296,7 @@
       .catch(error => console.error('Error:', error));
   });
 </script>
+@push('js')
+    <script src="{{ asset('frontend/js/constantes.js') }}"></script>
+@endpush
 @endsection

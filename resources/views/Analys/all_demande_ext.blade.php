@@ -30,11 +30,21 @@
                      <ul class="nav nav-tabs justify-content-center" id="customTab4" role="tablist">
                       <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="tab-oneAAA" data-bs-toggle="tab" href="#oneAAA" role="tab"
-                          aria-controls="oneAAA" aria-selected="true">Demandes en attentes</a>
+                          aria-controls="oneAAA" aria-selected="true">
+                          Demandes en attentes
+                          <sup class="badge bg-success ms-2">
+                            {{ $totalNewDemand }}
+                          </sup>
+                        </a>
                       </li>
                       <li class="nav-item" role="presentation">
                         <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
-                          aria-controls="twoAAA" aria-selected="false">Demandes transmises</a>
+                          aria-controls="twoAAA" aria-selected="false">
+                          Demandes transmises
+                          <sup class="badge bg-danger ms-2">
+                            {{ $totalDemand }}
+                          </sup>
+                        </a>
                       </li>
                      @else
                      <ul class="nav nav-tabs justify-content-center" id="customTab4" role="tablist">

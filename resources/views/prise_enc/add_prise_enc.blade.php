@@ -23,7 +23,7 @@
               <input type="hidden" name="centre_id" value="{{$centre_id}}">
               {{-- <input type="hidden" name="personnel_id" value="{{$personnel_id}}"> --}}
 			        <div class="col-md-12 mb-3">
-							<label class="classItems" for="selectError1"> Patients </label>
+							<label class="classItems" for="selectError1"> <b>Patients Existants</b><span style="color: red">*</span></label>
 							<div class="controls col-12">
 							<select class="form-control form-select" id="patient_id" name="patient_id" data-target="#service" data-source="get-detail/id">
 					  	<?php 
@@ -37,65 +37,80 @@
 							</div>
 					</div> 
 
-					 <div class="col-md-4 mb-3">
-							<label class="classItems" for="selectError1"> Mal/Maux du patient </label>
+					 <div class="col-md-6 mb-3">
+							<label class="classItems" for="selectError1"> <b>Pathologie du patient</b><span style="color: red">*</span> </label>
 							<div class="controls col-12">
-                 <input type="text" name="maux" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
+                 <textarea type="text" name="maux" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required ></textarea>
               </div>
 					</div> 
-          <div class="col-md-2 mb-3">
-              <label class="classItems" for="selectError1"> Température (°C)</label>
-              <div class="controls col-12">
-                          <input type="number" min="27" name="temp" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
+					 <div class="col-md-6 mb-3">
+							<label class="classItems" for="selectError1"> <b>Observation</b><span style="color: red">*</span> </label>
+							<div class="controls col-12">
+                 <textarea type="text" name="observation" class="form-control" id="validationCustomUsername"
+                            aria-describedby="inputGroupPrepend" required ></textarea>
               </div>
-          </div> 
-          <div class="col-md-2 mb-3">
-              <label class="classItems" for="selectError1"> Pression artérielle (mmHg) </label>
-              <div class="controls col-12">
-                          <input type="number" name="pression_art" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
-              </div>
-          </div> 
-          <div class="col-md-2 mb-3">
-              <label class="classItems" for="selectError1"> Frq. respiratoire (SpO2) </label>
-              <div class="controls col-12">
-                          <input type="number" name="frequence_respi" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
-              </div>
-          </div> 
-          <div class="col-md-2 mb-3">
-              <label class="classItems" for="selectError1"> Frq. Cardiq(FC)</label>
-              <div class="controls col-12">
-                          <input type="number" name="frequence_card" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
-              </div>
-          </div> 
+					</div> 
           <div class="col-md-3 mb-3">
-              <label class="classItems" for="selectError1"> Diurèse (Jr) </label>
+              <label class="classItems" for="selectError1"> <b>Constantes</b><span style="color: red">*</span></label>
               <div class="controls col-12">
-                          <input type="number" name="diurese" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
+                <select class="form-control form-select" name="constantes" id="constante-select">
+                  <option value="" selected>Sélectionner une constante</option>
+                  <option value="TENSION ARTERIELLE">Tension Artérielle</option>
+                  <option value="FREQUENCE CARDIAQUE">Fréquence Cardiaque</option>
+                  <option value="FREQUENCE RESPIRATOIRE">Fréquence Respiratoire</option>
+                  <option value="TEMPERATURE">Température</option>
+                  <option value="SATURATION O2">Saturation O2</option>
+                  <option value="GLYCEMIE CAPILLAIRE">Glycémie Capillaire</option>
+                  <option value="GLYCEMIE A JEUN">Glycémie à Jeun</option>
+                  <option value="GLYCEMIE POST PRANDIALE">Glycémie Post Prandiale</option>
+                  <option value="POIDS">Poids</option>
+                  <option value="TAILLE">Taille</option>
+                </select>
               </div>
           </div> 
-          <div class="col-md-3 mb-3">
-              <label class="classItems" for="selectError1"> Poids (Kg) </label>
+          <div class="col-md-2 mb-3">
+              <label class="classItems" for="selectError1"> <b>Valeur</b><span style="color: red">*</span></label>
               <div class="controls col-12">
-                          <input type="number" min="1" name="poids" class="form-control" id="validationCustomUsername"
-                            aria-describedby="inputGroupPrepend" required />
+                <input type="text" name="valeur" class="form-control" id="valeur-constante" placeholder="Valeur">
               </div>
           </div> 
+          <div class="col-md-2 mb-3">
+              <label class="classItems" for="selectError1"> <b>Unité </b><span style="color: red">*</span></label>
+              <div class="controls col-12">
+            <input type="text" name="unite" class="form-control" id="unite-constante" placeholder="Unité" readonly>
 
-					<div class="col-md-4 mb-3">
-							<label class="classItems" for="selectError1"> Observation </label>
-							<div class="controls col-12">
-                <input type="text" name="observation" value="Néant" class="form-control" id="validationCustom05" required />
               </div>
-					</div> 
+          </div> 
+          <div class="col-md-3 mb-3">
+            
+              <label class="classItems" for="selectError1">  </label>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-primary" id="add-constante">Ajouter la constante</button>
+            
+              </div>
+          </div> 
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                  <tr>
+                      <th>Constante</th>
+                      <th>Valeur</th>
+                      <th>Unité</th>
+                      <th>Action</th>
+                  </tr>
+              </thead>
+              <tbody id="constantes-container">
+                  <!-- Les constantes ajoutées apparaîtront ici -->
+              </tbody>
+          </table>
+          </div>
+       <div class="input-group-append">
+          </div>
 				<div class="col-md-10 mb-3">
+          <input type="hidden" id="constante-count" name="constante_count" value="0">
 			      <button type="submit" class="btn btn-success btn-pill col-md-4">
-			            Poursuivre 
+			            Enregistrer 
 			      </button> 
 			    </div>      
 			    </form>
@@ -111,20 +126,20 @@
                     <input type="hidden" name="centre_id" value="{{$centre_id}}">
                     <div></div>
             		      <div class="col-md-2">
-                        <label for="validationCustom05" class="form-label">N°de dossier</label>
+                        <label for="validationCustom05" class="form-label"><b>N°de dossier</b></label>
                         <input type="text" name="dossier_numero" class="form-control" id="validationCustom05" readonly />
                        
                       </div>
             		      <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label">Mal/Maux du patient*</label>
+                        <label for="validationCustom05" class="form-label"><b>Pathologie du patient</b> <span style="color: red">*</span></label>
                         <input type="text" name="maux" class="form-control" id="validationCustom05" required />
                         <div class="invalid-feedback">
-                          Entrez les maux du patient.
+                          Entrez la pathologie du patient.
                         </div>
                       </div>
 
                       <div class="col-md-6">
-                        <label for="validationCustom05" class="form-label">Observation</label>
+                        <label for="validationCustom05" class="form-label"><b>Observation</b><span style="color: red">*</span></label>
                         <input type="text" name="observation" value="Néant" class="form-control" id="validationCustom05" required />
                         <div class="invalid-feedback">
                           Entrez des observations sur le patient.
@@ -202,8 +217,6 @@
 			            <input type="tel" class="form-control" placeholder="Cip" name="nip" required="" />
 			            
 			          </div>
-
-
             		  <div class="col-md-4">
                       <label for="validationCustom01" class="form-label">Nom</label>
                         <input type="text" name="nom_patient" class="form-control" id="validationCustom01" value="Mark"/>
@@ -387,5 +400,11 @@
       })
       .catch(error => console.error('Error:', error));
   });
+
 </script>
+
+@push('js')
+    <script src="{{ asset('frontend/js/constantes.js') }}"></script>
+@endpush
+
 @endsection

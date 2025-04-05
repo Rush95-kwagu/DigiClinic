@@ -6,6 +6,7 @@
 <?php
  $user_role_id=Session::get('user_role_id');
  $user_id=Session::get('user_id');
+ $centre_id=Session::get('centre_id')
 ?>
 
           <!-- App body starts -->
@@ -16,7 +17,7 @@
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Allotted Rooms</h5>
+                    <h5 class="card-title">Chambres d'hospitalisation</h5>
                   </div>
                   <div class="card-body">
 

@@ -19,7 +19,7 @@ class Personnel extends Model
         'ville',
         'email',
         'adresse',
-        'service_id',
+        'services_id',
         'departement_id',
         'telephone',
         'departement',
@@ -28,7 +28,7 @@ class Personnel extends Model
 
     public function service()
     {
-        $this->belongsTo(Service::class, 'service_id');
+        $this->belongsTo(Service::class, 'services_id');
     }
 
     public function departement()

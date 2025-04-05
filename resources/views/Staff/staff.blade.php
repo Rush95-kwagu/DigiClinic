@@ -47,7 +47,7 @@ Espace du personnel
 
 
                           <tr>
-                            <td>{{$personnel->id}}</td>
+                            <td>{{$personnel->personnel_id}}</td>
                             
                             <td>
                              
@@ -73,7 +73,7 @@ Espace du personnel
                                   data-bs-target="#delRow">
                                   <i class="ri-delete-bin-line"></i>
                                 </button>
-                                <a href="{{route('personnel.edit',$personnel->id)}}" class="btn btn-outline-success btn-sm"
+                                <a href="{{route('personnel.edit',$personnel->personnel_id)}}" class="btn btn-outline-success btn-sm"
                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Staff Member">
                                   <i class="ri-edit-box-line"></i>
                                 </a>

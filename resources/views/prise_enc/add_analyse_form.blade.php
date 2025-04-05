@@ -54,14 +54,15 @@ Repertoire patient
                            
                             
                             <input type="hidden" name="centre_id" value="{{ Session::get('centre_id') }}">
+                            <input type="hidden" name="user_id" value="{{ Session::get('user_id')}}">
                           <label class="form-label" for="a1">Nom de l'analyse'</label>
-                          <input type="text" class="form-control" name="libelle_analyse" id="a1" placeholder="Entrez le nom de l'analyse">
+                          <input type="text" class="form-control" name="nom_prestation" id="a1" placeholder="Entrez le nom de l'analyse">
                         </div>
                       </div>
                       <div class="col-xxl-3 col-lg-4 col-sm-6">
                         <div class="mb-3">
                           <label class="form-label" for="a2">Coût de l'analyse</label>
-                          <input type="number" class="form-control" name="prix_analyse" id="a2" placeholder="Entrez le coût">
+                          <input type="number" class="form-control" name="tarif" id="a2" placeholder="Entrez le coût">
                           </div>
                       </div>
                       <div class="col-xxl-3 col-lg-4 col-sm-6">
@@ -167,10 +168,10 @@ Repertoire patient
 
     // Ajouter une analyse
     $(document).on("click", ".add-analysis", function () {
-        let element = $("#element").val().trim();
+        let element = $("#element").val();
         let genre = $("#inputGroupSelect01").val();
-        let libelle_norme = $("#libelle_norme").val().trim();
-        let valeur_norme = $("#valeur_norme").val().trim();
+        let libelle_norme = $("#libelle_norme").val();
+        let valeur_norme = $("#valeur_norme").val();
 
         // Validation des champs du formulaire
         if (!element || !libelle_norme || !valeur_norme || genre === "Sélectionner...") {
@@ -190,7 +191,7 @@ Repertoire patient
                 <td rel="${selectedAnalyses.length-1}">${selectedAnalyses.length}</td>
                 <td>${element}</td>
                 <td>${libelle_norme}</td>
-                <td>${valeur_norme} FCFA</td>
+                <td>${valeur_norme} </td>
                 <td>
                     <button class="btn btn-danger btn-sm remove-analysis" data-id="${slugify(element)}">
                         Retirer
@@ -220,6 +221,7 @@ Repertoire patient
         // });
     });
 
+    // Fonction de suppression des caractères spéciaux avant ajout dans le tableau
     function slugify(text) {
                   return text.toString().toLowerCase()
                     
