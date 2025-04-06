@@ -272,7 +272,7 @@ class PriseEnChargeController extends Controller
 
         ]);
         // dd($request->all());
-      $result=  DB::table('tbl_prestation')->insertGetId([
+      $resultId=  DB::table('tbl_prestation')->insertGetId([
             'nom_prestation' => $request->input('nom_prestation'),
             'tarif' => $request->input('tarif'),
             'prix_analyse_assure' => $request->input('prix_analyse_assure'),
@@ -289,6 +289,7 @@ class PriseEnChargeController extends Controller
                 'element' => $value->element,
                 'libelle_norme' => $value->libelle_norme,
                 'valeur_norme' => $value->valeur_norme,
+                'tbl_prestation_id' => $resultId,
                 'genre' => $value->genre
             ]);
         }

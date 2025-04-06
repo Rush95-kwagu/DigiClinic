@@ -20,7 +20,7 @@
           
         <input type="hidden" name="patient_id" value="{{$patient_id}}">
         <input type="hidden" name="analyse_id" value="{{$analyse->analyse_id}}">
-        <input type="hidden" name="id_type_analyse" value="{{$analyse->id_type_analyse}}">
+        <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
@@ -49,7 +49,7 @@
 
           <input type="hidden" name="patient_id" value="{{$patient_id}}">
         <input type="hidden" name="analyse_id" value="{{$analyse->analyse_id}}">
-        <input type="hidden" name="id_type_analyse" value="{{$analyse->id_type_analyse}}">
+        <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
@@ -57,7 +57,7 @@
               <thead>
                 <th>Elements</th>
                 <th>Résultats</th>
-                <th>Normes</th>
+                <th>Normes ({{$sex}})</th>
               </thead>
               <tbody>
                 @foreach ($analyse->parametres as $parameter)

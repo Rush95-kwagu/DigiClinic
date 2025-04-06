@@ -14,6 +14,9 @@
         @media print {
             .no-print { display: none; }
         }
+        .page-break {
+            page-break-before: always;
+        }
 
         /* h1 { color: #333; }
         table { width: 100%; border-collapse: collapse; }
@@ -22,8 +25,7 @@
     </style>
 </head>
 <body>
-
-
+    
 @php
         use SimpleSoftwareIO\QrCode\Facades\QrCode;
         use Illuminate\Support\Facades\DB;
@@ -36,10 +38,16 @@
             ->select('tbl_entite.*', 'tbl_centre.*')
             ->first();
     @endphp
+@foreach ($data as $d )
+<div class="@if(!$loop->first) page-break  @endif">
+
 
     <!-- Logo et Informations de la Clinique -->
     <div style="text-align: left;">
         <img src="{{ public_path('frontend/images/LogoDA.png') }}" alt="Logo Clinique" style="width: 100px;">
+        <br>
+        <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;">
+
     </div>
 
     <div style="text-align:right">
@@ -56,7 +64,8 @@
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
 
 
-    @if ($resultats)
+
+@if ($d['resultats'])
     <table>
         <thead>
             <tr>
@@ -66,11 +75,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($resultats as $resultat)
+            @foreach($d['resultats'] as $resultat)
             <tr>
-                <td>{{ $resultat['element'] }}</td>
-                <td>{{ $resultat['result'] }}</td>
-                <td>{{ $resultat['norme'] }}</td>
+                <td>{{ $resultat->element }}</td>
+                <td>{{ $resultat->result }}</td>
+                <td>{{ $resultat->norme }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -86,13 +95,17 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ $element }}</td>
-                <td>{{ $decision }}</td>
-                <td>{{ $observation }}</td>
+                <td>{{ $d['element'] }}</td>
+                <td>{{ $d['decision'] }}</td>
+                <td>{{ $d['observation'] }}</td>
             </tr>
         </tbody>
     </table>
     @endif
+
+@endforeach
+    
+</div> 
  
 </body>
 </html>
