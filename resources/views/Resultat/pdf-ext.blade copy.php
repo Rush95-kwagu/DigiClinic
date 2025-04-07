@@ -42,8 +42,18 @@
 
 
     <!-- Logo et Informations de la Clinique -->
-    <div class="">
-    <img src="{{ public_path('entete.jpg') }}" alt="Logo Clinique" style="width: 100%;height:120px" >
+    <div style="text-align: left;">
+        <img src="{{ public_path('frontend/images/LogoDA.png') }}" alt="Logo Clinique" style="width: 100px;">
+        <br>
+        <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
+
+    </div>
+
+    <div style="text-align:right">
+        {{ $infos->nom_centre }}
+        <p>{{ $infos->Autorisation_decret }}</p>
+        <p>Contact : {{ $infos->tel_centre }}</p>
+        <p>Adresse : {{ $infos->adresse_centre }}</p>
     </div>
     <hr>
 
@@ -76,27 +86,14 @@
         </tbody>
     </table>
  
-    <div class="" style="text-align-center">
-    <p>QR CODE ICI</p>
-        <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
-    </div>
     <br>
 
 @foreach ($data2 as $d )
-<div class="page-break">
-<div class="">
-    <img src="{{ public_path('entete.jpg') }}" alt="Logo Clinique" style="width: 100%;height:120px" >
-    </div>
-<hr>
-    <h1>Résultats des analyses</h1>
-    <p><strong>Patient :</strong> {{ $patient }}</p>
-    <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
-    <p><strong>Catégorie :</strong> {{$d['categorie']}}</p>
-    <p><strong>Analyse :</strong> {{$d['element']}}</p>
-
+<div class="@if(!$loop->first) page-break  @endif">
 <table>
         <thead>
             <tr>
+                <th>Catégorie</th>
                 <th>Elément</th>
                 <th>Résultat</th>
                 <th>Norme</th>
@@ -105,6 +102,7 @@
         <tbody>
             @foreach($d['resultats'] as $resultat)
             <tr>
+                <td>{{ $d['categorie'] }}</td>
                 <td>{{ $resultat->element }}</td>
                 <td>{{ $resultat->result }}</td>
                 <td>{{ $resultat->norme }}</td>
@@ -113,11 +111,6 @@
         </tbody>
     </table>
 </div> 
-
-<div class="" style="text-align-center">
-        <p>QR CODE ICI</p>
-        <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
-    </div>
 @endforeach
 </body>
 </html>

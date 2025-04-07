@@ -496,6 +496,7 @@ class ConsultationController extends Controller
             'a.payed_analyse_id as analyse_id',
             'a.date_paiement',
             'a.montant_total as montant',
+            'pr.category',
             'pr.prestation_id',
             'pr.nom_prestation',
             'pr.tarif as prix',
@@ -503,23 +504,38 @@ class ConsultationController extends Controller
         )
         ->get(); // Un seul résultat
      
-            $data=array();
+            $data1=array();
+            $data2=array();
             $i=0;
+            $j=0;
             foreach ($analyse as  $a) {
 
-                $data[$i]['element']=$a->nom_prestation;
-                $data[$i]['decision']=$a->resultat;
-                $data[$i]['observation']=$a->observation;
-                $data[$i]['resultats']=json_decode($a->content);
-                $i++;
+                $content=json_decode($a->content);
+                if (sizeof($content)==0) {
+                    $data1[$i]['categorie']=$a->category;
+                    $data1[$i]['element']=$a->nom_prestation;
+                    $data1[$i]['decision']=$a->resultat;
+                    $data1[$i]['observation']=$a->observation;
+                    $data1[$i]['resultats']=json_decode($a->content);
+                    $i++;
+                } else {
+                    $data2[$j]['categorie']=$a->category;
+                    $data2[$j]['element']=$a->nom_prestation;
+                    $data2[$j]['decision']=$a->resultat;
+                    $data2[$j]['observation']=$a->observation;
+                    $data2[$j]['resultats']=json_decode($a->content);
+                    $j++;
+                }
+               
             }
           // dd($data);
 
-              $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
-           // $qrCode ="QrCode ici";
+            //  $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
+            $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
             "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
-            "data"=>$data,
+            "data1"=>$data1,
+            "data2"=>$data2,
             "qrCode"=>$qrCode
             ]);
             $name='Resultat_' . time(). '_.pdf';
