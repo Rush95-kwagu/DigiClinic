@@ -4,6 +4,9 @@
  $user_role_id=Session::get('user_role_id');
  $user_id=Session::get('user_id');
  $centre_id=Session::get('centre_id');
+ $all_patients=DB::table('tbl_patient')
+                ->orderBy('patient_id','ASC')  
+                ->get(); 
 //  $personnel_id=Session::get('personnel_id');
 ?>
 
@@ -26,13 +29,18 @@
 							<label class="classItems" for="selectError1"> <b>Patients Existants</b><span style="color: red">*</span></label>
 							<div class="controls col-12">
 							<select class="form-control form-select" id="patient_id" name="patient_id" data-target="#service" data-source="get-detail/id">
-					  	<?php 
-              $all_patients=DB::table('tbl_patient')
-                ->orderBy('patient_id','ASC')  
-                ->get(); 
-              foreach ($all_patients as $v_patient){ ?>  
-							<option value="{{$v_patient->patient_id}}">{{$v_patient->prenom_patient}} {{$v_patient->nom_patient}} -- {{$v_patient->nip}} -- {{$v_patient->telephone}}</option>
-					 	<?php } ?>
+					  	
+             <option value="">Choix du patient</option>
+              @foreach ($all_patients as $v_patient)  
+							<option value="{{$v_patient->patient_id}}">
+                Dossier N° :{{$v_patient->dossier_numero}}--
+                 {{$v_patient->prenom_patient}} 
+                 {{$v_patient->nom_patient}} -- 
+                 {{$v_patient->nip}} -- 
+                 {{$v_patient->telephone}}
+              </option>
+              @endforeach
+					 	<?php  ?>
 							  </select>
 							</div>
 					</div> 

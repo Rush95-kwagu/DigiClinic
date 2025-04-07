@@ -25,6 +25,9 @@ class ConsultationController extends Controller
         }
         else 
         {
+
+          Session::put('error','Vous devez être connecté(e) pour accéder à cette page');
+            
             return Redirect::to('/')->send();
         }
 
@@ -38,6 +41,8 @@ class ConsultationController extends Controller
         }
         else 
         {
+          Session::put('error','Vous n\'êtes pas autorisé à accéder à cette page');
+
             return Redirect::to('/')->send();
         }
 
@@ -52,6 +57,8 @@ class ConsultationController extends Controller
         }
         else 
         {
+          Session::put('error','Vous n\'êtes pas autorisé à accéder à cette page');
+
             return Redirect::to('/')->send();
         }
 
@@ -147,6 +154,7 @@ class ConsultationController extends Controller
 
     public function consultation()
     {
+        $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
         $user_id=Session::get('user_id');
         $centre_id=Session::get('centre_id');
@@ -248,7 +256,6 @@ class ConsultationController extends Controller
 public function hospitalisation()
 {
     $this->UserAuthCheck();
-    // $this->InfAuthCheck();
     $this->SpecialisteAuthCheck();
     $user_id = Session::get('user_id');
     $centre_id = Session::get('centre_id');
@@ -315,9 +322,10 @@ $totalPatient_ob = $all_patient_ob->count();
         'all_patient_ob'=>$all_patient_ob,
         'totalPatient_ob' => $totalPatient_ob,
     )));
-}
+    }
     public function gestion_analyses()
     {
+        $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
         
         
@@ -372,29 +380,29 @@ $totalPatient_ob = $all_patient_ob->count();
                 ));;
     }
 
-public function traitement_hospitalisation($id_consultation,$patient_id)
-{
-    $this->UserAuthCheck();
-    // $this->InfAuthCheck();
-    $this->SpecialisteAuthCheck();
-    
-    $this->traitement_patient($id_consultation,$patient_id);
+    public function traitement_hospitalisation($id_consultation,$patient_id)
+    {
+        $this->UserAuthCheck();
+        $this->SpecialisteAuthCheck();
+        
+        $this->traitement_patient($id_consultation,$patient_id);
 
-    $patient_data = $this->getPatientData($patient_id);
+        $patient_data = $this->getPatientData($patient_id);
 
-    if (!$patient_data->first()) {
-        abort(404, 'Patient non trouvé');
+        if (!$patient_data->first()) {
+            abort(404, 'Patient non trouvé');
+        }
+        $last_constance = $this->getLastConstantes($patient_id, $id_consultation);
+        return view('Hospi.traitement_patient', [
+            'all_details' => $patient_data,
+            'id_consultation' => $id_consultation,
+            'last_constance' => $last_constance,
+            'patient' => $patient_data->first() 
+        ]);
+
     }
-    $last_constance = $this->getLastConstantes($patient_id, $id_consultation);
-    return view('Hospi.traitement_patient', [
-        'all_details' => $patient_data,
-        'id_consultation' => $id_consultation,
-        'last_constance' => $last_constance,
-        'patient' => $patient_data->first() 
-    ]);
-
-}
-    function getPatientAnalyse($id){
+    function getPatientAnalyse($id)
+    {
         
        // Récupérer les informations du patient
             $data = DB::table('tbl_patient as p')
@@ -436,7 +444,8 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
         ));
     }
 
-    function editAnalyseResult($id,$patient_id){
+    function editAnalyseResult($id,$patient_id)
+    {
         
         $analysis = DB::table('tbl_analyse_payed as a')
         ->leftJoin('tbl_type_analyse as pr', 'a.prestation_id', '=', 'pr.id_type_analyse')
@@ -477,8 +486,8 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
         ));
     }
 
-
-    function storeResult(Request $request){
+    function storeResult(Request $request)
+    {
         
         $user_id=$request->user_id;
         $user_role_id=$request->user_role_id;
@@ -557,6 +566,7 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
 
     public function traitement_analyse($id_analyse,$patient_id)
     {
+        $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
         $user_id=Session::get('user_id');
     
@@ -581,7 +591,6 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
     {
         $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
-        // $this->InfAuthCheck();
 
         $patient_data = $this->getPatientData($patient_id);
         
@@ -692,7 +701,9 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
 
     public function save_analyse_traitement (Request $request)
     {
-
+        $this->UserAuthCheck();
+        $this->SpecialisteAuthCheck();
+    
         $user_id = $request->user_id;
         $id_centre = $request->id_centre;
         $analyse_resultat = $request->analyse_resultat;
@@ -765,7 +776,6 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
         $this->UserAuthCheck();
         $this->SpecialisteAuthCheck();
     
-    
         $decision_type = $this->determinerDecisionType($request);
     
         $request->validate($this->getValidationRules($decision_type));
@@ -790,209 +800,204 @@ public function traitement_hospitalisation($id_consultation,$patient_id)
         }
     }
     
-    protected function determinerDecisionType($request)
-{
-    if ($request->filled('etat_traitement') && $request->etat_traitement == 1) {
-        return 'cloture';
-    }
-
-    if ($request->filled('specialiste')) {
-        $specialisteId = $request->specialiste;
-        
-        if ($specialisteId === '0') {
-            return 'hospitalisation';
-        } elseif ($specialisteId === '2') {
-            return 'observation';
-        } else {
-            $exists = DB::table('users')
-                ->join('personnel', 'users.email', '=', 'personnel.email')
-                ->where('user_id', $specialisteId)
-                ->exists();
-            
-            return $exists ? 'transfert' : abort(400, 'Spécialiste non trouvé');
+        protected function determinerDecisionType($request)
+        {
+        if ($request->filled('etat_traitement') && $request->etat_traitement == 1) {
+            return 'cloture';
         }
-    }
-
-    abort(400, 'Type de décision non reconnu');
-}
-    
-protected function getValidationRules($decision_type)
-{
-    $rules = [
-        'diagnostic' => 'required',
-        'id_consultation' => 'required|exists:tbl_consultation,id_consultation',
-        'id_prise_en_charge' => 'required|exists:tbl_prise_en_charge,id_prise_en_charge',
-        'patient_id' => 'required|exists:tbl_patient,patient_id',
-        'fichier_joint' => 'nullable|file|mimes:pdf|max:2048'
-    ];
-
-    if ($decision_type === 'cloture') {
-        $rules['ordonnance'] = 'required';
-    } elseif ($decision_type === 'transfert') {
-        $rules['specialiste'] = 'required|exists:users,user_id';
-    }
-
-    return $rules;
-}
-    
-    protected function traiterFichierJoint($request)
-    {
-        if (!$request->hasFile('fichier_joint')) {
-            return [];
-        }
-    
-        $file = $request->file('fichier_joint');
-        $fileName = time().'_'.$file->getClientOriginalName();
-        $filePath = $file->storeAs('consultations', $fileName, 'public');
-        
-        return ['fichier_joint' => '/storage/'.$filePath];
-    }
-    
-    protected function traiterHospitalisation($request, $consultData)
-    {
-        DB::transaction(function () use ($request, $consultData) {
-            // Mise à jour de la consultation
-            DB::table('tbl_consultation')
-                ->where('id_consultation', $request->id_consultation)
-                ->update(array_merge($consultData, [
-                    'is_hospitalisation' => 1,
-                    'etat_traitement' => 0
-                ]));
-    
-            // Mise à jour de la prise en charge
-            DB::table('tbl_prise_en_charge')
-                ->where('id_prise_en_charge', $request->id_prise_en_charge)
-                ->update([
-                    'etat_hospitalisation' => 1,
-                    'updated_at' => now()
-                ]);
-        });
-    
-        Alert::success('Succès', 'Patient hospitalisé avec succès');
-        return redirect()->route('consultations.index');
-    }
-    
-    protected function traiterObservation($request, $consultData)
-    {
-        DB::transaction(function () use ($request, $consultData) {
-            DB::table('tbl_consultation')
-                ->where('id_consultation', $request->id_consultation)
-                ->update(array_merge($consultData, [
-                    'is_hospitalisation' => 0, 
-                    'etat_traitement' => 0
-                ]));
-    
-            DB::table('tbl_prise_en_charge')
-                ->where('id_prise_en_charge', $request->id_prise_en_charge)
-                ->update([
-                    'etat_observation' => 1,
-                    'updated_at' => now()
-                ]);
-        });
-    
-        Alert::success('Succès', 'Patient mis en observation');
-        return redirect()->route('consultations.index');
-    }
-    
-    protected function traiterTransfert($request, $consultData)
-{
-    // Récupération validée du spécialiste (déjà vérifié dans determinerDecisionType)
-    $specialiste = DB::table('users')
-        ->join('personnel', 'users.email', '=', 'personnel.email')
-        ->where('user_id', $request->specialiste)
-        ->first();
-
-    // Double vérification pour sécurité
-    if (!$specialiste) {
-        Alert::error('Erreur', 'Spécialiste non trouvé');
-        return back()->withInput();
-    }
-
-    DB::transaction(function () use ($request, $consultData, $specialiste) {
-        // Mise à jour consultation actuelle
-        DB::table('tbl_consultation')
-            ->where('id_consultation', $request->id_consultation)
-            ->update(array_merge($consultData, [
-                'etat_traitement' => 1,
-                'conslt_updated_at' => now()
-            ]));
-
-        // Nouvelle consultation pour le spécialiste
-        DB::table('tbl_consultation')->insert([
-            'id_prise_en_charge' => $request->id_prise_en_charge,
-            'user_id' => $specialiste->user_id,
-            'user_role_id' => $specialiste->user_role_id,
-            'conslt_created_at' => now(),
-            'conslt_updated_at' => now()
-        ]);
-
-        // Mise à jour prise en charge
-        DB::table('tbl_prise_en_charge')
-            ->where('id_prise_en_charge', $request->id_prise_en_charge)
-            ->update([
-                'last_consult_user_id' => $specialiste->user_id,
-                'last_consult_user_role_id' => $specialiste->user_role_id,
-                'updated_at' => now()
-            ]);
-    });
-
-    Alert::success('Succès', "Patient transféré à {$specialiste->prenom} {$specialiste->nom}");
-    return redirect()->route('consultations.index');
-}
-    
-    protected function traiterCloture($request, $consultData)
-    {
-        DB::transaction(function () use ($request, $consultData) {
+        if ($request->filled('specialiste')) {
+            $specialisteId = $request->specialiste;
             
+            if ($specialisteId === '0') {
+                return 'hospitalisation';
+            } elseif ($specialisteId === '2') {
+                return 'observation';
+            } else {
+                $exists = DB::table('users')
+                    ->join('personnel', 'users.email', '=', 'personnel.email')
+                    ->where('user_id', $specialisteId)
+                    ->exists();
+                
+                return $exists ? 'transfert' : abort(400, 'Spécialiste non trouvé');
+            }
+        }
+        abort(400, 'Type de décision non reconnu');
+        }
+        
+        protected function getValidationRules($decision_type)
+        {
+            $rules = [
+                'diagnostic' => 'required',
+                'id_consultation' => 'required|exists:tbl_consultation,id_consultation',
+                'id_prise_en_charge' => 'required|exists:tbl_prise_en_charge,id_prise_en_charge',
+                'patient_id' => 'required|exists:tbl_patient,patient_id',
+                'fichier_joint' => 'nullable|file|mimes:pdf|max:2048'
+            ];
+
+            if ($decision_type === 'cloture') {
+                $rules['ordonnance'] = 'required';
+            } elseif ($decision_type === 'transfert') {
+                $rules['specialiste'] = 'required|exists:users,user_id';
+            }
+
+            return $rules;
+        }
+            
+        protected function traiterFichierJoint($request)
+        {
+            if (!$request->hasFile('fichier_joint')) {
+                return [];
+            }
+        
+            $file = $request->file('fichier_joint');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $filePath = $file->storeAs('consultations', $fileName, 'public');
+            
+            return ['fichier_joint' => '/storage/'.$filePath];
+        }
+        
+        protected function traiterHospitalisation($request, $consultData)
+        {
+            DB::transaction(function () use ($request, $consultData) {
+                // Mise à jour de la consultation
+                DB::table('tbl_consultation')
+                    ->where('id_consultation', $request->id_consultation)
+                    ->update(array_merge($consultData, [
+                        'is_hospitalisation' => 1,
+                        'etat_traitement' => 0
+                    ]));
+        
+                // Mise à jour de la prise en charge
+                DB::table('tbl_prise_en_charge')
+                    ->where('id_prise_en_charge', $request->id_prise_en_charge)
+                    ->update([
+                        'etat_hospitalisation' => 1,
+                        'updated_at' => now()
+                    ]);
+            });
+        
+            Alert::success('Succès', 'Patient hospitalisé avec succès');
+            return redirect()->route('consultations.index');
+        }
+        
+     protected function traiterObservation($request, $consultData)
+        {
+            DB::transaction(function () use ($request, $consultData) {
+                DB::table('tbl_consultation')
+                    ->where('id_consultation', $request->id_consultation)
+                    ->update(array_merge($consultData, [
+                        'is_hospitalisation' => 0, 
+                        'etat_traitement' => 0
+                    ]));
+        
+                DB::table('tbl_prise_en_charge')
+                    ->where('id_prise_en_charge', $request->id_prise_en_charge)
+                    ->update([
+                        'etat_observation' => 1,
+                        'updated_at' => now()
+                    ]);
+            });
+        
+            Alert::success('Succès', 'Patient mis en observation');
+            return redirect()->route('consultations.index');
+        }
+        
+     protected function traiterTransfert($request, $consultData)
+        {
+        // Récupération validée du spécialiste (déjà vérifié dans determinerDecisionType)
+        $specialiste = DB::table('users')
+            ->join('personnel', 'users.email', '=', 'personnel.email')
+            ->where('user_id', $request->specialiste)
+            ->first();
+
+        // Double vérification pour sécurité
+        if (!$specialiste) {
+            Alert::error('Erreur', 'Spécialiste non trouvé');
+            return back()->withInput();
+        }
+
+        DB::transaction(function () use ($request, $consultData, $specialiste) {
+            // Mise à jour consultation actuelle
             DB::table('tbl_consultation')
                 ->where('id_consultation', $request->id_consultation)
                 ->update(array_merge($consultData, [
                     'etat_traitement' => 1,
-                    'is_hospitalisation' => 0
+                    'conslt_updated_at' => now()
                 ]));
-    
-            // Nouvelle ordonnance
-            DB::table('tbl_ordo_consultation')->insert([
-                'id_consultation' => $request->id_consultation,
-                'ordonnance_consultation' => $request->ordonnance,
-                'num_ordo' => 'ORD-'.time(),
-                'date_ordo' => now(),
-                'updated_at' => now()
+
+            // Nouvelle consultation pour le spécialiste
+            DB::table('tbl_consultation')->insert([
+                'id_prise_en_charge' => $request->id_prise_en_charge,
+                'user_id' => $specialiste->user_id,
+                'user_role_id' => $specialiste->user_role_id,
+                'conslt_created_at' => now(),
+                'conslt_updated_at' => now()
             ]);
-    
+
+            // Mise à jour prise en charge
             DB::table('tbl_prise_en_charge')
                 ->where('id_prise_en_charge', $request->id_prise_en_charge)
                 ->update([
-                    'etat_hospitalisation' => 0,
+                    'last_consult_user_id' => $specialiste->user_id,
+                    'last_consult_user_role_id' => $specialiste->user_role_id,
                     'updated_at' => now()
                 ]);
         });
-    
-        Alert::success('Succès', 'Traitement clôturé avec succès');
+
+        Alert::success('Succès', "Patient transféré à {$specialiste->prenom} {$specialiste->nom}");
         return redirect()->route('consultations.index');
-    }
+      }
+        
+        protected function traiterCloture($request, $consultData)
+        {
+            DB::transaction(function () use ($request, $consultData) {
+                
+                DB::table('tbl_consultation')
+                    ->where('id_consultation', $request->id_consultation)
+                    ->update(array_merge($consultData, [
+                        'etat_traitement' => 1,
+                        'is_hospitalisation' => 0
+                    ]));
+        
+                // Nouvelle ordonnance
+                DB::table('tbl_ordo_consultation')->insert([
+                    'id_consultation' => $request->id_consultation,
+                    'ordonnance_consultation' => $request->ordonnance,
+                    'num_ordo' => 'ORD-'.time(),
+                    'date_ordo' => now(),
+                    'updated_at' => now()
+                ]);
+        
+                DB::table('tbl_prise_en_charge')
+                    ->where('id_prise_en_charge', $request->id_prise_en_charge)
+                    ->update([
+                        'etat_hospitalisation' => 0,
+                        'updated_at' => now()
+                    ]);
+            });
+        
+            Alert::success('Succès', 'Traitement clôturé avec succès');
+            return redirect()->route('consultations.index');
+        }
     
     public function get_ordo($ordo_id)
     {
-    $ordo_info=DB::table('tbl_ordo_consultation')
+        $ordo_info=DB::table('tbl_ordo_consultation')
                   ->leftjoin('tbl_consultation','tbl_consultation.id_consultation','=','tbl_ordo_consultation.id_consultation')
                   ->leftjoin('tbl_prise_en_charge','tbl_prise_en_charge.id_prise_en_charge','=','tbl_consultation.id_prise_en_charge')
                   ->leftjoin('tbl_patient','tbl_patient.patient_id','=','tbl_prise_en_charge.patient_id')
                   ->select('tbl_ordo_consultation.*','tbl_consultation.*','tbl_prise_en_charge.*','tbl_patient.*')
                   ->where('id_ordo_traitement',$ordo_id)
-                  ->first(); 
- 
-
-      return view ('Consult.ordonnance')
+                  ->first();
+                  
+        return view ('Consult.ordonnance')
                 ->with(array(
-                   
-                    'ordo_info'=>$ordo_info,                       
-                                                    
+                     'ordo_info'=>$ordo_info,      
                 ));
-
-      
     }
-    public function make_ordonance (Request $request){
+
+    public function make_ordonance (Request $request)
+    {
 
         $id_consultation=$request->id_consultation;
         $id_prise_en_charge=$request->id_prise_en_charge;
@@ -1013,30 +1018,25 @@ protected function getValidationRules($decision_type)
                   ->select('tbl_ordo_consultation.*','tbl_consultation.*','tbl_prise_en_charge.*','tbl_patient.*')
                   ->where('tbl_ordo_consultation.id_consultation',$id_ordo)
                   ->first(); 
-
-
-        $message='L\'ordonnance a été généré avec succès';
+                  
+                  $message='L\'ordonnance a été généré avec succès';
           return Redirect::to('ordonnance/'.$id_ordo)->with(array(
                     'message'=>$message,
-                    
-                    'ordo_info'=>$ordo_info,                       
-                                                   
-                ));    
+                     'ordo_info'=>$ordo_info,
+                     ));
+    }
+    public function update_constante (Request $request)
+    {
+        $id_consultation=$request->id_consultation;
+        $new_temp=$request->new_temp;
+        $data['new_temp']=$new_temp;
 
-      }
+        DB::table('tbl_consultation')
+                    ->where('id_consultation',$id_consultation)
+                    ->update($data);
 
-
-    public function update_constante (Request $request){
-    $id_consultation=$request->id_consultation;
-    $new_temp=$request->new_temp;
-    $data['new_temp']=$new_temp;
-
-    DB::table('tbl_consultation')
-                ->where('id_consultation',$id_consultation)
-                ->update($data);
-
-            Alert::success('Info', 'Constante modifié avec succès');
-               return Redirect::to ('/consultations');
+                Alert::success('Info', 'Constante modifié avec succès');
+                return Redirect::to ('/consultations');
 
     }
 }

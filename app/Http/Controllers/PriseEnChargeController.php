@@ -466,7 +466,7 @@ class PriseEnChargeController extends Controller
     
 
             Alert::success('Info', 'Nouveau patient enregistré dans les prises en charges.');
-               return redirect()->route ('prises-en-charges.index');
+               return redirect()->route('prise_en_charge.index');
                 
 }
     public function saveStep1(Request $request)

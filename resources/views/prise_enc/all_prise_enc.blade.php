@@ -313,7 +313,7 @@
                                           <th></th>
                                           <th>N° Dossier</th>
                                           <th>Patient</th>
-                                          <th>Mal/Maux</th>
+                                          <th>Pathologie</th>
                                           <th>Spécialiste actuel</th>
                                           <th>Date d'admission</th>
                                           <th>Acttion</th>
@@ -326,7 +326,8 @@
                                           <td></td>
                                           <td>{{$p_urgence->dossier_numero}}</td>
                                           <td>{{$p_urgence->nom_patient}}
-                                          {{$p_urgence->prenom_patient}}</td>
+                                           {{$p_urgence->prenom_patient}}
+                                          </td>
                                           <td>{{$p_urgence->maux}}</td>
                                          
                                           
