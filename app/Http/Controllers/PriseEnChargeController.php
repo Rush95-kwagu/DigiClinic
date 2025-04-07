@@ -286,6 +286,7 @@ class PriseEnChargeController extends Controller
 
         foreach ($normes as $key => $value) {
             $result=  DB::table('tbl_analyse_parametres')->insert([
+                'category' => $value->category,
                 'element' => $value->element,
                 'libelle_norme' => $value->libelle_norme,
                 'valeur_norme' => $value->valeur_norme,

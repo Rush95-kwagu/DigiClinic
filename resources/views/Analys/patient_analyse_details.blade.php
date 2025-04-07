@@ -45,6 +45,9 @@
             </thead>
             <tbody>
                 @foreach ($patient['analyses'] as $analyse)
+                @php
+                  $ids[]=$analyse->analyse_id;
+                @endphp
                     <tr>
                         <td>{{ $analyse->analyse_id }}</td>
                         <td>{{ $analyse->date_paiement ? \Carbon\Carbon::parse($analyse->date_paiement)->format('d-m-Y H:i:s') : 'Non payé' }}</td>
@@ -69,9 +72,8 @@
     @else
         <p>Aucune analyse trouvée pour ce patient.</p>
     @endif
-
     <div class="text-center">
-    <a class="btn btn-sm btn-danger" href="{{URL::to('generate-analyses-result/'.$patient['patient_id'] )}}" type="button">Générer le pdf</a>   
+    <a class="btn btn-sm btn-danger" href="{{URL::to('generate-analyses-result/'.$patient['patient_id'].'/'.implode(',',$ids).'/'.$idDemand )}}" type="button">Générer le pdf</a>   
 
     </div>
 </div>

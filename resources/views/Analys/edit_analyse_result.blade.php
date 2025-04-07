@@ -34,9 +34,7 @@
 
             <div class="form-group">
               <label for="">Observation</label>
-              <textarea class="form-control" name="observation" >
-
-              </textarea>
+              <textarea class="form-control" name="observation" ></textarea>
             </div>
 
             <div class="">
@@ -60,9 +58,16 @@
                 <th>Normes ({{$sex}})</th>
               </thead>
               <tbody>
-                @foreach ($analyse->parametres as $parameter)
+                @foreach ($analyse->parametres as $group => $parameters)
+                <tr>
+                  <td class="text-center" colspan="3">
+                    <h4><strong>{{$group}}</strong> </h4>
+                  </td>
+                </tr>
+                @foreach ( $parameters as $parameter )
                 <tr>
                   <td>
+                    <input type="hidden" name="categories[]" value="{{$group}}">
                     <input type="hidden" name="elements[]" value="{{$parameter->element}}">
                     {{$parameter->element}}
                   </td>
@@ -74,6 +79,8 @@
                     <input type="hidden" name="normes[]" value="{{$parameter->valeur_norme}}">
                   </td>
                 </tr>
+                @endforeach
+               
                 @endforeach
               </tbody>
             </table>
@@ -101,12 +108,7 @@
       $(document).ready(function() {
       $("#example3").DataTable();
     });
-      $("select").change(function(){
-      if(confirm('Cliquez OK pour envoyer le patient vers le spécialiste')){
-          {this.form.submit()} 
-      }
-      else $("select option:selected").prop("selected", false);
-    });
+
     </script>
     </script>
     @endsection

@@ -103,8 +103,9 @@ Repertoire patient
                       
                       <div class="col-12">
                         <h4>Ajout des normes (si disponible)</h4>
-                        
+                        <p class="text-danger">Si l'analyse présente deux catégories de paramètre. Veuillez renseigner le champs catégorie</p>
                         <div class="input-group mb-3">
+                        <input id="category" value="Catégorie unique"  type="text" class="form-control" placeholder="Catégorie" aria-label="Catégorie" aria-describedby="basic-addon2">
                         <input id="element"  type="text" class="form-control" placeholder="Elément" aria-label="Elément" aria-describedby="basic-addon2">
                         <input id="libelle_norme" type="text" class="form-control" placeholder="Libellé Norme" aria-label="Libellé Norme" aria-describedby="basic-addon2">
                         <input id="valeur_norme"  type="text" class="form-control" placeholder="Valeur Norme" aria-label="Valeur Norme" aria-describedby="basic-addon2">
@@ -126,6 +127,7 @@ Repertoire patient
                           <thead>
                             <tr>
                               <th>#</th>
+                              <th>Catégorie paramètre</th>
                               <th>Eléments</th>
                               <th>Libellé Norme</th>
                               <th>Valeur Norme</th>
@@ -168,19 +170,21 @@ Repertoire patient
 
     // Ajouter une analyse
     $(document).on("click", ".add-analysis", function () {
+        let category = $("#category").val();
         let element = $("#element").val();
         let genre = $("#inputGroupSelect01").val();
         let libelle_norme = $("#libelle_norme").val();
         let valeur_norme = $("#valeur_norme").val();
 
         // Validation des champs du formulaire
-        if (!element || !libelle_norme || !valeur_norme || genre === "Sélectionner...") {
+        if (!category || !element || !libelle_norme || !valeur_norme || genre === "Sélectionner...") {
             Swal.fire("Erreur", "Veuillez remplir tous les champs !", "error");
             return;
         }
 
       //  Les données (les éléments sélectionés) sont ajoutées au tableau
         selectedAnalyses.push({
+          category:category,
           element:element,
           libelle_norme:libelle_norme,
           valeur_norme:valeur_norme,
@@ -189,6 +193,7 @@ Repertoire patient
         let newRow = `
             <tr>
                 <td rel="${selectedAnalyses.length-1}">${selectedAnalyses.length}</td>
+                <td>${category}</td>
                 <td>${element}</td>
                 <td>${libelle_norme}</td>
                 <td>${valeur_norme} </td>
@@ -205,7 +210,7 @@ Repertoire patient
         console.log($("#normes"))
 
         // Réinitialisation des champs
-        $("#element, #libelle_norme, #valeur_norme").val("");
+        $("#element, #libelle_norme, #valeur_norme, #category").val("");
         $("#inputGroupSelect01").val("Sélectionner...");
     });
 

@@ -29,12 +29,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($resultats as $resultat)
-            <tr>
-                <td>{{ $resultat->element }}</td>
-                <td>{{ $resultat->result }}</td>
-                <td>{{ $resultat->norme }}</td>
-            </tr>
+            @foreach($resultats as $group => $resultats2)
+                    <tr>
+                  <td class="text-center" colspan="3">
+                    <h4><strong>{{$group}}</strong> </h4>
+                  </td>
+                </tr>
+                @foreach($resultats2 as $resultat)
+                <tr>
+                    <td>{{ $resultat->element }}</td>
+                    <td>{{ $resultat->result }}</td>
+                    <td>{{ $resultat->norme }}</td>
+                </tr>
+                @endforeach
             @endforeach
         </tbody>
     </table>

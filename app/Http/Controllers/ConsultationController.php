@@ -287,6 +287,7 @@ class ConsultationController extends Controller
             ->select(
                 'a.payed_analyse_id as analyse_id',
                 'a.date_paiement',
+                'a.id_demande as idDemand',
                 'a.montant_total as montant',
                 'pr.prestation_id',
                 'pr.nom_prestation as libelle_analyse',
@@ -301,10 +302,11 @@ class ConsultationController extends Controller
             'prenom' => $data->prenom,
             'analyses' => $analyses
             ];
-          //  dd($result);
+        //  dd($result);
 
         return view('Analys.patient_analyse_details')->with(array(
-            'patient'=>$result
+            'patient'=>$result,
+            'idDemand'=>$analyses->first()->idDemand,
         ));
     }
 
@@ -317,6 +319,7 @@ class ConsultationController extends Controller
             'a.payed_analyse_id as analyse_id',
             'a.treated',
             'a.date_paiement',
+            'a.id_demande',
             'a.montant_total as montant',
             'pr.prestation_id',
             'pr.nom_prestation as libelle_analyse',
@@ -335,15 +338,16 @@ class ConsultationController extends Controller
                 ->where('genre', $sex)
                 ->select(
                     'id as parametre_id',
+                    'category',
                     'element',
                     'libelle_norme',
                     'valeur_norme',
                     'genre'
                 )
-                ->get();
+                ->get()->groupby('category');
 
             }
-      
+           
             // Ajouter les paramètres à l'analyse
             $analysis->parametres = $parameters;          
            
@@ -366,6 +370,7 @@ class ConsultationController extends Controller
             foreach ($request->elements as $key => $value) {
                 $data->push([
                     "element"=>$value,
+                    "category"=>$request->categories[$key],
                     "result"=>$request->results[$key],
                     "norme"=>$request->normes[$key],
                 ]);
@@ -414,7 +419,7 @@ class ConsultationController extends Controller
 
             $centre_id=Session::get('centre_id');
 
-            xDB::table('tbl_analyse_payed')->where('payed_analyse_id', $request->analyse_id)->update(['treated'=>true]);
+            DB::table('tbl_analyse_payed')->where('payed_analyse_id', $request->analyse_id)->update(['treated'=>true]);
 
             DB::table('tbl_resultats_analyse')->updateOrInsert(
                 [
@@ -472,20 +477,22 @@ class ConsultationController extends Controller
                 "patient"=>$analyse->nom_patient. " ".$analyse->prenom_patient,
                 "decision"=>$resultat->resultat,
                 "observation"=>$resultat->observation,
-                "resultats"=>json_decode($resultat->content)
+                "resultats"=>collect(json_decode($resultat->content))?->groupby('category'),
                 ]);
                 
         }
 
     
-    function getResultPDF($id){
+    function getResultPDF($id,$analyse_id,$id_demande){
         
         $analyse = DB::table('tbl_analyse_payed as a')
         ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
         ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id')
         ->leftJoin('tbl_resultats_analyse as r', 'pr.prestation_id', '=', 'r.prestation_id')        // Jointure avec la table des patients
+        ->whereIn('a.payed_analyse_id', explode(',',$analyse_id))
         ->where('a.treated', true)
         ->where('a.patient_id', $id)
+        ->where('a.id_demande', $id_demande)
         ->select(
             // Informations du patient
             'p.patient_id as patient_id',
@@ -500,10 +507,13 @@ class ConsultationController extends Controller
             'pr.prestation_id',
             'pr.nom_prestation',
             'pr.tarif as prix',
-             'r.*'
+             'r.resultat',
+             'r.observation',
+             'r.content',
         )
+        ->distinct('a.analyse_id')
         ->get(); // Un seul résultat
-     
+             //   dd($analyse);
             $data1=array();
             $data2=array();
             $i=0;
@@ -523,12 +533,13 @@ class ConsultationController extends Controller
                     $data2[$j]['element']=$a->nom_prestation;
                     $data2[$j]['decision']=$a->resultat;
                     $data2[$j]['observation']=$a->observation;
-                    $data2[$j]['resultats']=json_decode($a->content);
+                    $data2[$j]['resultats']= collect(json_decode($a->content))?->groupby('category');
                     $j++;
+                  //  dd(collect(json_decode($a->content)));
+
                 }
                
-            }
-          // dd($data);
+            }  
 
             //  $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
             $qrCode ="QrCode ici";
