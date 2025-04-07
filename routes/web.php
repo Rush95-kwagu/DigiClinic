@@ -57,7 +57,7 @@ Route::post('/update-analyse-form/{id_type_analyse}', [PriseEnChargeController::
 Route::get('/add-analyse', [PriseEnChargeController::class, 'addAnalyse']);
 Route::post('/add-form', [PriseEnChargeController::class, 'savePrestation'])->name('add.prestation');
 Route::post('/add-analyse', [PriseEnChargeController::class, 'saveAnalyse'])->name('save.analyse');
-Route::get('/prises-en-charges', [PriseEnChargeController::class,('index')]);
+Route::get('/prises-en-charges', [PriseEnChargeController::class,('index')])->name('prise_en_charge.index');
 Route::get('/enregistrer-prise-en-charge', [PriseEnChargeController::class,('record_prisenc')]);
 Route::post('/save-prisenc', [PriseEnChargeController::class,('save_prisenc')]);
 Route::get('/caisse-consultations', [PriseEnChargeController::class,('caisse_conslt')]);
@@ -114,13 +114,18 @@ Route::get('/directeur/center/{id}/{nom}-{prenom}', [ServiceController::class, '
 
 //Consultation
 Route::post('send-consult', [ConsultationController::class,('send_consult')]);
-Route::get('consultations', [ConsultationController::class,('consultation')]);
+Route::get('consultations', [ConsultationController::class,('consultation')])->name('consultations.index');
 Route::get('traitement-patient/{id_consultation}/{patient_id}', [ConsultationController::class,('traitement_patient')])->name('traitement-patient');
-Route::post('save-traitement', [ConsultationController::class,('save_traitement')]);
+Route::post('save-traitement', [ConsultationController::class,('save_traitement')])->name('traitement.save');
 // Route::post('modifier-constante', [ConsultationController::class,('update_constante')]);
 // Route::post('modifier-constante', [PriseEnChargeController::class,('save_constantes')]);
 Route::post('traitement-patient/{id_consultation}/{patient_id}/modifier-constante', [PriseEnChargeController::class, 'save_constantes'])
      ->name('modifier.constante');
+
+// Hospitalisation
+
+Route::get('gestion-hospitalisation', [ConsultationController::class,('hospitalisation')]);
+Route::get('traitement-hospitalisation/{id_consultation}/{patient_id}',[ConsultationController::class,('traitement_hospitalisation')])->name('hospitalisation.traitement');
 
 //Analyses
 Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses')]);

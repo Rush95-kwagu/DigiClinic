@@ -37,7 +37,7 @@
                             aria-controls="twoAAA" aria-selected="false">
                             Patients en consultation
                             <sup class="badge bg-warning ms-1">
-                              {{ $totalPatient_H }}
+                              {{ $totalPatient_c }}
                             </sup>
                           </a>
                         </li>
@@ -65,160 +65,160 @@
                         <div class="tab-pane fade show active" id="oneAAA" role="tabpanel">
                           <!-- Row starts -->
                           <div class="row gx-3">
-                             <div class="col-sm-12">
-                                <div class="card mb-3">
-                                  <div class="card-header">
-                                    <h5 class="card-title">Patients en attente</h5>
-                                  </div>
-                                  <div class="card-body">
-                                    <div class="">
-                                      <div class="table-responsive">
-                                        <table class="table truncate align-middle" id="example">
-                                          <thead>
-                                            <tr>
-                                              <th width="30px">&nbsp;</th>
-                                              <th width="30px">N° Dossier</th>
-                                              <th width="60px">Patient</th>
-                                              <th width="100px">Mal/Maux </th>
-                                              <th width="100px">Sexe </th>
-                                              <th width="100px">nip/numero</th>
-                                              <th width="100px">Adresse</th>
-                                              <th width="100px">Naissance</th>
-                                              </th>
-                                              <th width="100px">
-                                              Observation
-                                              </th>
-                                              <th width="100px">Actions</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                           @foreach($all_prisenc as $v_prisenc) 
-                                            <tr>
-                                           
+                            <div class="col-sm-12">
+                               <div class="card mb-3">
+                                 <div class="card-header">
+                                   <h5 class="card-title">Patients en attente</h5>
+                                 </div>
+                                 <div class="card-body">
+                                   <div class="">
+                                     <div class="table-responsive">
+                                       <table class="table truncate align-middle" id="example">
+                                         <thead>
+                                           <tr>
+                                             <th width="30px">&nbsp;</th>
+                                             <th width="30px">N° Dossier</th>
+                                             <th width="60px">Patient</th>
+                                             <th width="100px">Mal/Maux </th>
+                                             <th width="100px">Sexe </th>
+                                             <th width="100px">nip/numero</th>
+                                             <th width="100px">Adresse</th>
+                                             <th width="100px">Naissance</th>
+                                             </th>
+                                             <th width="100px">
+                                             Observation
+                                             </th>
+                                             <th width="100px">Actions</th>
+                                           </tr>
+                                         </thead>
+                                         <tbody>
+                                          @foreach($all_prisenc as $v_prisenc) 
+                                           <tr>
+                                          
+                                             <td>
+                                               <a href="#" class="me-1 icon-box sm bg-light rounded-circle">
+                                               @if($v_prisenc->sexe_patient == 'F')
+                                               <img style="width:30px; height:30px;" src="{{asset('frontend/F.png')}}" alt="sexe')}}" class="rounded-circle img-3x">
+                                               @else
+                                               <img style="width:30px; height:30px;" src="{{asset('frontend/M.png')}}" alt="sexe" class="rounded-circle img-3x">
+                                               @endif
+                                               </a>
+                                             </td>
                                               <td>
-                                                <a href="#" class="me-1 icon-box sm bg-light rounded-circle">
-                                                @if($v_prisenc->sexe_patient == 'F')
-                                                <img style="width:30px; height:30px;" src="{{asset('frontend/F.png')}}" alt="sexe')}}" class="rounded-circle img-3x">
-                                                @else
-                                                <img style="width:30px; height:30px;" src="{{asset('frontend/M.png')}}" alt="sexe" class="rounded-circle img-3x">
-                                                @endif
-                                                </a>
-                                              </td>
-                                               <td>
-                                                {{$v_prisenc->dossier_numero}}
-                                                
-                                              </td>
-                                              <td>
-                                                {{$v_prisenc->prenom_patient}}
-                                                {{$v_prisenc->nom_patient}}
-                                              </td>
-                                              <td><h4><span class="badge bg-danger">{{$v_prisenc->maux}}</span></h4></td>
-                                              <td><h4><span class="badge bg-success">{{$v_prisenc->sexe_patient}}</span></h4></td>
-                                              <td>{{$v_prisenc->telephone}}</td>
-                                              <td>{{$v_prisenc->adresse}}</td>
+                                               {{$v_prisenc->dossier_numero}}
+                                               
+                                             </td>
+                                             <td>
+                                               {{$v_prisenc->prenom_patient}}
+                                               {{$v_prisenc->nom_patient}}
+                                             </td>
+                                             <td><h4><span class="badge bg-danger">{{$v_prisenc->maux}}</span></h4></td>
+                                             <td><h4><span class="badge bg-success">{{$v_prisenc->sexe_patient}}</span></h4></td>
+                                             <td>{{$v_prisenc->telephone}}</td>
+                                             <td>{{$v_prisenc->adresse}}</td>
+                                            
+                                             <td>
+                                               {{$v_prisenc->datenais}}
+                                             </td>
+                                             <td><h4><span class="badge bg-success">{{$v_prisenc->observation}}</span></h4></td>
                                              
-                                              <td>
-                                                {{$v_prisenc->datenais}}
-                                              </td>
-                                              <td>{{$v_prisenc->observation}}</td>
+                                             <td>
+                                             @if($v_prisenc->last_consult_user_role_id == NULL && $v_prisenc->etat_consultation == 0)
+                                             <form action="{{url('send-consult')}}" method="POST">
+                                                 {{csrf_field()}}
+                                             <input type="hidden" name="id_prise_en_charge" value="{{$v_prisenc->id_prise_en_charge}}">
+                                             <select id="myDropdown" class="form-select btn btn-outline-success" name="specialiste">
+                                               <option selected>Urgence</option>
+                                              <optgroup label="Spécialistes">
                                               
-                                              <td>
-                                              @if($v_prisenc->last_consult_user_role_id == NULL && $v_prisenc->etat_consultation == 0)
-                                              <form action="{{url('send-consult')}}" method="POST">
-                                                  {{csrf_field()}}
-                                              <input type="hidden" name="id_prise_en_charge" value="{{$v_prisenc->id_prise_en_charge}}">
-                                              <select id="myDropdown" class="form-select btn btn-outline-success" name="specialiste">
-                                                <option selected>Urgence</option>
-                                               <optgroup label="Spécialistes">
-                                               
-                                              <?php 
+                                             <?php 
 
-                                                $all_specialiste=DB::table('user_roles')
-                                                ->join('users','user_roles.user_role_id','=','users.user_role_id')
-                                                ->join('personnel','users.email','=','personnel.email')
-                                                ->where('is_consult',1)
-                                                ->where('personnel.id_centre',$centre_id)
-                                                ->get(); 
-                                                foreach ($all_specialiste as $v_specialist){ ?>  
-                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}} 
-                                                {{$v_specialist->prenom}}
-                                                {{$v_specialist->nom}}</option>
-                                              <?php } ?>
-                                               </optgroup>
-                                               
-                                               <optgroup label="Analyse / Scanner">
-                                               
-                                              <?php 
-
-                                                $all_specialiste=DB::table('user_roles')
-                                                ->join('users','user_roles.user_role_id','=','users.user_role_id')
-                                                ->join('personnel','users.email','=','personnel.email')
-                                                ->where('designation',"Caisse")
-                                                ->where('personnel.id_centre',$centre_id)
-                                                ->get(); 
-                                                foreach ($all_specialiste as $v_specialist){ ?>  
-                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
-                                                {{$v_specialist->prenom}}
-                                                {{$v_specialist->nom}}</option>
-                                              <?php } ?>
-                                               </optgroup>
-                                               
-                                               <optgroup label="Consultation">
-                                               
-                                              <?php 
-
-                                                $all_specialiste=DB::table('user_roles')
-                                                ->join('users','user_roles.user_role_id','=','users.user_role_id')
-                                                ->join('personnel','users.email','=','personnel.email')
-                                                ->whereIn('is_consult',[1, 4])
-                                                ->where('personnel.id_centre',$centre_id)
-                                                ->get(); 
-                                                foreach ($all_specialiste as $v_specialist){ ?>  
-                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
-                                                {{$v_specialist->prenom}}
-                                                {{$v_specialist->nom}}</option>
-                                              <?php } ?>
-                                               </optgroup>
-                                              </select>
-                                            </form>
-                                              @else
-                                              <form action="{{url('send-consult')}}" method="POST">
-                                                  {{csrf_field()}}
-                                              <input type="hidden" name="id_prise_en_charge" value="{{$v_prisenc->id_prise_en_charge}}">
-                                              <select id="myDropdown" class="form-select btn btn-outline-info" name="specialiste">
-                                                <option selected>Envoyer vers</option>
-                                               <optgroup label="Spécialistes">
-                                               
-                                              <?php 
-
-                                                $all_specialiste=DB::table('user_roles')
-                                                ->join('users','user_roles.user_role_id','=','users.user_role_id')
-                                                ->join('personnel','users.email','=','personnel.email')
-                                                ->where('is_consult',1)
-                                                ->where('personnel.id_centre',$centre_id)
-                                                ->get(); 
-                                                foreach ($all_specialiste as $v_specialist){ ?>  
-                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}.
-                                                {{$v_specialist->prenom}}
-                                                {{$v_specialist->nom}}</option>
-                                              <?php } ?>
-                                               </optgroup>
-                                              </select>
-                                            </form>
+                                               $all_specialiste=DB::table('user_roles')
+                                               ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                               ->join('personnel','users.email','=','personnel.email')
+                                               ->where('is_consult',1)
+                                               ->where('personnel.id_centre',$centre_id)
+                                               ->get(); 
+                                               foreach ($all_specialiste as $v_specialist){ ?>  
+                                               <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}} 
+                                               {{$v_specialist->prenom}}
+                                               {{$v_specialist->nom}}</option>
+                                             <?php } ?>
+                                              </optgroup>
                                               
-                                              @endif
+                                              <optgroup label="Analyse / Scanner">
+                                              
+                                             <?php 
 
-                                              </td>
-                                            </tr>
-                                          @endforeach
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                          </div>
+                                               $all_specialiste=DB::table('user_roles')
+                                               ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                               ->join('personnel','users.email','=','personnel.email')
+                                               ->where('is_consult',3)
+                                               ->where('personnel.id_centre',$centre_id)
+                                               ->get(); 
+                                               foreach ($all_specialiste as $v_specialist){ ?>  
+                                               <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
+                                               {{$v_specialist->prenom}}
+                                               {{$v_specialist->nom}}</option>
+                                             <?php } ?>
+                                              </optgroup>
+                                              
+                                              <optgroup label="Consultation">
+                                              
+                                             <?php 
+
+                                               $all_specialiste=DB::table('user_roles')
+                                                        ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                                        ->join('personnel','users.email','=','personnel.email')
+                                                        ->whereIn('is_consult',[1, 4])
+                                                        ->where('personnel.id_centre',$centre_id)
+                                                        ->get(); 
+                                               foreach ($all_specialiste as $v_specialist){ ?>  
+                                               <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
+                                               {{$v_specialist->prenom}}
+                                               {{$v_specialist->nom}}</option>
+                                             <?php } ?>
+                                              </optgroup>
+                                             </select>
+                                           </form>
+                                             @else
+                                             <form action="{{url('send-consult')}}" method="POST">
+                                                 {{csrf_field()}}
+                                             <input type="hidden" name="id_prise_en_charge" value="{{$v_prisenc->id_prise_en_charge}}">
+                                             <select id="myDropdown" class="form-select btn btn-outline-info" name="specialiste">
+                                               <option selected>Envoyer vers</option>
+                                              <optgroup label="Spécialistes">
+                                              
+                                             <?php 
+
+                                               $all_specialiste=DB::table('user_roles')
+                                               ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                               ->join('personnel','users.email','=','personnel.email')
+                                               ->where('is_consult',1)
+                                               ->where('personnel.id_centre',$centre_id)
+                                               ->get(); 
+                                               foreach ($all_specialiste as $v_specialist){ ?>  
+                                               <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}.
+                                               {{$v_specialist->prenom}}
+                                               {{$v_specialist->nom}}</option>
+                                             <?php } ?>
+                                              </optgroup>
+                                             </select>
+                                           </form>
+                                             
+                                             @endif
+
+                                             </td>
+                                           </tr>
+                                         @endforeach
+                                         </tbody>
+                                       </table>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             </div>
+                         </div>
                           <!-- Row ends -->
                         </div>
                         <div class="tab-pane fade" id="twoAAA" role="tabpanel">

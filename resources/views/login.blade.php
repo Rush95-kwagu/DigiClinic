@@ -7,16 +7,15 @@
     <title>Connexion | DigiClinic</title>
 
     <!-- Meta -->
-    <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
-    <meta name="author" content="Bootstrap Gallery">
-    <link rel="canonical" href="https://www.bootstrap.gallery/">
-    <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
-    <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
+    <meta name="description" content="DigiClinic">
+    <meta name="author" content="Administration | Gestion de Cliniques">
+    <link rel="canonical" href="https://www.gnlfconsult.com/">
+    <meta property="og:url" content="https://www.gnlfconsult.com">
+    <meta property="og:title" content="Administration | Gestion de Cliniques">
+    <meta property="og:description" content="DigiClinic | Administration de Cliniques">
     <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="frontend/images/favicon.svg">
-
+    <meta property="og:site_name" content="Administration | Gestion de Cliniques">
+    
     <!-- *************
 			************ CSS Files *************
 		************* -->
@@ -24,7 +23,6 @@
     <link rel="stylesheet" href="{{asset('frontend/css/main.min.css')}}">
 
   </head>
-
   <body class="login-bg">
   <?php $error=Session::get('error')?>
   <?php $succes=Session::get('succes')?>
@@ -34,7 +32,7 @@
 
       <!-- Auth wrapper starts -->
       <div class="auth-wrapper">
-
+        
 
         <!-- Form starts -->
         <form action="{{url('login')}}" method="POST">

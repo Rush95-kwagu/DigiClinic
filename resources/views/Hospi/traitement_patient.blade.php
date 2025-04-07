@@ -39,8 +39,8 @@
                                 <u>Constantes vitales</u>: <br><br>
                             </h5>
                             
-                            @forelse($last_constance as $constante)
-                                <b>{{ $constante->type }}</b>: {{ $constante->valeur }} {{ $constante->unite }} <br>
+                            @forelse($last_constance as $type => $constante)
+                                <b>{{ $type }}</b>: {{ $constante->valeur }} {{ $constante->unite }} <br>
                             @empty
                                 <span class="text-muted">Aucune constante disponible</span>
                             @endforelse
@@ -98,68 +98,95 @@
                                     <div class="tab-pane fade show active" id="oneAAAA" role="tabpanel">
                                         <div class="card-body">
                                             <div class="collapse" id="collapse-from-validation"></div>
-                                            <form id="traitementForm" class="form-horizontal" method="post" action="{{ url('/save-traitement') }}" enctype="multipart/form-data">
+                                            <form onsubmit="return confirm('Cliquez OK pour clôturer le traitement')" 
+                                                  class="form-horizontal" 
+                                                  method="post" 
+                                                  action="{{ url('/save-traitement') }}" 
+                                                  enctype="multipart/form-data">
                                                 @csrf
-                                                <input id="idc" type="hidden" name="id_consultation" value="{{ $id_consultation }}">
-                                                <input id="idp" type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge }}">
-                                                <input id="idpa" type="hidden" name="patient_id" value="{{ $patient->patient_id }}">
-                                            
+                                                
                                                 <div class="form-row">
-                                                    <!-- Champs communs -->
                                                     <div class="col-md-12 mb-3">
                                                         <label class="control-label">Votre diagnostic</label>
-                                                        <textarea class="form-control" name="diagnostic" rows="3" required></textarea>
+                                                        <div class="controls">
+                                                            <textarea class="form-control" name="diagnostic" rows="3" required></textarea>
+                                                        </div>
                                                     </div>
-                                            
+
                                                     <div class="col-md-10 mb-3">
-                                                        <label>Observation</label>
-                                                        <input type="text" class="form-control" name="observation">
+                                                        <label for="validationServer0">Observation</label>
+                                                        <input type="text" class="form-control border-success" id="validationServer0" 
+                                                               placeholder="libellé" name="observation">
                                                     </div>
-                                            
+                                                    
                                                     <div class="col-md-12 mb-3">
-                                                        <label>Pièce jointe</label>
-                                                        <input type="file" class="form-control" name="fichier_joint" accept="application/pdf">
-                                                        <div class="text-success small mt-1">PDF supporté</div>
+                                                        <label for="validationServer03">Pièce jointe</label>
+                                                        <input type="file" class="form-control border-success" id="validationServer03" 
+                                                               placeholder="description" name="fichier_joint" accept="application/pdf" />
+                                                        <div class="text-success small mt-1">Pdf supporté</div>
                                                     </div>
-                                            
-                                                    <!-- Bloc décision (masqué si clôture) -->
+
                                                     <div class="affect col-md-12 mb-3">
                                                         <label class="control-label">Décision</label>
-                                                        <select id="decisionSelect" class="form-select" name="specialiste">
-                                                            <option value="" selected>Choisir une action</option>
-                                                            <optgroup label="Hospitalisation">
-                                                                <option value="0">Mise en Hospitalisation</option>
-                                                            </optgroup>
-                                                            <optgroup label="Observation">
-                                                                <option value="2">Mise en observation</option>
-                                                            </optgroup>
-                                                            <optgroup label="Spécialistes">
-                                                                @foreach($specialistes as $specialiste)
-                                                                    <option value="{{ $specialiste->user_id }}">
-                                                                        {{ $specialiste->qualification }}: {{ $specialiste->prenom }} {{ $specialiste->nom }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </optgroup>
-                                                        </select>
+                                                        <div class="controls">
+                                                            <select id="myDropdown" class="form-select btn btn-outline-" name="specialiste">
+                                                                <option selected>Mettre en observation ou Affecter à un spécialiste</option>
+                                                                <optgroup label="Hospitalisation">
+                                                                    <option value="0">Mise en Hospitalisation</option>
+                                                                </optgroup>
+                                                                <optgroup label="Observation">
+                                                                    <option value="2">Mise en observation</option>
+                                                                </optgroup>
+                                                                <optgroup label="Spécialistes">
+                                                                    @foreach(DB::table('user_roles')
+                                                                        ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                                                        ->join('personnel','users.email','=','personnel.email')
+                                                                        ->where('is_consult',1)
+                                                                        ->where('users.user_id','!=',$user_id)
+                                                                        ->get() as $v_specialist)
+                                                                        <option value="{{ $v_specialist->user_id }}">
+                                                                            {{ $v_specialist->designation }}: {{ $v_specialist->prenom }} {{ $v_specialist->nom }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                                <optgroup label="Envoyer pour analyses">
+                                                                    @foreach(DB::table('user_roles')
+                                                                        ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                                                        ->join('personnel','users.email','=','personnel.email')
+                                                                        ->where('user_roles.user_role_id',1)
+                                                                        ->where('personnel.id_centre',$centre_id)
+                                                                        ->get() as $v_specialist)
+                                                                        <option value="{{ $v_specialist->user_id }}">
+                                                                            {{ $v_specialist->designation }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                            
-                                                    <!-- Bloc ordonnance (visible seulement si clôture) -->
+
                                                     <div class="ordo col-md-12 mb-3" style="display: none;">
                                                         <label class="control-label">Ordonnance</label>
-                                                        <div id="quill_editor"></div>
-                                                        <textarea name="ordonnance" id="textar" hidden></textarea>
+                                                        <div class="controls">
+                                                            <div id="quill_editor" placeholder="Votre texte..."></div>
+                                                            <textarea name="ordonnance" id="textar" cols="30" rows="30" hidden></textarea>
+                                                        </div>
                                                     </div>
-                                            
-                                                    <!-- Switch clôture -->
+
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" id="clotureSwitch" name="etat_traitement" value="1">
-                                                        <label class="form-check-label" for="clotureSwitch">Clôturer le traitement</label>
-                                                        <input type="hidden" name="etat_hospitalisation" id="etatHospitalisation" value="0">
+                                                        <input class="checkbox form-check-input" type="checkbox" role="switch" 
+                                                               id="flexSwitchCheckDefault">
+                                                        <label class="checkbox form-check-label" for="flexSwitchCheckDefault">
+                                                            Clôturer le traitement
+                                                        </label>
+                                                        <input id="sign" type="hidden" name="etat_hospitalisation" value="0">
+                                                        <input id="idc" type="hidden" name="id_consultation" value="{{ $id_consultation }}">
+                                                        <input id="idp" type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge ?? '' }}">
+                                                        <input id="idpa" type="hidden" name="patient_id" value="{{ $patient->patient_id ?? '' }}">
                                                     </div>
                                                 </div>
-                                            
-                                                <button type="submit" class="btn btn-primary btn-pill mr-2">Valider</button>
-                                                <button type="reset" class="btn btn-light btn-pill">Annuler</button>
+                                                <button class="btn btn-primary btn-pill mr-2" type="submit">Valider</button>
+                                                <button class="btn btn-light btn-pill" type="reset">Annuler</button>
                                             </form>
                                         </div>
                                     </div>
@@ -306,33 +333,22 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel">Ordonnance de soin du patient </h4>
+                <h5 class="modal-title" id="exampleModalLabel">Prescrire une ordonnance</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Annuler"></button>
             </div>
             <form action="{{ url('/make-ordonnance') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    Nom : 
-                    <span class="badge bg-info">
-                        {{ $patient->nom_patient ?? '' }}
-                    </span> 
-                    Prénom : 
-                    <span class="badge bg-info">
-                        {{ $patient->prenom_patient ?? '' }}
-                    </span> 
-                    Sexe : 
-                    <span class="badge bg-info">
-                        {{ $patient->sexe_patient }}
-                    </span>
+                    <h4>Veuillez éditer votre ordonnance</h4>
                     <br>
                     <input type="hidden" name="id_consultation" value="{{ $id_consultation }}">
                     <input type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge ?? '' }}">
 
                     <div class="control-group hidden-phone">
-                        <label class="control-label" for="textarea2"></label>
+                        <label class="control-label" for="textarea2">Contenu de l'ordonnance</label>
                         <br>
-                        <div id="editor2" style="height: 200px;"></div>
-                        <input type="hidden" name="ordonnance_consultation" id="ordonnance_consultation" required>
+                        <div id="editor" style="height: 200px;"></div>
+                        <input type="hidden" name="ordonnance_consultation" id="ordonnance_consultation">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -432,11 +448,10 @@
 
 <!-- Include the Quill library -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <!-- Initialize Quill editor -->
 <script>
-    const quill = new Quill('#editor2', {
+    const quill = new Quill('#editor', {
         theme: 'snow'
     });
     
@@ -446,83 +461,35 @@
 </script>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-  
-    const quill = new Quill('#quill_editor', {
-        theme: 'snow'
-    });
-    quill.on('text-change', function() {
-        document.getElementById('textar').value = quill.root.innerHTML;
-    });
-
-    
-    const clotureSwitch = document.getElementById('clotureSwitch');
-    const affectDiv = document.querySelector('.affect');
-    const ordoDiv = document.querySelector('.ordo');
-
-    clotureSwitch.addEventListener('change', function() {
-        if(this.checked) {
-            affectDiv.style.display = 'none';
-            ordoDiv.style.display = 'block';
-            document.getElementById('etatHospitalisation').value = '1';
-        } else {
-            affectDiv.style.display = 'block';
-            ordoDiv.style.display = 'none';
-            document.getElementById('etatHospitalisation').value = '0';
-        }
-    });
-
-    // Confirmation avant soumission
-    document.getElementById('traitementForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion de la checkbox pour clôturer le traitement
+        document.querySelector('input#sign').value = 0;
+        document.querySelector('.affect').style.display = '';
+        document.querySelector('.ordo').style.display = 'none';
         
-        const decision = clotureSwitch.checked ? 'cloture' : 
-                        document.getElementById('decisionSelect').value;
-        
-        let confirmText, confirmTitle;
-        
-        switch(decision) {
-            case '0':
-                confirmTitle = "Confirmer l'hospitalisation";
-                confirmText = "Voulez-vous vraiment hospitaliser ce patient?";
-                break;
-            case '2':
-                confirmTitle = "Confirmer la mise en observation";
-                confirmText = "Voulez-vous vraiment mettre ce patient en observation?";
-                break;
-            case 'cloture':
-                confirmTitle = "Confirmer la clôture";
-                confirmText = "Voulez-vous vraiment clôturer ce traitement?";
-                break;
-            default:
-                if(decision) { // Transfert spécialiste
-                    const specialisteText = document.getElementById('decisionSelect')
-                        .options[document.getElementById('decisionSelect').selectedIndex].text;
-                    confirmTitle = "Confirmer le transfert";
-                    confirmText = `Voulez-vous vraiment transférer ce patient à ${specialisteText}?`;
-                } else {
-                    Swal.fire('Erreur', 'Veuillez sélectionner une action', 'error');
-                    return;
-                }
-        }
-
-        Swal.fire({
-            title: confirmTitle,
-            text: confirmText,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Oui, confirmer',
-            cancelButtonText: 'Annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                e.target.submit();
+        const check = document.querySelector('.checkbox');
+        check.addEventListener('click', () => {
+            check.classList.toggle('active');
+            if(check.classList.contains('active')) {
+                document.querySelector('.affect').style.display = 'none';
+                document.querySelector('.ordo').style.display = '';
+                document.querySelector('input#sign').value = 1;
+            } else {                
+                document.querySelector('.affect').style.display = '';
+                document.querySelector('.ordo').style.display = 'none';
+                document.querySelector('input#sign').value = 0;
             }
         });
+        
+        // Initialisation de l'éditeur Quill pour le formulaire principal
+        const quillEditor = new Quill('#quill_editor', {
+            theme: 'snow'
+        });
+        
+        quillEditor.on('text-change', function() {
+            document.getElementById('textar').value = quillEditor.root.innerHTML;
+        });
     });
-});
 </script>
 
 @push('js')

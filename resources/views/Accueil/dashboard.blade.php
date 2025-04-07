@@ -99,12 +99,15 @@ Admin
                             </a>
                             <div class="d-flex flex-column">
                               <?php
-                                   $nbr_conslt_imp=DB::table('tbl_caisse_prise_en_charge')
-                                          ->where('frais_consultation',NULL)
-                                          ->where('id_centre',$centre_id)
+                                   $nbr_hospi_nt=DB::table('tbl_consultation')
+                                          ->where([
+                                            ['is_hospitalisation',1],
+                                            ['id_lit', NULL]
+                                            ])
+                                          ->where('centre_id',$centre_id)
                                           ->count();
                               ?>
-                              <h2 class="m-0 lh-1">{{$nbr_conslt_imp}}</h2>
+                              <h2 class="m-0 lh-1">{{$nbr_hospi_nt}}</h2>
 
 
                               <p class="m-0"> Patient à hospitaliser</p>
@@ -122,12 +125,13 @@ Admin
                             </a>
                             <div class="d-flex flex-column">
                               <?php
-                              $nbr_hosp_imp=DB::table('tbl_caisse_prise_en_charge')
-                                        ->where('frais_hospitalisation',NULL)
-                                        ->where('id_centre',$centre_id)
-                                        ->count();
+                               $nbr_hospi = DB::table('tbl_consultation')
+                                              ->where('is_hospitalisation', 1)
+                                              ->whereNotNull('id_lit') 
+                                              ->where('centre_id', $centre_id)
+                                              ->count();
                           ?>
-                              <h2 class="m-0 lh-1">{{$nbr_hosp_imp}}</h2>
+                              <h2 class="m-0 lh-1">{{$nbr_hospi}}</h2>
 
 
                               <p class="m-0"> Patients en Hospitalisation</p>
@@ -141,11 +145,15 @@ Admin
                             </a>
                             <div class="d-flex flex-column">
                             <?php
-                                $list_patient=DB::table('tbl_patient')
-                                          ->where('id_centre',$centre_id)
+                                $patient_ob=DB::table('tbl_prise_en_charge')
+                                          ->where([
+                                            ['etat_hospitalisation',2],
+                                            ['etat_consultation',1],
+                                            ['id_centre',$centre_id]
+                                            ])
                                           ->count();
                             ?>
-                              <h2 class="m-0 lh-1">{{$list_patient}}</h2>
+                              <h2 class="m-0 lh-1">{{$patient_ob}}</h2>
 
 
                               <p class="m-0"> Patients en Observation</p>

@@ -62,7 +62,7 @@
   <body>
 
     <!-- Loading starts -->
-    {{-- <div id="loading-wrapper">
+    <div id="loading-wrapper">
       <div class='spin-wrapper'>
         <div class='spin'>
           <div class='inner'></div>
@@ -83,7 +83,7 @@
           <div class='inner'></div>
         </div>
       </div>
-    </div> --}}
+    </div>
     <!-- Loading ends -->
 
     <!-- Page wrapper starts -->
@@ -118,10 +118,10 @@
         <div class="header-actions">
 
           <!-- Search container starts -->
-          <!-- <div class="search-container d-lg-block d-none mx-3">
+          <div class="search-container d-lg-block d-none mx-3">
             <input type="text" class="form-control" id="searchId" placeholder="Search">
             <i class="ri-search-line"></i>
-          </div> -->
+          </div> 
           <!-- Search container ends -->
 
           <!-- Header actions starts -->
@@ -573,7 +573,7 @@
                
                 <ul class="treeview-menu">
                   <li>
-                    <a href="{{URL::to('consultations')}}">Espace Hospitalisations</a>
+                    <a href="{{URL::to('gestion-hospitalisation')}}">Espace Hospitalisations</a>
                   </li>
                  </ul>
               </li>
@@ -608,7 +608,7 @@
                 </ul>
               </li>
 
-@elseif($user_role_id == 4)
+            @elseif($user_role_id == 4)
               <li class="treeview">
                 <a href="#!">
                   <i class="ri-microscope-line"></i>
