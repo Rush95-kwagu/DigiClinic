@@ -20,7 +20,7 @@
           
         <input type="hidden" name="patient_id" value="{{$patient_id}}">
         <input type="hidden" name="analyse_id" value="{{$analyse->analyse_id}}">
-        <input type="hidden" name="id_type_analyse" value="{{$analyse->id_type_analyse}}">
+        <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
@@ -34,9 +34,7 @@
 
             <div class="form-group">
               <label for="">Observation</label>
-              <textarea class="form-control" name="observation" >
-
-              </textarea>
+              <textarea class="form-control" name="observation" ></textarea>
             </div>
 
             <div class="">
@@ -49,7 +47,7 @@
 
           <input type="hidden" name="patient_id" value="{{$patient_id}}">
         <input type="hidden" name="analyse_id" value="{{$analyse->analyse_id}}">
-        <input type="hidden" name="id_type_analyse" value="{{$analyse->id_type_analyse}}">
+        <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
@@ -57,12 +55,19 @@
               <thead>
                 <th>Elements</th>
                 <th>Résultats</th>
-                <th>Normes</th>
+                <th>Normes ({{$sex}})</th>
               </thead>
               <tbody>
-                @foreach ($analyse->parametres as $parameter)
+                @foreach ($analyse->parametres as $group => $parameters)
+                <tr>
+                  <td class="text-center" colspan="3">
+                    <h4><strong>{{$group}}</strong> </h4>
+                  </td>
+                </tr>
+                @foreach ( $parameters as $parameter )
                 <tr>
                   <td>
+                    <input type="hidden" name="categories[]" value="{{$group}}">
                     <input type="hidden" name="elements[]" value="{{$parameter->element}}">
                     {{$parameter->element}}
                   </td>
@@ -74,6 +79,8 @@
                     <input type="hidden" name="normes[]" value="{{$parameter->valeur_norme}}">
                   </td>
                 </tr>
+                @endforeach
+               
                 @endforeach
               </tbody>
             </table>
@@ -101,12 +108,7 @@
       $(document).ready(function() {
       $("#example3").DataTable();
     });
-      $("select").change(function(){
-      if(confirm('Cliquez OK pour envoyer le patient vers le spécialiste')){
-          {this.form.submit()} 
-      }
-      else $("select option:selected").prop("selected", false);
-    });
+
     </script>
     </script>
     @endsection

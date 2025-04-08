@@ -45,17 +45,21 @@
             </thead>
             <tbody>
                 @foreach ($patient['analyses'] as $analyse)
+                @php
+                  $ids[]=$analyse->analyse_id;
+                @endphp
                     <tr>
                         <td>{{ $analyse->analyse_id }}</td>
                         <td>{{ $analyse->date_paiement ? \Carbon\Carbon::parse($analyse->date_paiement)->format('d-m-Y H:i:s') : 'Non payé' }}</td>
                         <td>{{ $analyse->montant ?? 'Non spécifié' }}</td>
-                        <td>{{ $analyse->prestation_nom ?? 'Non spécifiée' }}</td>
+                        <td>{{ $analyse->libelle_analyse ?? 'Non spécifiée' }}</td>
                         <td>{{ $analyse->prix ?? 'Non spécifié' }}</td>
                         <td>
                             <a class="btn btn-sm btn-primary" href="{{URL::to('store-analyses-result/'.$analyse->analyse_id.'/'.$patient['patient_id'] )}}" type="button" >Ajouter un résultat</a>
 
                             @if ($analyse->id_resultat)
-                            <a class="btn btn-sm btn-warning" target="_blank" href="{{env('APP_URL')}}/storage/{{$analyse->path}}" type="button" >Voir le résultat</a>   
+                            <a class="btn btn-sm btn-warning" href="{{URL::to('show-analyses-result/'.$analyse->prestation_id.'/'.$analyse->id_resultat )}}" type="button">Voir le résultat</a>   
+                            <!-- <a class="btn btn-sm btn-warning" target="_blank" href="{{env('APP_URL')}}/storage/{{$analyse->path}}" type="button" >Voir le résultat</a>    -->
                             @endif
                             <!-- Formulaire caché pour ajouter un résultat -->
                              <!-- Modal to add analysis result -->
@@ -68,7 +72,10 @@
     @else
         <p>Aucune analyse trouvée pour ce patient.</p>
     @endif
+    <div class="text-center">
+    <a class="btn btn-sm btn-danger" href="{{URL::to('generate-analyses-result/'.$patient['patient_id'].'/'.implode(',',$ids).'/'.$idDemand )}}" type="button">Générer le pdf</a>   
 
+    </div>
 </div>
 @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
 

@@ -18,85 +18,6 @@
             page-break-before: always;
         }
 
-
-        .header {
-      text-align: center;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 10px;
-    }
-
-    .header .top-text {
-      color: #0077cc;
-      font-weight: bold;
-      line-height: 1.5;
-      text-align:left;
-      width: 33%;
-      font-size:12px
-    }
-
-    .header .zone {
-      font-size: 12px;
-    }
-
-    .header .clinic-name {
-      color: green;
-      font-size: 24px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
-    .header .authorization {
-      color: red;
-      font-style: italic;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    .header .contact {
-      color: #005baa;
-      font-size: 16px;
-    }
-
-    .left-icon,
-    .right-icon {
-      width: 40px;
-      position: absolute;
-      top: 150px;
-      height:80px;
-    }
-
-    .top-text2 {
-      position: absolute;
-      top: 10px;
-      left: 33%;
-      font-size: 12px;
-    }
-
-    .left-icon {
-      left: 10px;
-    }
-
-    .right-icon {
-      right: 10px;
-    }
-
-    .logo {
-      position: absolute;
-      right: 30px;
-      top: 10px;
-      text-align: right;
-    }
-
-    .logo img {
-      height: 60px;
-    }
-
-
-    .logo .bureau {
-      font-size: 14px;
-      color: #005baa;
-    }
-
         /* h1 { color: #333; }
         table { width: 100%; border-collapse: collapse; }
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
@@ -119,7 +40,21 @@
     @endphp
 
 
-    @include('Resultat.pdf-header')
+
+    <!-- Logo et Informations de la Clinique -->
+    <div style="text-align: left;">
+        <img src="{{ public_path('frontend/images/LogoDA.png') }}" alt="Logo Clinique" style="width: 100px;">
+        <br>
+        <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
+
+    </div>
+
+    <div style="text-align:right">
+        {{ $infos->nom_centre }}
+        <p>{{ $infos->Autorisation_decret }}</p>
+        <p>Contact : {{ $infos->tel_centre }}</p>
+        <p>Adresse : {{ $infos->adresse_centre }}</p>
+    </div>
     <hr>
 
 
@@ -151,50 +86,31 @@
         </tbody>
     </table>
  
-
+    <br>
 
 @foreach ($data2 as $d )
-<div class="page-break">
-@include('Resultat.pdf-header')
-<hr>
-    <h1>Résultats des analyses</h1>
-    <p><strong>Patient :</strong> {{ $patient }}</p>
-    <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
-    <p><strong>Catégorie :</strong> {{$d['categorie']}}</p>
-    <p><strong>Analyse :</strong> {{$d['element']}}</p>
-
+<div class="@if(!$loop->first) page-break  @endif">
 <table>
         <thead>
             <tr>
+                <th>Catégorie</th>
                 <th>Elément</th>
                 <th>Résultat</th>
                 <th>Norme</th>
             </tr>
         </thead>
         <tbody>
-        @foreach($d['resultats'] as $group => $resultats2)
-                    <tr>
-                  <td style="text-align:center" colspan="3">
-                    <h4><strong>{{$group}}</strong> </h4>
-                  </td>
-                </tr>
-            @foreach($resultats2 as $resultat)
-
+            @foreach($d['resultats'] as $resultat)
             <tr>
+                <td>{{ $d['categorie'] }}</td>
                 <td>{{ $resultat->element }}</td>
                 <td>{{ $resultat->result }}</td>
                 <td>{{ $resultat->norme }}</td>
             </tr>
             @endforeach
-            @endforeach
         </tbody>
     </table>
 </div> 
-
-<div class="" style="text-align-center">
-        <p>QR CODE ICI</p>
-        <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
-    </div>
 @endforeach
 </body>
 </html>
