@@ -581,7 +581,7 @@ $totalPatient_ob = $all_patient_ob->count();
             return redirect()->to(URL::to("gestion-analyses/".$request->patient_id));
         }
 
-    function showResult($id,$result_id){
+    function showResult($id,$result_id,$id_demande){
             $this->SpecialisteAuthCheck();
             $user_id=Session::get('user_id');
             $centre_id=Session::get('centre_id');
@@ -589,6 +589,7 @@ $totalPatient_ob = $all_patient_ob->count();
             $analyse = DB::table('tbl_analyse_payed as a')
             ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
             ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id') // Jointure avec la table des patients
+            ->where('a.id_demande', $id_demande)
             ->where('pr.prestation_id', $id)
             ->select(
                 // Informations du patient
@@ -606,9 +607,7 @@ $totalPatient_ob = $all_patient_ob->count();
             )
             ->first(); 
             $resultat = DB::table('tbl_resultats_analyse')->where('id_resultat', $result_id)->first();
-             //   dd( $resultat);
            
-             //dd(json_decode($resultat->content));
 
             return view('Analys.show_analys_result')->with( [
                 "element"=>$analyse->nom_prestation,
@@ -691,6 +690,10 @@ $totalPatient_ob = $all_patient_ob->count();
             $path=storage_path('app/public/'.$name);
             
           return  $pdf->stream();
+    }
+
+    function closeAnalys($id_analyse, $patient_id) {
+        
     }
 
     public function traitement_analyse($id_analyse,$patient_id)

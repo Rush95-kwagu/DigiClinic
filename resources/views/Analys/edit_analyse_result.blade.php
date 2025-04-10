@@ -33,7 +33,7 @@
             </div>
 
             <div class="form-group">
-              <label for="">Observation</label>
+              <label for="">Observation/Référence</label>
               <textarea class="form-control" name="observation" ></textarea>
             </div>
 
@@ -85,6 +85,12 @@
               </tbody>
             </table>
 
+
+            <div class="form-group">
+              <label for="">Observation/Référence</label>
+              <textarea class="form-control" name="observation" ></textarea>
+            </div>
+            
             <div class="">
               <button type="submit" class="btn btn-sm btn-primary">Enregistrer</button>
             </div>

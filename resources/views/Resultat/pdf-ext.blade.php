@@ -189,10 +189,14 @@
             @endforeach
         </tbody>
     </table>
+
+    <div class="">
+      <h6>Référence</h6>
+      <p>{{$d['observation']}}</p>
+    </div>
 </div> 
 
-<div class="" style="text-align-center">
-        <p>QR CODE ICI</p>
+
         <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
     </div>
 @endforeach
