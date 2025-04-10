@@ -42,8 +42,6 @@
         <p>Adresse : {{ $infos->adresse_centre }}</p>
     </div>
     <hr>
-
-    <!-- Informations du Patient -->
     <p><strong>Nom :</strong> {{ $patient->nom_patient }}</p>
     <p><strong>Prénom :</strong> {{ $patient->prenom_patient }}</p>
     <p><strong>Téléphone :</strong> {{ $patient->telephone }}</p>
@@ -87,8 +85,8 @@
 
     <!-- Boutons pour Impression et Téléchargement -->
     <div class="no-print">
-        <button onclick="window.print()">🖨️ Imprimer</button>
-        <button onclick="downloadPDF()">📥 Télécharger en PDF</button>
+        <button onclick="window.print()">Imprimer</button>
+        <button onclick="downloadPDF()">Télécharger en PDF</button>
     </div>
 
     <!-- Script pour Génération du PDF -->

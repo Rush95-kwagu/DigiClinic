@@ -544,7 +544,7 @@ class PriseEnChargeController extends Controller
         return redirect()->route('save.step2')
                ->with('numero_dossier', $numeroDossier);
     }
-
+    
     Alert::success('Info', 'Dossier créé avec succès. Vous pourrez compléter les informations ultérieurement.');
     return redirect()->route('prises-en-charges.index');
     }
