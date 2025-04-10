@@ -25,15 +25,15 @@
    <img src="{{ public_path('medical_icon.jpg') }}" alt="medical icon" class="right-icon">
 
    <div class="clinic-name">
-     CLINIQUE MEDICALE “ASSAFWA LES ELITES”
+     {{$infos->nom_centre}}
    </div>
 
    <div class="authorization">
-     Autorisation: ANNÉE 2021 N° 012/MS/DC/SGM/CCJ/DNSP/SRS/SA/016 SGG21
+     Autorisation: {{$infos->Autorisation_decret}}
    </div>
 
    <div class="contact">
-     Cotonou (Fidjrossè), rue Houdou Ali &nbsp;&nbsp; Tél.: 69 39 69 91 / 96 79 92 77
+   {{$infos->adresse_centre}} &nbsp;&nbsp; Tél.: {{$infos->tel_centre}}
    </div>
    </div>
   

@@ -127,8 +127,10 @@ Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses
 Route::get('gestion-analyses/{id}', [ConsultationController::class,('getPatientAnalyse')]);
 Route::get('store-analyses-result/{id}/{patient_id}', [ConsultationController::class,('editAnalyseResult')]);
 Route::post('store-analyses-result', [ConsultationController::class,('storeResult')]);
-Route::get('show-analyses-result/{id}/{result_id}', [ConsultationController::class,('showResult')]);
+Route::get('show-analyses-result/{id}/{result_id}/{id_demande}', [ConsultationController::class,('showResult')]);
 Route::get('generate-analyses-result/{id}/{analyse_id}/{id_demande}', [ConsultationController::class,('getResultPDF')]);
+Route::get('close-analyse/{id_analyse}/{patient_id}', [ConsultationController::class,('closeAnalys')]);
+
 Route::get('traitement-analyse/{id_analyse}/{patient_id}', [ConsultationController::class,('traitement_analyse')]);
 Route::get('get-reactif/{user_id}/{id_analyse}', [SalesController::class, 'get_reactif']);
 Route::post('/store-tabreactif',[SalesController::class, 'store_tabreactif']);

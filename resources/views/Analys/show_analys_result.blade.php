@@ -19,7 +19,7 @@
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
 
 
-    @if ($resultats)
+    @if ($resultats->count() > 0)
     <table class="table table-sm table-bordered">
         <thead>
             <tr>
@@ -45,8 +45,13 @@
             @endforeach
         </tbody>
     </table>
+
+    <div class="">
+      <h6>Référence</h6>
+      <p>{{$observation}}</p>
+    </div>
     @else
-    <table>
+    <table class="table table-sm table-bordered">
         <thead>
             <tr>
                 <th>Elément</th>
