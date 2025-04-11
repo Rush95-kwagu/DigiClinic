@@ -73,8 +73,12 @@
         <p>Aucune analyse trouvée pour ce patient.</p>
     @endif
     <div class="container d-flex justify-content-between">
-    <a class="btn btn-sm btn-danger" href="{{URL::to('generate-analyses-result/'.$patient['patient_id'].'/'.implode(',',$ids).'/'.$idDemand )}}" type="button">Générer le pdf</a>   
-    <a class="btn btn-sm btn-success" href="{{URL::to('generate-analyses-result/'.implode(',',$ids).'/'.$patient['patient_id'] )}}" type="button">Clôturer le dossier</a>   
+    <a class="btn btn-sm btn-danger" href="{{URL::to('generate-analyses-result/'.$patient['patient_id'].'/'.implode(',',$ids).'/'.$idDemand )}}" type="button">Générer le pdf</a>  
+    
+    @if (!$is_closed)
+    <a class="btn btn-sm btn-success" href="{{URL::to('close-analyse/'.implode(',',$ids).'/'.$patient['patient_id'] )}}" type="button">Clôturer le dossier</a>   
+
+    @endif
 
     </div>
 </div>

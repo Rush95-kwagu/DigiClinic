@@ -108,14 +108,19 @@
 @php
         use SimpleSoftwareIO\QrCode\Facades\QrCode;
         use Illuminate\Support\Facades\DB;
+        use App\Models\User;
 
         $centre_id = session('centre_id');
-
+        $user =User::where('user_id',session('user_id'))->first();
         $infos = DB::table('tbl_centre')
             ->join('tbl_entite', 'tbl_entite.id_entite', '=', 'tbl_centre.id_entite')
             ->where('id_centre', $centre_id)
             ->select('tbl_entite.*', 'tbl_centre.*')
             ->first();
+
+            $userInfo=DB::table('personnel')
+                ->where('email',$user->email)
+                ->first(); 
     @endphp
 
 
@@ -126,6 +131,7 @@
     <h1>Résultats des analyses</h1>
     <p><strong>Patient :</strong> {{ $patient }}</p>
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
+    <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p>
 
 
     
@@ -137,6 +143,7 @@
                 <th>Elément</th>
                 <th>Résultat</th>
                 <th>Référence</th>
+                <th>Date Validité</th>
             </tr>
         </thead>
         <tbody>
@@ -146,6 +153,7 @@
                 <td>{{ $d['element'] }}</td>
                 <td>{{ $d['decision'] }}</td>
                 <td>{{ $d['observation'] }}</td>
+                <td>{{ $d['date_validite'] }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -162,6 +170,8 @@
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
     <p><strong>Catégorie :</strong> {{$d['categorie']}}</p>
     <p><strong>Analyse :</strong> {{$d['element']}}</p>
+    <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p>
+    <p><strong>Date Validité :</strong> {{$d['date_validite']}}</p>
 
 <table>
         <thead>

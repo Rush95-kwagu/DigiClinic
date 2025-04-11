@@ -289,6 +289,7 @@ class ConsultationController extends Controller
                 'a.date_paiement',
                 'a.id_demande as idDemand',
                 'a.montant_total as montant',
+                'a.is_closed',
                 'pr.prestation_id',
                 'pr.nom_prestation as libelle_analyse',
                 'pr.tarif as prix',
@@ -300,12 +301,13 @@ class ConsultationController extends Controller
             'patient_id' => $data->patient_id,
             'nom' => $data->nom,
             'prenom' => $data->prenom,
-            'analyses' => $analyses
+            'analyses' => $analyses,
             ];
         //  dd($result);
 
         return view('Analys.patient_analyse_details')->with(array(
             'patient'=>$result,
+            'is_closed' => $analyses->where('is_closed',false)->count() > 0?false:true,
             'idDemand'=>$analyses->first()->idDemand,
         ));
     }
@@ -436,7 +438,9 @@ class ConsultationController extends Controller
                 'personnel_id' => null, 
                 'user_role_id' => $user_role_id,
                 'personnel_id' => $user_id,
-                'centre_id' => $centre_id
+                'centre_id' => $centre_id,
+                'date_prelevement' => date_create($request->date_prelevement),
+                'date_validite' => date_create($request->date_prelevement)->modify('+7 days'),
             ]);
 
 
@@ -509,6 +513,7 @@ class ConsultationController extends Controller
              'r.resultat',
              'r.observation',
              'r.content',
+             'r.date_validite'
         )
         ->distinct('a.analyse_id')
         ->get(); // Un seul résultat
@@ -524,6 +529,7 @@ class ConsultationController extends Controller
                     $data1[$i]['categorie']=$a->category;
                     $data1[$i]['element']=$a->nom_prestation;
                     $data1[$i]['decision']=$a->resultat;
+                    $data1[$i]['date_validite']=date_create($a->date_validite)?->format('d/m/Y');
                     $data1[$i]['observation']=$a->observation;
                     $data1[$i]['resultats']=json_decode($a->content);
                     $i++;
@@ -531,6 +537,7 @@ class ConsultationController extends Controller
                     $data2[$j]['categorie']=$a->category;
                     $data2[$j]['element']=$a->nom_prestation;
                     $data2[$j]['decision']=$a->resultat;
+                    $data2[$j]['date_validite']=date_create($a->date_validite)?->format('d/m/Y');
                     $data2[$j]['observation']=$a->observation;
                     $data2[$j]['resultats']= collect(json_decode($a->content))?->groupby('category');
                     $j++;
@@ -540,8 +547,8 @@ class ConsultationController extends Controller
                
             }  
 
-            //  $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
-            $qrCode ="QrCode ici";
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
+           // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
             "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
             "data1"=>$data1,
@@ -554,8 +561,16 @@ class ConsultationController extends Controller
           return  $pdf->stream();
     }
 
-    function closeAnalys($id_analyse, $patient_id) {
-        
+    function closeAnalys($id_analyse,$patient_id) {
+        $ids=explode(',',$id_analyse);
+
+        foreach ($ids as $value) {
+            DB::table('tbl_analyse_payed')->where('payed_analyse_id', $value)->update(['is_closed'=>true]);
+
+        }
+
+        return redirect()->to(URL::to("gestion-analyses/".$patient_id));
+
     }
 
     public function traitement_analyse($id_analyse,$patient_id)
