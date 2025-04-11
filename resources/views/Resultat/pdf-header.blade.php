@@ -12,8 +12,8 @@
     </div>
    </div>
    <div class="top-text2" style="text-align-center; width:33%">
-   <p>QR CODE ICI</p>
-       <!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
+   <!-- <p>QR CODE ICI</p> -->
+       <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 100px;">
    </div>
    <div class="logo">
    <img src="{{ public_path('logo.jpg') }}" alt="logo directaid">

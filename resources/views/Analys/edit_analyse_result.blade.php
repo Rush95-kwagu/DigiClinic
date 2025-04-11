@@ -36,6 +36,10 @@
               <label for="">Observation/Référence</label>
               <textarea class="form-control" name="observation" ></textarea>
             </div>
+            <div class="form-group">
+              <label for="">Date prélèvement</label>
+              <input type="date" class="form-control" name="date_prelevement">
+            </div>
 
             <div class="">
               <button type="submit" class="btn btn-sm btn-primary">Enregistrer</button>
@@ -89,6 +93,11 @@
             <div class="form-group">
               <label for="">Observation/Référence</label>
               <textarea class="form-control" name="observation" ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="">Date prélèvement</label>
+              <input type="date" class="form-control" name="date_prelevement">
             </div>
             
             <div class="">
