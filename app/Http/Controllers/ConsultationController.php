@@ -169,6 +169,7 @@ class ConsultationController extends Controller
                         ['tbl_consultation.user_id',$user_id],
                         ['tbl_prise_en_charge.etat_consultation', 1],
                         ['tbl_consultation.etat_traitement',0],
+                        ['tbl_consultation.etat_traitement',0],
                         ])
                     ->select('tbl_prise_en_charge.*',
                             'tbl_patient.*',
@@ -649,7 +650,7 @@ $totalPatient_ob = $all_patient_ob->count();
              'r.content',
         )
         ->distinct('a.analyse_id')
-        ->get(); // Un seul résultat
+        ->get(); 
              //   dd($analyse);
             $data1=array();
             $data2=array();
@@ -828,7 +829,7 @@ $totalPatient_ob = $all_patient_ob->count();
                 ->first()
         ];
     
-        dd($data);
+        // dd($data);
     }
 
     public function save_analyse_traitement (Request $request)
@@ -1041,21 +1042,13 @@ $totalPatient_ob = $all_patient_ob->count();
             ->join('personnel', 'users.email', '=', 'personnel.email')
             ->where('user_id', $request->specialiste)
             ->first();
-
-        // Double vérification pour sécurité
         if (!$specialiste) {
             Alert::error('Erreur', 'Spécialiste non trouvé');
             return back()->withInput();
         }
 
         DB::transaction(function () use ($request, $consultData, $specialiste) {
-            // Mise à jour consultation actuelle
-            DB::table('tbl_consultation')
-                ->where('id_consultation', $request->id_consultation)
-                ->update(array_merge($consultData, [
-                    'etat_traitement' => 1,
-                    'conslt_updated_at' => now()
-                ]));
+       
 
             // Nouvelle consultation pour le spécialiste
             DB::table('tbl_consultation')->insert([

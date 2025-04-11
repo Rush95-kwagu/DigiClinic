@@ -140,6 +140,10 @@
                                                                     </option>
                                                                 @endforeach
                                                             </optgroup>
+                                                            <optgroup label="Analyse/Scanner">
+                                                                <option value="3">Analyse / Scanner</option>
+                                                                
+                                                            </optgroup>
                                                         </select>
                                                     </div>
                                             
