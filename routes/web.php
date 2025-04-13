@@ -156,7 +156,7 @@ Route::get('/verifier-recu/{filename}', function ($filename) {
 })->name('verifier-recu');
 
 Route::get('/test-qrcode', function () {
-    return response(QrCode::format('svg')->size(200)->color(100, 200, 100)->generate('https://www.irokotour.com'))
+    return response(QrCode::format('svg')->size(200)->color(100, 200, 100)->generate('https://www.gnlfconsult.com'))
         ->header('Content-Type', 'image/svg+xml');
 });
 Route::get('/demande-externe', [PriseEnChargeController::class,('demande_ext')]);

@@ -200,9 +200,16 @@
 
 	<div class="btn btn-secondary" onclick="printDiv('printMe')"><button contenteditable class="btn btn-primary"> Imprimer </button>
     </div>
-
-    <a class="print" href="{{URL::to('/consultations')}}"><button content class="print btn btn-danger"> Fermer </button>
-    </a>
+	@php
+		$user_role_id = Session::get('user_role_id')
+	@endphp
+	@if ($user_role_id ==35)
+		<a class="print" href="{{URL::to('gestion-hospitalisation')}}"><button content class="print btn btn-danger"> Fermer </button>
+    	</a>
+	@else
+			<a class="print" href="{{URL::to('/consultations')}}"><button content class="print btn btn-danger"> Fermer </button>
+			</a>
+	@endif
     <br>
 	<body>
 
@@ -228,9 +235,9 @@
 			<address style="float:right;">
 				<span style="font-size: 20px;">{{$infos->nom_centre}}</span><br>
 				<span>{{$infos->Autorisation_decret}}</span><br>
-				<span >{{$infos->tel_centre}}</span><br>
-				<span >{{$infos->adresse_centre}}</span><br><br><br>
-				<span > Cotonou le {{\Carbon\Carbon::parse($ordo_info->date_ordo)->formatLocalized('%A %d %B %Y')}}</span><br>
+				<span>{{$infos->tel_centre}}</span><br>
+				<span>{{$infos->adresse_centre}}</span><br><br><br>
+				<span> Cotonou le {{\Carbon\Carbon::parse($ordo_info->date_ordo)->formatLocalized('%A %d %B %Y')}}</span><br>
 				
 			</address>
 			

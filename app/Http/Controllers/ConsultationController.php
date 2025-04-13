@@ -685,8 +685,9 @@ $totalPatient_ob = $all_patient_ob->count();
                 }
                
             }  
+            // dd(extension_loaded('imagick'));
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.gnlfconsult.com/'));
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
             "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,

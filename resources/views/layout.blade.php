@@ -510,9 +510,7 @@
                       <li>
                         <a href="{{URL::to('gestion-demande-ext')}}">Gestion des analyses</a>
                       </li>
-                      <li>
-                        <a href="{{ URL::to('all-analyses') }}">Soumettre une analyse</a>
-                      </li>
+                    
                       
                     </ul>
                   </li>
