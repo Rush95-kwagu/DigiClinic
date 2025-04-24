@@ -499,6 +499,7 @@ class ConsultationController extends Controller
         ->select(
             // Informations du patient
             'p.patient_id as patient_id',
+            'a.id_demande  as demandId',
             'p.nom_patient',
             'p.prenom_patient',
 
@@ -547,7 +548,15 @@ class ConsultationController extends Controller
                
             }  
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.irokotour.com'));
+            $centre_id = session('centre_id');
+            $infos = DB::table('tbl_centre')
+            ->join('tbl_entite', 'tbl_entite.id_entite', '=', 'tbl_centre.id_entite')
+            ->where('id_centre', $centre_id)
+            ->select('tbl_entite.*', 'tbl_centre.*')
+            ->first();
+
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->nom_centre."-".$analyse[0]->demandId."-".date('Y')));
+
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
             "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
