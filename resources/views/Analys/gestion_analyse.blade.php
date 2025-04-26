@@ -193,7 +193,7 @@
                                             2
                                           <td>{{$d_analyse->telephone}}</td>
                                          <td>
-                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id)}}"                                                    >
+                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id.'/'.$d_analyse->id_demande)}}"                                                    >
                                               <i class="ri-file-edit-fill"></i></a>                    
                                          </td>
                                         </tr>

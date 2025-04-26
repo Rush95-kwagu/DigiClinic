@@ -125,6 +125,8 @@ Repertoire patient
                           Sélectionner
                 </button>
 
+                <a href="{{url('prestation-edit/'.$all_analyses->prestation_id)}}" type="button" class="btn btn-outline-warning btn-sm">Modifier</a>
+
                   </td>
                 </tr>
                 @endforeach

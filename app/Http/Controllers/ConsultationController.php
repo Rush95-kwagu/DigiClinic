@@ -266,7 +266,7 @@ class ConsultationController extends Controller
     }
 
 
-    function getPatientAnalyse($id){
+    function getPatientAnalyse($id,$id_demande){
         
        // Récupérer les informations du patient
             $data = DB::table('tbl_patient as p')
@@ -283,7 +283,8 @@ class ConsultationController extends Controller
             ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
             ->leftJoin('tbl_resultats_analyse as r', 'a.payed_analyse_id', '=', 'r.id_demande') // Ajout de la jointure
             ->where('a.patient_id', $id)
-           // ->where('a.treated', false)
+            ->where('a.id_demande', $id_demande)
+           ->where('a.is_closed', false)
             ->select(
                 'a.payed_analyse_id as analyse_id',
                 'a.date_paiement',
@@ -296,6 +297,7 @@ class ConsultationController extends Controller
                 'r.*',
             )
             ->get();
+
             // Combiner les résultats
             $result = [
             'patient_id' => $data->patient_id,
@@ -324,6 +326,7 @@ class ConsultationController extends Controller
             'a.id_demande',
             'a.montant_total as montant',
             'pr.prestation_id',
+            'pr.result_params',
             'pr.nom_prestation as libelle_analyse',
             'pr.tarif as prix'
         )
@@ -444,7 +447,7 @@ class ConsultationController extends Controller
             ]);
 
 
-            return redirect()->to(URL::to("gestion-analyses/".$request->patient_id));
+            return redirect()->to(URL::to("gestion-analyses/".$request->patient_id.'/'.$request->id_demande));
         }
 
     function showResult($id,$result_id,$id_demande){
@@ -511,6 +514,7 @@ class ConsultationController extends Controller
             'pr.prestation_id',
             'pr.nom_prestation',
             'pr.tarif as prix',
+             'r.id_resultat',
              'r.resultat',
              'r.observation',
              'r.content',
@@ -555,7 +559,7 @@ class ConsultationController extends Controller
             ->select('tbl_entite.*', 'tbl_centre.*')
             ->first();
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->nom_centre."-".$analyse[0]->demandId."-".date('Y')));
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
 
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [

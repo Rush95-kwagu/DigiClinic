@@ -206,17 +206,44 @@ class PriseEnChargeController extends Controller
         ]);
     return redirect()->back()->with('PersonnalAdded', 'Informations sauvegardées avec succès');
     }
+    public function updatePrestation(Request $request,$id)
+    {
+      //  $this->CaisseAuthCheck();
+        // $user = Auth::user();
+        $user_role_id=Session::get('user_role_id');
+        $centre_id=Session::get('centre_id');
+      
+       // dd($request->all());
+        $request->validate([
+           'nom_prestation'=>'required|string',
+           'result_params'=>'required|string',
+           'tarif'=>'required|integer',
+           'category'=>'required|string',
+
+        ]);       
+        DB::table('tbl_prestation')
+        ->where('prestation_id', $id) 
+        ->update([
+            'nom_prestation' => $request->input('nom_prestation'),
+            'tarif' => $request->input('tarif'),
+            'result_params' => $request->input('result_params'),
+            'category' => $request->input('category')
+        ]);
+
+    return redirect()->back()->with('PersonnalAdded', 'Informations sauvegardées avec succès');
+    }
 
     public function editPrestation($prestation_id)
     {
-        $this->ChefAuthCheck();
+       // $this->ChefAuthCheck();
         $user_id =Session::get('user_id');
-        $all_prestation = DB::table('tbl_prestatiion')
+        $all_prestation = DB::table('tbl_prestation')
                             ->where('prestation_id', $prestation_id)
                              ->first();
                 if(!$all_prestation){
                     return redirect()->back()->with('error', 'Erreur lors de la récupération de la prestation');
                 }
+               // dd($all_prestation);
             return view('prise_enc/edit_prestation_form', compact('all_prestation'));
     }
 
