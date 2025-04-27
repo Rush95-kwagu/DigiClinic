@@ -250,12 +250,28 @@ class ConsultationController extends Controller
                 ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
                 ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
                 ->where('tbl_analyse_payed.centre_id',$centre_id)
+                ->where('tbl_analyse_payed.is_closed',false)
                 ->select(
                     'tbl_analyse_payed.*',
                     'tbl_patient.*',
                     'tbl_prestation.*'
                     )
                 ->get();  
+
+
+
+                $all_demand_pt=DB::table('tbl_analyse_payed')
+                ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
+                ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
+                ->where('tbl_analyse_payed.centre_id',$centre_id)
+                ->where('tbl_analyse_payed.is_closed',true)
+                ->select(
+                    'tbl_analyse_payed.*',
+                    'tbl_patient.*',
+                    'tbl_prestation.*'
+                    )
+                ->get();  
+                    $all_analyse_t= $all_analyse_t->merge($all_demand_pt);
 
         return view('Analys.gestion_analyse')->with(array(
                     'all_analyse_nt'=>$all_analyse_nt,             
@@ -310,7 +326,7 @@ class ConsultationController extends Controller
         return view('Analys.patient_analyse_details')->with(array(
             'patient'=>$result,
             'is_closed' => $analyses->where('is_closed',false)->count() > 0?false:true,
-            'idDemand'=>$analyses->first()->idDemand,
+            'idDemand'=>$analyses->first()?->idDemand,
         ));
     }
 
@@ -582,7 +598,8 @@ class ConsultationController extends Controller
 
         }
 
-        return redirect()->to(URL::to("gestion-analyses/".$patient_id));
+       // return redirect()->to(URL::to("gestion-analyses/".$patient_id));
+        return redirect()->to(URL::to("gestion-analyses"));
 
     }
 
