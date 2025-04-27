@@ -490,7 +490,6 @@ class ConsultationController extends Controller
 
     
     function getResultPDF($id,$analyse_id,$id_demande){
-        
         $analyse = DB::table('tbl_analyse_payed as a')
         ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
         ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id')
@@ -499,6 +498,7 @@ class ConsultationController extends Controller
         ->where('a.treated', true)
         ->where('a.patient_id', $id)
         ->where('a.id_demande', $id_demande)
+        ->whereIn('r.id_demande',  explode(',',$analyse_id))
         ->select(
             // Informations du patient
             'p.patient_id as patient_id',
@@ -522,14 +522,14 @@ class ConsultationController extends Controller
         )
         ->distinct('a.analyse_id')
         ->get(); // Un seul résultat
-             //   dd($analyse);
+             //  dd($analyse);
             $data1=array();
             $data2=array();
             $i=0;
             $j=0;
             foreach ($analyse as  $a) {
 
-                $content=json_decode($a->content);
+                $content=$a->content==null ?[] :json_decode($a->content) ;
                 if (sizeof($content)==0) {
                     $data1[$i]['categorie']=$a->category;
                     $data1[$i]['element']=$a->nom_prestation;

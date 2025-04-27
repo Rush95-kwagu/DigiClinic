@@ -25,6 +25,24 @@
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
+          
+            @if ($analyse->result_params)
+              @php
+                  $data= explode(';',$analyse->result_params);
+                @endphp
+            <div class="form-group">
+            <label for="">Décision</label>
+
+            <textarea class="form-control" rows="10" name="decision" id="">@foreach ($data as $d){{ $d . '( )' . "\n" }}@endforeach</textarea>
+            </div>
+
+              
+                <div class="form-group">
+              <label for="">Observation/Référence</label>
+              <textarea class="form-control" name="observation" ></textarea>
+            </div>
+            @else
+
             <div class="form-group">
               <label for="">Décision</label>
               <input type="text" class="form-control" name="decision">
@@ -35,14 +53,6 @@
               </select> -->
             </div>
 
-            @if ($analyse->result_params)
-                @php
-                  $data= explode(';',$analyse->result_params);
-                @endphp
-
-                <textarea class="form-control" name="observation" id="">@foreach ($data as $d){{ $d . '( )' . "\n" }}@endforeach</textarea>
-            
-            @else
             <div class="form-group">
               <label for="">Observation/Référence</label>
               <textarea class="form-control" name="observation" ></textarea>
