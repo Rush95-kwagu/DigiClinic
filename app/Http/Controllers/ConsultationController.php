@@ -367,12 +367,28 @@ $totalPatient_ob = $all_patient_ob->count();
                 ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
                 ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
                 ->where('tbl_analyse_payed.centre_id',$centre_id)
+                ->where('tbl_analyse_payed.is_closed',false)
                 ->select(
                     'tbl_analyse_payed.*',
                     'tbl_patient.*',
                     'tbl_prestation.*'
                     )
                 ->get();  
+
+
+
+                $all_demand_pt=DB::table('tbl_analyse_payed')
+                ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
+                ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
+                ->where('tbl_analyse_payed.centre_id',$centre_id)
+                ->where('tbl_analyse_payed.is_closed',true)
+                ->select(
+                    'tbl_analyse_payed.*',
+                    'tbl_patient.*',
+                    'tbl_prestation.*'
+                    )
+                ->get();  
+                    $all_analyse_t= $all_analyse_t->merge($all_demand_pt);
 
         return view('Analys.gestion_analyse')->with(array(
                     'all_analyse_nt'=>$all_analyse_nt,             
@@ -382,29 +398,8 @@ $totalPatient_ob = $all_patient_ob->count();
                 ));;
     }
 
-    public function traitement_hospitalisation($id_consultation,$patient_id)
-    {
-        $this->UserAuthCheck();
-        $this->SpecialisteAuthCheck();
-        
-        $this->traitement_patient($id_consultation,$patient_id);
 
-        $patient_data = $this->getPatientData($patient_id);
-
-        if (!$patient_data->first()) {
-            abort(404, 'Patient non trouvé');
-        }
-        $last_constance = $this->getLastConstantes($patient_id, $id_consultation);
-        return view('Hospi.traitement_patient', [
-            'all_details' => $patient_data,
-            'id_consultation' => $id_consultation,
-            'last_constance' => $last_constance,
-            'patient' => $patient_data->first() 
-        ]);
-
-    }
-    function getPatientAnalyse($id)
-    {
+    function getPatientAnalyse($id,$id_demande){
         
        // Récupérer les informations du patient
             $data = DB::table('tbl_patient as p')
@@ -421,7 +416,8 @@ $totalPatient_ob = $all_patient_ob->count();
             ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
             ->leftJoin('tbl_resultats_analyse as r', 'a.payed_analyse_id', '=', 'r.id_demande') // Ajout de la jointure
             ->where('a.patient_id', $id)
-           // ->where('a.treated', false)
+            ->where('a.id_demande', $id_demande)
+           ->where('a.is_closed', false)
             ->select(
                 'a.payed_analyse_id as analyse_id',
                 'a.date_paiement',
@@ -434,6 +430,7 @@ $totalPatient_ob = $all_patient_ob->count();
                 'r.*',
             )
             ->get();
+
             // Combiner les résultats
             $result = [
             'patient_id' => $data->patient_id,
@@ -446,7 +443,7 @@ $totalPatient_ob = $all_patient_ob->count();
         return view('Analys.patient_analyse_details')->with(array(
             'patient'=>$result,
             'is_closed' => $analyses->where('is_closed',false)->count() > 0?false:true,
-            'idDemand'=>$analyses->first()->idDemand,
+            'idDemand'=>$analyses->first()?->idDemand,
         ));
     }
 
@@ -463,6 +460,7 @@ $totalPatient_ob = $all_patient_ob->count();
             'a.id_demande',
             'a.montant_total as montant',
             'pr.prestation_id',
+            'pr.result_params',
             'pr.nom_prestation as libelle_analyse',
             'pr.tarif as prix'
         )
@@ -583,7 +581,7 @@ $totalPatient_ob = $all_patient_ob->count();
             ]);
 
 
-            return redirect()->to(URL::to("gestion-analyses/".$request->patient_id));
+            return redirect()->to(URL::to("gestion-analyses/".$request->patient_id.'/'.$request->id_demande));
         }
 
     function showResult($id,$result_id,$id_demande){
@@ -626,7 +624,6 @@ $totalPatient_ob = $all_patient_ob->count();
 
     
     function getResultPDF($id,$analyse_id,$id_demande){
-        
         $analyse = DB::table('tbl_analyse_payed as a')
         ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
         ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id')
@@ -635,9 +632,11 @@ $totalPatient_ob = $all_patient_ob->count();
         ->where('a.treated', true)
         ->where('a.patient_id', $id)
         ->where('a.id_demande', $id_demande)
+        ->whereIn('r.id_demande',  explode(',',$analyse_id))
         ->select(
             // Informations du patient
             'p.patient_id as patient_id',
+            'a.id_demande  as demandId',
             'p.nom_patient',
             'p.prenom_patient',
 
@@ -649,21 +648,22 @@ $totalPatient_ob = $all_patient_ob->count();
             'pr.prestation_id',
             'pr.nom_prestation',
             'pr.tarif as prix',
+             'r.id_resultat',
              'r.resultat',
              'r.observation',
              'r.content',
              'r.date_validite'
         )
         ->distinct('a.analyse_id')
-        ->get(); 
-             //   dd($analyse);
+        ->get(); // Un seul résultat
+             //  dd($analyse);
             $data1=array();
             $data2=array();
             $i=0;
             $j=0;
             foreach ($analyse as  $a) {
 
-                $content=json_decode($a->content);
+                $content=$a->content==null ?[] :json_decode($a->content) ;
                 if (sizeof($content)==0) {
                     $data1[$i]['categorie']=$a->category;
                     $data1[$i]['element']=$a->nom_prestation;
@@ -687,7 +687,15 @@ $totalPatient_ob = $all_patient_ob->count();
             }  
             // dd(extension_loaded('imagick'));
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate('https://www.gnlfconsult.com/'));
+            $centre_id = session('centre_id');
+            $infos = DB::table('tbl_centre')
+            ->join('tbl_entite', 'tbl_entite.id_entite', '=', 'tbl_centre.id_entite')
+            ->where('id_centre', $centre_id)
+            ->select('tbl_entite.*', 'tbl_centre.*')
+            ->first();
+
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
+
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
             "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
@@ -709,7 +717,8 @@ $totalPatient_ob = $all_patient_ob->count();
 
         }
 
-        return redirect()->to(URL::to("gestion-analyses/".$patient_id));
+       // return redirect()->to(URL::to("gestion-analyses/".$patient_id));
+        return redirect()->to(URL::to("gestion-analyses"));
 
     }
 

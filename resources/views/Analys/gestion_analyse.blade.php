@@ -134,9 +134,14 @@
                                           </td>
                                           
                                           <td>
-                                              
+                                              @if(isset($v_consult->id_analyse))
                                               <a title="Dossier medial du patient" class="btn btn-outline-success" href="{{URL::to('traitement-analyse/'.$v_consult->id_analyse.'/'.$v_consult->patient_id)}}">
-                                              <i class="ri-file-edit-fill"></i></a>                    
+                                              <i class="ri-file-edit-fill"></i></a>        
+                                              @else
+                                              <a title="Dossier medial du patient" class="btn btn-outline-success" href="{{URL::to('traitement-analyse/'.$v_consult->payed_analyse_id.'/'.$v_consult->patient_id)}}">
+                                              <i class="ri-file-edit-fill"></i></a>        
+                                              @endif
+                                                        
                                               </td>
                                         <?php ?>
                                         </tr>
@@ -193,7 +198,7 @@
                                             2
                                           <td>{{$d_analyse->telephone}}</td>
                                          <td>
-                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id)}}"                                                    >
+                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id.'/'.$d_analyse->id_demande)}}"                                                    >
                                               <i class="ri-file-edit-fill"></i></a>                    
                                          </td>
                                         </tr>

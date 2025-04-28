@@ -17,7 +17,7 @@ Repertoire patient
               <div class="col-sm-12">
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Ajouter une nouvelle prestation</h5>
+                    <h5 class="card-title">Modifier la prestation</h5>
                   </div>
                   <div class="col-sm-12">
                     <div class="d-flex gap-2 justify-content-end">
@@ -49,7 +49,7 @@ Repertoire patient
                     <div class="row gx-3">
                       <div class="col-xxl-3 col-lg-4 col-sm-6">
                         <div class="mb-3">
-                          <form action="{{route('add.prestation')}}" method="POST">
+                          <form action="{{route('edit.prestation',$all_prestation->prestation_id)}}" method="POST">
                             @csrf
                             <input type="hidden" name="user_role_id" value="{{ Session::get('user_role_id') }}">
                             <input type="hidden" name="centre_id" value="{{ Session::get('centre_id') }}">
@@ -60,7 +60,33 @@ Repertoire patient
                       <div class="col-xxl-3 col-lg-4 col-sm-6">
                         <div class="mb-3">
                           <label class="form-label" for="a2">Coût de la prestation</label>
-                          <input type="number" class="form-control" name="prix_prestation" id="a2" value="{{$all_prestation->prix_prestation}}">
+                          <input type="number" class="form-control" name="tarif" id="a2" value="{{$all_prestation->tarif}}">
+                          </div>
+                      </div>
+                      <div class="col-xxl-3 col-lg-4 col-sm-6">
+                        <div class="mb-3">
+                          <label class="form-label" for="a2">Coût de l'analyse pour les assurés</label>
+                          <input type="number" class="form-control" name="prix_analyse_assure" value="{{$all_prestation->prix_analyse_assure}}" id="a2" placeholder="Entrez le coût">
+                          </div>
+                      </div>
+
+                      <div class="col-xxl-3 col-lg-4 col-sm-6">
+                        <div class="mb-3">
+                          <label class="form-label" for="a4">Groupe d'analyse</label>
+                          <select class="form-select" id="a4" name="category"  required>
+                            <option value="HEMATOLOGIE" @if($all_prestation->category=='HEMATOLOGIE') selected @endif>HEMATOLOGIE</option>
+                            <option value="PARASITOLOGIE" @if($all_prestation->category=='PARASITOLOGIE') selected @endif>PARASITOLOGIE</option>
+                            <option value="SEROLOGIE" @if($all_prestation->category=='SEROLOGIE') selected @endif>SEROLOGIE</option>
+                            <option value="BIOCHIMIE" @if($all_prestation->category=='BIOCHIMIE') selected @endif>BIOCHIMIE</option>
+                            <option value="IMMUNOLOGIE" @if($all_prestation->category=='IMMUNOLOGIE') selected @endif>IMMUNOLOGIE</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-xxl-3 col-lg-4 col-sm-6">
+                        <div class="mb-3">
+                          <label class="form-label" for="a2">Paramètres résultats</label>
+                          <input type="text" class="form-control" name="result_params" value="{{$all_prestation->result_params}}" id="a2" placeholder="Aligner les paramètres séparés par de ;">
                           </div>
                       </div>
                       

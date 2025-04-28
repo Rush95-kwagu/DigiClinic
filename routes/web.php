@@ -56,6 +56,7 @@ Route::get('/edit-analyse-form/{id_type_analyse}', [PriseEnChargeController::cla
 Route::post('/update-analyse-form/{id_type_analyse}', [PriseEnChargeController::class, 'updateAnalyse']);
 Route::get('/add-analyse', [PriseEnChargeController::class, 'addAnalyse']);
 Route::post('/add-form', [PriseEnChargeController::class, 'savePrestation'])->name('add.prestation');
+Route::post('/edit-form/{id}', [PriseEnChargeController::class, 'updatePrestation'])->name('edit.prestation');
 Route::post('/add-analyse', [PriseEnChargeController::class, 'saveAnalyse'])->name('save.analyse');
 Route::get('/prises-en-charges', [PriseEnChargeController::class,('index')])->name('prise_en_charge.index');
 Route::get('/enregistrer-prise-en-charge', [PriseEnChargeController::class,('record_prisenc')]);
@@ -129,7 +130,7 @@ Route::get('traitement-hospitalisation/{id_consultation}/{patient_id}',[Consulta
 
 //Analyses
 Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses')]);
-Route::get('gestion-analyses/{id}', [ConsultationController::class,('getPatientAnalyse')]);
+Route::get('gestion-analyses/{id}/{id_demande}', [ConsultationController::class,('getPatientAnalyse')]);
 Route::get('store-analyses-result/{id}/{patient_id}', [ConsultationController::class,('editAnalyseResult')]);
 Route::post('store-analyses-result', [ConsultationController::class,('storeResult')]);
 Route::get('show-analyses-result/{id}/{result_id}/{id_demande}', [ConsultationController::class,('showResult')]);

@@ -21,21 +21,43 @@
         <input type="hidden" name="patient_id" value="{{$patient_id}}">
         <input type="hidden" name="analyse_id" value="{{$analyse->analyse_id}}">
         <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
+        <input type="hidden" name="id_demande" value="{{$analyse->id_demande}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
 
+          
+            @if ($analyse->result_params)
+              @php
+                  $data= explode(';',$analyse->result_params);
+                @endphp
+            <div class="form-group">
+            <label for="">Décision</label>
+
+            <textarea class="form-control" rows="10" name="decision" id="">@foreach ($data as $d){{ $d . '( )' . "\n" }}@endforeach</textarea>
+            </div>
+
+              
+                <div class="form-group">
+              <label for="">Observation/Référence</label>
+              <textarea class="form-control" name="observation" ></textarea>
+            </div>
+            @else
+
             <div class="form-group">
               <label for="">Décision</label>
-              <select class="form-control" name="decision" required>
+              <input type="text" class="form-control" name="decision">
+
+              <!-- <select class="form-control" name="decision" required>
                 <option value="TEST POSITIF">TEST POSITIF</option>
                 <option value="TEST NEGATIVE">TEST NEGATIVE</option>
-              </select>
+              </select> -->
             </div>
 
             <div class="form-group">
               <label for="">Observation/Référence</label>
               <textarea class="form-control" name="observation" ></textarea>
             </div>
+            @endif          
             <div class="form-group">
               <label for="">Date prélèvement</label>
               <input type="date" class="form-control" name="date_prelevement">
