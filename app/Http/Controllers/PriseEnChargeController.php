@@ -546,7 +546,7 @@ class PriseEnChargeController extends Controller
     }
     
     Alert::success('Info', 'Dossier créé avec succès. Vous pourrez compléter les informations ultérieurement.');
-    return redirect()->route('prises-en-charges.index');
+    return redirect()->route('prise_en_charge.index');
     }
 
     public function showStep2Form()
@@ -582,6 +582,11 @@ class PriseEnChargeController extends Controller
         'nationalite' => 'required|string|max:50',
         'smatrimonial' => 'required|string|max:20',
         'contact_urgence' => 'required|string|max:20',
+        'lien_contact_urgence'=>'nullable|string',
+        
+        'religion'=>'nullable|string',
+        'ethnie'=>'nullable|string',
+        'electrophorese_Hb'=>'nullable|string',
         'gsang' => 'nullable|string|max:3',
         'nip' => 'required|string|max:50|unique:tbl_patient,nip,'.$step1Data['patient_id'].',patient_id',
         

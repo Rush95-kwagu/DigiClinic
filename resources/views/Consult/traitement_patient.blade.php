@@ -106,6 +106,10 @@
                                             
                                                 <div class="form-row">
                                                     <!-- Champs communs -->
+                                                    {{-- <div class="contaire mt-8">
+                                                        <textarea name="" id="" cols="80" rows="10"></textarea>
+                                                        <textarea name="" id="" cols="80" rows="10"></textarea>
+                                                    </div> --}}
                                                     <div class="col-md-12 mb-3">
                                                         <label class="control-label">Votre diagnostic</label>
                                                         <textarea class="form-control" name="diagnostic" rows="3" required></textarea>
@@ -175,7 +179,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="card mb-3">
                                                 <div class="card-header">
-                                                    <h5 class="card-title">Antécédents Médicaux</h5>
+                                                    <h5 class="card-title">Parcours Médical</h5>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="scroll350">

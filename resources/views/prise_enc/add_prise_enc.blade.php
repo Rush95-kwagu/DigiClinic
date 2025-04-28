@@ -46,7 +46,7 @@
 					</div> 
 
 					 <div class="col-md-6 mb-3">
-							<label class="classItems" for="selectError1"> <b>Pathologie du patient</b><span style="color: red">*</span> </label>
+							<label class="classItems" for="selectError1"> <b>Motif d'admission</b><span style="color: red">*</span> </label>
 							<div class="controls col-12">
                  <textarea type="text" name="maux" class="form-control" id="validationCustomUsername"
                             aria-describedby="inputGroupPrepend" required ></textarea>
@@ -139,10 +139,10 @@
                        
                       </div>
             		      <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label"><b>Pathologie du patient</b> <span style="color: red">*</span></label>
+                        <label for="validationCustom05" class="form-label"><b>Motif d'admission</b> <span style="color: red">*</span></label>
                         <input type="text" name="maux" class="form-control" id="validationCustom05" required />
                         <div class="invalid-feedback">
-                          Entrez la pathologie du patient.
+                          Entrez la Motif d'admission.
                         </div>
                       </div>
 

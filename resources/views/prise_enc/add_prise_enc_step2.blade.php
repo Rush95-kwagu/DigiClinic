@@ -94,7 +94,7 @@
                   </div> 
                   <br>
                   <br>
-                    <h3>Renseignements complémentaires du patient</h3>
+                    <h3>Etat civil</h3>
                <div class="col-md-4 form-group">
 			            <label for="phone1"><b>Nip / N°Pièce d'identité</b><span style="color: red">*</span></label><br>
 			            <input type="tel" class="form-control" placeholder="Cip" name="nip">
@@ -135,10 +135,9 @@
                   </div>
                   <div class="col-md-4">
                     <label for="lnaii"><b>Personne à contacter</b><span style="color: red">*</span></label><br>
-            <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_urgence" required="" />
-            <input type="hidden" id='lnaii' name="contact_urgence">
-                 
-               </div>
+                    <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_urgence" required="" />
+                    <input type="hidden" id='lnaii' name="contact_urgence">
+                  </div>
                       <div class="col-md-4">
                         <label for="validationCustomUsername" class="form-label"><b>Email</b></label>
                         <div class="input-group has-validation">
