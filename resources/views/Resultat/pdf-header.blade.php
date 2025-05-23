@@ -16,13 +16,13 @@
        <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 100px;">
    </div>
    <div class="logo">
-   <img src="{{ public_path('logo.jpg') }}" alt="logo directaid">
+   <img src="{{ asset('logo.jpg') }}" alt="logo directaid">
      <div class="bureau">BUREAU DU BENIN</div>
    </div>
 
    <div class="">
-   <img src="{{ public_path('medical_icon.jpg') }}" alt="medical icon" class="left-icon">
-   <img src="{{ public_path('medical_icon.jpg') }}" alt="medical icon" class="right-icon">
+   <img src="{{ asset('medical_icon.jpg') }}" alt="medical icon" class="left-icon">
+   <img src="{{ asset('medical_icon.jpg') }}" alt="medical icon" class="right-icon">
 
    <div class="clinic-name">
      {{$infos->nom_centre}}

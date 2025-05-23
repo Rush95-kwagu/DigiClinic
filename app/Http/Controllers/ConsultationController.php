@@ -674,6 +674,87 @@ $totalPatient_ob = $all_patient_ob->count();
             
           return  $pdf->stream();
     }
+    function getPDF($id,$analyse_id,$id_demande){
+        $analyse = DB::table('tbl_analyse_payed as a')
+        ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
+        ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id')
+        ->leftJoin('tbl_resultats_analyse as r', 'pr.prestation_id', '=', 'r.prestation_id')        // Jointure avec la table des patients
+        ->whereIn('a.payed_analyse_id', explode(',',$analyse_id))
+        ->where('a.treated', true)
+        ->where('a.patient_id', $id)
+        ->where('a.id_demande', $id_demande)
+        ->whereIn('r.id_demande',  explode(',',$analyse_id))
+        ->select(
+            // Informations du patient
+            'p.patient_id as patient_id',
+            'a.id_demande  as demandId',
+            'p.nom_patient',
+            'p.prenom_patient',
+
+            // Informations de l'analyse
+            'a.payed_analyse_id as analyse_id',
+            'a.date_paiement',
+            'a.montant_total as montant',
+            'pr.category',
+            'pr.prestation_id',
+            'pr.nom_prestation',
+            'pr.tarif as prix',
+             'r.id_resultat',
+             'r.resultat',
+             'r.observation',
+             'r.content',
+             'r.date_validite'
+        )
+        ->distinct('a.analyse_id')
+        ->get(); // Un seul résultat
+             //  dd($analyse);
+            $data1=array();
+            $data2=array();
+            $i=0;
+            $j=0;
+            foreach ($analyse as  $a) {
+
+                $content=$a->content==null ?[] :json_decode($a->content) ;
+                if (sizeof($content)==0) {
+                    $data1[$i]['categorie']=$a->category;
+                    $data1[$i]['element']=$a->nom_prestation;
+                    $data1[$i]['decision']=$a->resultat;
+                    $data1[$i]['date_validite']=date_create($a->date_validite)?->format('d/m/Y');
+                    $data1[$i]['observation']=$a->observation;
+                    $data1[$i]['resultats']=json_decode($a->content);
+                    $i++;
+                } else {
+                    $data2[$j]['categorie']=$a->category;
+                    $data2[$j]['element']=$a->nom_prestation;
+                    $data2[$j]['decision']=$a->resultat;
+                    $data2[$j]['date_validite']=date_create($a->date_validite)?->format('d/m/Y');
+                    $data2[$j]['observation']=$a->observation;
+                    $data2[$j]['resultats']= collect(json_decode($a->content))?->groupby('category');
+                    $j++;
+                  //  dd(collect(json_decode($a->content)));
+
+                }
+               
+            }  
+
+            $centre_id = session('centre_id');
+            $infos = DB::table('tbl_centre')
+            ->join('tbl_entite', 'tbl_entite.id_entite', '=', 'tbl_centre.id_entite')
+            ->where('id_centre', $centre_id)
+            ->select('tbl_entite.*', 'tbl_centre.*')
+            ->first();
+
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
+
+             return view ('Resultat.analyse_pdf')
+                ->with([
+            "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
+            "data1"=>$data1,
+            "data2"=>$data2,
+            "qrCode"=>$qrCode,
+            "path"=>$id."/".$analyse_id."/".$id_demande,
+            ]);
+    }
 
     function closeAnalys($id_analyse,$patient_id) {
         $ids=explode(',',$id_analyse);
