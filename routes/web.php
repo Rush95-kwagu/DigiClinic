@@ -83,6 +83,7 @@ Route::resource('agendas', AgendaController::class);
 Route::resource('patient', PatientController::class);
 Route::get('patients/repertoire', [PatientController::class,('all_patient')])->name('patient.repertoire');
 Route::get('patient/data/{id}', [PatientController::class, ('showPatientDatas')])->name('patient.datas');
+Route::get('Edit/patient/data/{id}',[PatientController::class, ('updatePatientDatas')])->name('patient.datas.update');
 
 
 //Chambre
@@ -127,7 +128,7 @@ Route::post('traitement-patient/{id_consultation}/{patient_id}/modifier-constant
 
 Route::get('gestion-hospitalisation', [ConsultationController::class,('hospitalisation')]);
 Route::get('traitement-hospitalisation/{id_consultation}/{patient_id}',[ConsultationController::class,('traitement_hospitalisation')])->name('hospitalisation.traitement');
-
+Route::post('traitement-hospitalisation/{id_consultation}/{patient_id}', [ConsultationController::class, 'save_soins_traitement'])->name('hospitalisation.saveTraitement');
 //Analyses
 Route::get('gestion-analyses', [ConsultationController::class,('gestion_analyses')]);
 Route::get('gestion-analyses/{id}/{id_demande}', [ConsultationController::class,('getPatientAnalyse')]);

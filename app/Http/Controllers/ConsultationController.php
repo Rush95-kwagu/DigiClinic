@@ -516,40 +516,6 @@ $totalPatient_ob = $all_patient_ob->count();
             }
         }
 
-        // $analyse = DB::table('tbl_analyse_payed as a')
-        // ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
-        // ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id') // Jointure avec la table des patients
-        // ->where('pr.prestation_id', $request->prestation_id)
-        // ->select(
-        //     // Informations du patient
-        //     'p.patient_id as patient_id',
-        //     'p.nom_patient',
-        //     'p.prenom_patient',
-
-        //     // Informations de l'analyse
-        //     'a.payed_analyse_id as analyse_id',
-        //     'a.date_paiement',
-        //     'a.montant_total as montant',
-        //     'pr.prestation_id',
-        //     'pr.nom_prestation',
-        //     'pr.tarif as prix',
-        // )
-        // ->first(); // Un seul résultat
-
-          //  dd($analyse);
-
-            // $pdf = Pdf::loadView('Resultat.pdf-ext', [
-            // "element"=>$analyse->nom_prestation,
-            // "patient"=>$analyse->nom_patient. " ".$analyse->prenom_patient,
-            // "resultats"=>$data,
-            // "decision"=>$request->decision,
-            // "observation"=>$request->observation
-            // ]);
-            // $name='Resultat_' . time(). '_.pdf';
-            // $path=storage_path('app/public/'.$name);
-            
-            // $pdf->save($path);
-
             $get_user_role=DB::table('users')
             ->join('personnel','users.email','=','personnel.email')
             ->select('users.*','personnel.*')
@@ -685,7 +651,7 @@ $totalPatient_ob = $all_patient_ob->count();
                 }
                
             }  
-            // dd(extension_loaded('imagick'));
+            // dd(extension_loaded('gd'));
 
             $centre_id = session('centre_id');
             $infos = DB::table('tbl_centre')
@@ -694,7 +660,7 @@ $totalPatient_ob = $all_patient_ob->count();
             ->select('tbl_entite.*', 'tbl_centre.*')
             ->first();
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
+            $qrCode = base64_encode(QrCode::format('svg')->color(30, 127, 203)->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
 
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
@@ -767,7 +733,7 @@ $totalPatient_ob = $all_patient_ob->count();
         ]);
     }
     
-    private function getSpecialistes($exclude_user_id)
+    public function getSpecialistes($exclude_user_id)
     {
         return DB::table('user_roles')
             ->join('users', 'user_roles.user_role_id', '=', 'users.user_role_id')
@@ -783,7 +749,7 @@ $totalPatient_ob = $all_patient_ob->count();
             )
             ->get();
     }
-    private function getPatientData($patient_id)
+    public function getPatientData($patient_id)
     {
         return DB::table('tbl_prise_en_charge')
             ->leftjoin('tbl_patient', 'tbl_prise_en_charge.patient_id', '=', 'tbl_patient.patient_id')
@@ -819,7 +785,7 @@ $totalPatient_ob = $all_patient_ob->count();
             });
     }
     
-    private function getLastConstantes($patient_id,$id_consultation)
+    public function getLastConstantes($patient_id,$id_consultation)
     {
         return DB::table('tbl_constantes')
             ->join('tbl_consultation', 'tbl_constantes.id_consultation', '=', 'tbl_consultation.id_consultation')
@@ -1122,14 +1088,30 @@ $totalPatient_ob = $all_patient_ob->count();
                     ->where('id_prise_en_charge', $request->id_prise_en_charge)
                     ->update([
                         'etat_hospitalisation' => 0,
-                        'updated_at' => now()
+                        'status'=>'cloture_manuelle',
+                        'updated_at' => now(),
+                        'date_cloture' => now()
+
                     ]);
             });
         
             Alert::success('Succès', 'Traitement clôturé avec succès');
             return redirect()->route('consultations.index');
         }
+
+
+
+    public function clotureAutomatique()
+    {
+         $deuxSemainesAvant = now()->subWeeks(2);
     
+        DB::table('tbl_prise_en_charge')->where('created_at', '<=', $deuxSemainesAvant)
+                ->where('status', 'en_cours')
+                ->update([
+                    'status' => 'cloture_auto',
+                    'date_cloture' => now()
+                ]);
+    }
     public function get_ordo($ordo_id)
     {
         $ordo_info=DB::table('tbl_ordo_consultation')
@@ -1189,4 +1171,70 @@ $totalPatient_ob = $all_patient_ob->count();
                 return Redirect::to ('/consultations');
 
     }
+    public function InfAuthCheck()
+    {
+     $user_role_id=Session::get('user_role_id');
+     if ($user_role_id == 35) {
+         return;
+         }
+         else 
+         {
+             return Redirect::to('/')->send();
+         }
+     }
+
+    public function traitement_hospitalisation($id_consultation,$patient_id)
+    {
+        $this->UserAuthCheck();
+        $this->SpecialisteAuthCheck();
+
+        $patient_data = $this->getPatientData($patient_id);
+        
+        if (!$patient_data->first()) {
+            abort(404, 'Patient non trouvé');
+        }
+        $last_constance = $this->getLastConstantes($patient_id, $id_consultation);
+        $specialistes = $this->getSpecialistes(Session::get('user_id'));
+                    
+        return view('Hospi.patient-infos', [
+            'all_details' => $patient_data,
+            'id_consultation' => $id_consultation,
+            'last_constance' => $last_constance,
+            'specialistes' => $specialistes,
+            'patient' => $patient_data->first() 
+        ]);
+    }
+
+    public function save_soins_traitement(Request $request, $id_consultation, $patient_id)
+{
+    // Sécurise la validation des données
+    $validated = $request->validate([
+        'libelle_soins'        => 'required|string|max:1000',
+        'id_prise_en_charge'   => 'required|integer|exists:tbl_prise_en_charge,id_prise_en_charge',
+        'patient_id'           => 'required|integer|exists:tbl_patient,patient_id',
+        'id_consultation'      => 'required|integer|exists:tbl_consultation,id_consultation',
+        // centre_id est présent dans le formulaire, mais inutilisé ici — à ignorer ou exploiter si nécessaire
+    ]);
+  dd($validated);
+    // Vérification anti-manipulation URL vs formulaire
+    if ((int)$request->patient_id !== (int)$patient_id || (int)$request->id_consultation !== (int)$id_consultation) {
+        abort(400, 'Les identifiants de la requête ne correspondent pas à ceux de l\'URL.');
+    }
+
+    // Facultatif : tu peux vérifier aussi que l'utilisateur est bien autorisé à traiter ce patient
+
+    // Insertion avec protection maximale
+    DB::table('tbl_soins_apk')->insert([
+        'id_consultation'    => $id_consultation,
+        'patient_id'         => $patient_id,
+        'id_prise_en_charge' => $validated['id_prise_en_charge'],
+        'libelle_soins'      => strip_tags($validated['libelle_soins']), // empêche l'injection HTML
+        'created_by'         => Session::get('user_id'),
+        'created_at'         => now(),
+        'updated_at'         => now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Traitement enregistré avec succès.');
+}
+
 }

@@ -35,10 +35,7 @@ Repertoire patient
                             <th>Sexe</th>
                             <th>Né(e) le</th>
                             <th>Groupe Sanguin</th>
-                            <th>Traitement</th>
                             <th>Contact</th>
-                            <th>Email</th>
-                            <th>Address</th>
                             <th>Actions</th>
                           </tr>
                         </thead>
@@ -67,12 +64,7 @@ Repertoire patient
                             <td><span class="badge bg-info-subtle text-info">{{ $data_patient->sexe_patient }}</span></td>
                             <td>{{ $data_patient->datenais }}</td>
                             <td><span class="badge bg-info-subtle text-danger">{{ $data_patient->gsang}}</span></td>
-                            <td>
-                              Diabetes
-                            </td>
                             <td>{{ $data_patient->telephone}}</td>
-                            <td>{{ $data_patient->email_patient }}</td>
-                            <td>{{ $data_patient->adresse}}</td>
                             <td>
                               <div class="d-inline-flex gap-1">
                               @if($user_role_id == 10)
@@ -90,7 +82,7 @@ Repertoire patient
                                   <i class="ri-eye-line"></i>
                                 </a>
                                  @elseif($user_role_id == 0)
-                                  <a href="#" class="btn btn-outline-success btn-sm"
+                                  <a href="{{ route('patient.datas.update', $data_patient->patient_id) }}" class="btn btn-outline-success btn-sm"
                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Modifier les informations du patient">
                                   <i class="ri-edit-box-line"></i>
                                 </a>
@@ -114,17 +106,17 @@ Repertoire patient
                         <div class="modal-content">
                           <div class="modal-header">
                             <h5 class="modal-title" id="delRowLabel">
-                              Confirm
+                              Confirmations
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
-                            Are you sure you want to delete the patient?
+                           Êtes-vous sûre de vouloir supprimé ce patient
                           </div>
                           <div class="modal-footer">
                             <div class="d-flex justify-content-end gap-2">
                               <button class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                                aria-label="Close">No</button>
+                                aria-label="Close">Non</button>
                               <button class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Yes</button>
                             </div>
                           </div>

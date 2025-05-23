@@ -433,12 +433,40 @@ class PriseEnChargeController extends Controller
         return view('Analys.add_analyse_ext');
     }
 
+    public function pendingPriseEnCharge($patient_id)
+    {
+        $user = Session::get('user_id');
+        $patient = DB::table('tbl_patient')
+                            ->join('tbl_centre','tbl_patient.id_centre','=','tbl_centre.centre_id')
+                            ->where('tbl_patient.patient_id',$user)
+                            ->where('tbl_centre.centre_id',$patient_id)
+                            ->first();
+                            $patient_id = $patient->patientid;
+      $prisenc_en_cours = DB::table('tbl_prise_en_charge')
+                            ->join('tbl_patient','tbl_prise_en_charge.patient_id','=','tbl_patient.patient_id')
+                            ->join('tbl_centre','tbl_prise_en_charge.centre_id','=','tbl_centre.centre_id')
+                            ->where('tbl_prise_en_charge.id_prise_en_charge',$patient_id)
+                            ->where('tbl_centre.centre_id',$patient->id_centre)
+                            ->select('tbl_patient.*','tbl_prise_en_charge.*','tbl_centre.*')
+                            ->first();
+if($prisenc_en_cours){
+                                return redirect()->back()->with('Error',"Ce patient a déjà une prise en charge en cours");
+                            }
+        
+    }
     
     public function save_prisenc(Request $request)
     {
     $this->UserAuthCheck(); 
     $this->AccueilAuthCheck();
-            
+        $is_pending_prisenc = DB::table('tbl_prise_en_charge')
+                ->where('patient_id',$request->patient_id)
+                ->where('status','en_cours')
+                    ->first();
+            if($is_pending_prisenc){
+          
+                return back()->withInput()->with('error',"Ce patient a une prise en charge en cours");
+            };
             $tel=$request->telephone;
 
             if ($tel) {
@@ -472,6 +500,8 @@ class PriseEnChargeController extends Controller
             $datap['maux']=$request->maux; 
             $datap['temp']=$request->temp; 
             $datap['observation']=$request->observation; 
+
+           
             $id_prise_en_charge = DB::table('tbl_prise_en_charge')->insertGetId($datap);
 
             $datac['id_prise_en_charge']=$id_prise_en_charge; 
@@ -610,6 +640,9 @@ class PriseEnChargeController extends Controller
         'smatrimonial' => 'required|string|max:20',
         'contact_urgence' => 'required|string|max:20',
         'lien_contact_urgence'=>'nullable|string',
+        'nom_contact_urgence'=>'required|string',
+        'prenom_contact_urgence'=>'required|string',
+        'profession'=>'required|string',
         
         'religion'=>'nullable|string',
         'ethnie'=>'nullable|string',
@@ -617,16 +650,15 @@ class PriseEnChargeController extends Controller
         'gsang' => 'nullable|string|max:3',
         'nip' => 'required|string|max:50|unique:tbl_patient,nip,'.$step1Data['patient_id'].',patient_id',
         
-        'constante_count' => 'required|integer|min:1',
+        'constante_count' => 'nullable|integer|min:1',
         'constantes.*.type' => 'required|string',
         'constantes.*.valeur' => 'required|numeric',
         'constantes.*.unite' => 'required|string',
     ]);
-
+// dd($request->all());
     DB::beginTransaction();
 
     try {
-        // Mise à jour des informations du patient
         DB::table('tbl_patient')
             ->where('patient_id', $step1Data['patient_id'])
             ->update([
@@ -641,6 +673,13 @@ class PriseEnChargeController extends Controller
                 'contact_urgence' => $request->contact_urgence,
                 'gsang' => $request->gsang,
                 'nip' => $request->nip,
+                'lien_contact_urgence'=>$request->lien_contact_urgence,
+                'nom_contact_urgence'=>$request->nom_contact_urgence,
+                'prenom_contact_urgence'=>$request->prenom_contact_urgence,
+                'profession'=>$request->profession,
+                'religion'=>$request->religion,
+                'ethnie'=>$request->ethnie,
+                'electrophorese_Hb'=>$request->electrophorese_Hb,
                 'statut' => 'complet',
                 'updated_at' => now()
             ]);
@@ -658,8 +697,6 @@ class PriseEnChargeController extends Controller
                 'updated_at' => now()
             ]);
         }
-
-        // Mise à jour de la prise en charge
         DB::table('tbl_prise_en_charge')
             ->where('id_prise_en_charge', $step1Data['prise_en_charge_id'])
             ->update([
@@ -667,8 +704,6 @@ class PriseEnChargeController extends Controller
                 'updated_at' => now()
             ]);
 
-        // Enregistrement dans la caisse
-        // table:(tbl_caisse_prise_en_charge)
         DB::table('tbl_caisse_prise_en_charge')->insert([
             'id_prise_en_charge' => $step1Data['prise_en_charge_id'],
             'id_centre' => $step1Data['id_centre'],
@@ -679,7 +714,6 @@ class PriseEnChargeController extends Controller
 
         DB::commit();
 
-        // Suppression de la session
         session()->forget('step1_data');
 
         Alert::success('Succès', 'Dossier patient complété avec succès.');
@@ -1098,7 +1132,6 @@ $consultationExists = DB::table('tbl_prise_en_charge')
     {
         DB::beginTransaction();
         try {
-            // Validation adaptée
             $validated = $request->validate([
                 'id_prise_en_charge' => 'required|integer',
                 'patient_id' => 'required|integer',
@@ -1111,7 +1144,6 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 'constantes.*.unite' => 'required|string|max:50'
             ]);
     
-            // Vérification cohérence des IDs
             if ($validated['id_consultation'] != $id_consultation || $validated['patient_id'] != $patient_id) {
                 return response()->json([
                     'success' => false,
@@ -1119,9 +1151,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                 ], 400);
             }
     
-            // Traitement des constantes
             foreach ($validated['constantes'] as $constante) {
-                // Exemple d'enregistrement - adaptez à votre modèle
                 DB::table('tbl_constantes')->insert([
                     'id_consultation' => $id_consultation,
                     'centre_id'=>$request->centre_id,

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Apr 08, 2025 at 05:14 PM
--- Server version: 8.0.31
--- PHP Version: 8.0.26
+-- Hôte : 127.0.0.1:3306
+-- Généré le : mer. 07 mai 2025 à 07:31
+-- Version du serveur : 8.2.0
+-- Version de PHP : 8.1.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `digiclinic`
+-- Base de données : `digiclinic`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admins`
+-- Structure de la table `admins`
 --
 
 DROP TABLE IF EXISTS `admins`;
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `departement`
+-- Structure de la table `departement`
 --
 
 DROP TABLE IF EXISTS `departement`;
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `departement` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `departement_generales`
+-- Structure de la table `departement_generales`
 --
 
 DROP TABLE IF EXISTS `departement_generales`;
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `departement_generales` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `departement_speciales`
+-- Structure de la table `departement_speciales`
 --
 
 DROP TABLE IF EXISTS `departement_speciales`;
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `departement_speciales` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
+-- Structure de la table `failed_jobs`
 --
 
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medecins`
+-- Structure de la table `medecins`
 --
 
 DROP TABLE IF EXISTS `medecins`;
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `medecins` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `migrations`
+-- Structure de la table `migrations`
 --
 
 DROP TABLE IF EXISTS `migrations`;
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `migrations`
+-- Déchargement des données de la table `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -186,7 +186,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `password_resets`
+-- Structure de la table `password_resets`
 --
 
 DROP TABLE IF EXISTS `password_resets`;
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personal_access_tokens`
+-- Structure de la table `personal_access_tokens`
 --
 
 DROP TABLE IF EXISTS `personal_access_tokens`;
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personnel`
+-- Structure de la table `personnel`
 --
 
 DROP TABLE IF EXISTS `personnel`;
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `personnel`
+-- Déchargement des données de la table `personnel`
 --
 
 INSERT INTO `personnel` (`personnel_id`, `nom`, `prenom`, `sexe`, `qualification`, `specialite`, `birthdate`, `departement`, `ville`, `telephone`, `adresse`, `email`, `service_id`, `departement_id`, `photo`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -272,7 +272,7 @@ INSERT INTO `personnel` (`personnel_id`, `nom`, `prenom`, `sexe`, `qualification
 -- --------------------------------------------------------
 
 --
--- Table structure for table `services`
+-- Structure de la table `services`
 --
 
 DROP TABLE IF EXISTS `services`;
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `services` (
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `services`
+-- Déchargement des données de la table `services`
 --
 
 INSERT INTO `services` (`services_id`, `service`, `specialite`, `email`, `telephone`, `status`, `centre_id`, `chef_service`, `created_at`, `updated_at`) VALUES
@@ -306,14 +306,14 @@ INSERT INTO `services` (`services_id`, `service`, `specialite`, `email`, `teleph
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_agendas`
+-- Structure de la table `tbl_agendas`
 --
 
 DROP TABLE IF EXISTS `tbl_agendas`;
 CREATE TABLE IF NOT EXISTS `tbl_agendas` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `date` date NOT NULL,
   `patient_id` bigint UNSIGNED NOT NULL,
   `user_id` bigint UNSIGNED NOT NULL,
@@ -322,12 +322,12 @@ CREATE TABLE IF NOT EXISTS `tbl_agendas` (
   PRIMARY KEY (`id`),
   KEY `agendas_patient_id_foreign` (`patient_id`),
   KEY `agendas_user_id_foreign` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_analyse`
+-- Structure de la table `tbl_analyse`
 --
 
 DROP TABLE IF EXISTS `tbl_analyse`;
@@ -350,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `tbl_analyse` (
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_analyse`
+-- Déchargement des données de la table `tbl_analyse`
 --
 
 INSERT INTO `tbl_analyse` (`id_analyse`, `patient_id`, `id_type_analyse`, `payed_analyse_id`, `analyse`, `prix`, `prix_manuel`, `user_id`, `analyse_fichier`, `analyse_resultat`, `statut_analyse`, `created_at`, `id_centre`) VALUES
@@ -363,38 +363,48 @@ INSERT INTO `tbl_analyse` (`id_analyse`, `patient_id`, `id_type_analyse`, `payed
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_analyse_parametres`
+-- Structure de la table `tbl_analyse_parametres`
 --
 
 DROP TABLE IF EXISTS `tbl_analyse_parametres`;
 CREATE TABLE IF NOT EXISTS `tbl_analyse_parametres` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `element` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `element` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `genre` enum('HOMME','FEMME','ADOLESCENT','FEMME ENCEINTE','ENFANT') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `category` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `libelle_norme` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `valeur_norme` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `libelle_norme` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `valeur_norme` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tranche_adolescent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tbl_prestation_id` bigint UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `tbl_prestation` (`tbl_prestation_id`),
   KEY `tbl_prestation_id` (`tbl_prestation_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_analyse_parametres`
+-- Déchargement des données de la table `tbl_analyse_parametres`
 --
 
 INSERT INTO `tbl_analyse_parametres` (`id`, `element`, `genre`, `category`, `libelle_norme`, `valeur_norme`, `tranche_adolescent`, `tbl_prestation_id`) VALUES
 (1, 'Elément', 'HOMME', NULL, 'test1', 'testtest2', NULL, 236),
 (2, 'Elément', 'FEMME', NULL, 'test3', 'testtest3', NULL, 236),
 (3, 'test', 'HOMME', NULL, 'test libellé norme', '0.2', NULL, NULL),
-(4, 'ELement norme', 'FEMME', NULL, 'Libelle norme', '32633', NULL, NULL);
+(4, 'ELement norme', 'FEMME', NULL, 'Libelle norme', '32633', NULL, NULL),
+(5, 'Hb', 'HOMME', 'LEUCOCYTOMETRIE', 'Val. Nor. Leuco. Homme', '1.5 à 6 G/l', NULL, 138),
+(6, 'NGR', 'HOMME', 'LEUCOCYTOMETRIE', 'Val. Nor. Leuco. Homme', '3 à 8 G/l', NULL, 138),
+(7, 'NGR', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '4 à 6 T/L', NULL, 138),
+(8, 'Hb', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '12 à 16 g /dl', NULL, 138),
+(9, 'Hte', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '36 à 49 %', NULL, 138),
+(10, 'VGM', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '80 à 90 fi', NULL, 138),
+(11, 'CCMH', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '30 à 36%', NULL, 138),
+(12, 'TCMH', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '25 à 32 pg', NULL, 138),
+(13, 'N Réticulocytes', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '20 à 80 G/l', NULL, 138),
+(14, 'VS 1ere heure', 'HOMME', 'ERYTROCYTOMETRIE', 'Val. Nor. Eryt. Homme', '3 à 7 mm', NULL, 138);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_analyse_payed`
+-- Structure de la table `tbl_analyse_payed`
 --
 
 DROP TABLE IF EXISTS `tbl_analyse_payed`;
@@ -407,6 +417,7 @@ CREATE TABLE IF NOT EXISTS `tbl_analyse_payed` (
   `services_id` int NOT NULL,
   `centre_id` int NOT NULL,
   `treated` tinyint NOT NULL DEFAULT '0',
+  `is_closed` tinyint NOT NULL DEFAULT '0',
   `date_paiement` timestamp NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`payed_analyse_id`),
@@ -415,80 +426,95 @@ CREATE TABLE IF NOT EXISTS `tbl_analyse_payed` (
   KEY `services` (`services_id`),
   KEY `tbl_demande_ext` (`id_demande`),
   KEY `tbl_prestation` (`prestation_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_analyse_payed`
+-- Déchargement des données de la table `tbl_analyse_payed`
 --
 
-INSERT INTO `tbl_analyse_payed` (`payed_analyse_id`, `prestation_id`, `montant_total`, `id_demande`, `patient_id`, `services_id`, `centre_id`, `treated`, `date_paiement`, `updated_at`) VALUES
-(1, 10, 0, 1, 54, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:13'),
-(2, 232, 0, 2, 62, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:30'),
-(3, 229, 0, 3, 61, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:48'),
-(4, 10, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(5, 6, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(6, 232, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(7, 231, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(8, 229, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(9, 228, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(10, 227, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(11, 226, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(12, 225, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(13, 222, 543, 1, 54, 0, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
-(14, 24, 500, 3, 61, 0, 1, 0, '2025-03-21 08:44:58', '2025-03-21 08:44:58'),
-(15, 0, 0, 4, 5, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-23 13:20:06'),
-(16, 6, 507, 4, 5, 0, 1, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
-(17, 10, 507, 4, 5, 0, 1, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
-(18, 106, 507, 4, 5, 0, 1, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
-(19, 138, 507, 4, 5, 0, 1, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
-(20, 0, 0, 5, 64, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-23 13:29:23'),
-(21, 6, 7, 5, 64, 0, 1, 0, '2025-03-23 12:33:38', '2025-03-23 12:33:38'),
-(22, 16, 7, 5, 64, 0, 1, 0, '2025-03-23 12:33:38', '2025-03-23 12:33:38'),
-(23, 0, 0, 6, 65, 0, 1, 0, '0000-00-00 00:00:00', '2025-03-23 15:40:35'),
-(24, 0, 0, 7, 61, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-23 15:42:02'),
-(25, 10, 1003, 7, 61, 0, 1, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
-(26, 6, 1003, 7, 61, 0, 1, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
-(27, 24, 1003, 7, 61, 0, 1, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
-(28, 0, 0, 8, 2, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-27 22:08:19'),
-(29, 236, 1200, 8, 2, 0, 1, 0, '2025-03-28 14:06:48', '2025-03-28 14:06:48'),
-(30, 236, 1200, 8, 2, 0, 1, 0, '2025-03-28 14:06:59', '2025-03-28 14:06:59'),
-(31, 236, 1200, 8, 2, 0, 1, 0, '2025-03-28 14:07:13', '2025-03-28 14:07:13'),
-(32, 0, 0, 9, 68, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-31 20:28:16'),
-(33, 0, 0, 10, 68, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-31 20:28:52'),
-(34, 236, 1200, 9, 68, 0, 1, 0, '2025-03-31 19:31:31', '2025-03-31 19:31:31'),
-(35, 236, 1200, 9, 68, 0, 1, 0, '2025-03-31 19:32:32', '2025-03-31 19:32:32'),
-(36, 236, 1200, 9, 68, 0, 1, 0, '2025-03-31 19:33:40', '2025-03-31 19:33:40'),
-(37, 236, 1200, 10, 68, 0, 1, 0, '2025-03-31 19:39:26', '2025-03-31 19:39:26'),
-(38, 0, 0, 11, 68, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-31 21:27:19'),
-(39, 138, 1208, 11, 68, 0, 1, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
-(40, 139, 1208, 11, 68, 0, 1, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
-(41, 236, 1208, 11, 68, 0, 1, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
-(42, 0, 0, 12, 68, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-31 23:31:02'),
-(43, 243, 0, 13, 68, 9, 1, 0, '0000-00-00 00:00:00', '2025-03-31 23:31:22'),
-(44, 236, 1200, 13, 68, 0, 1, 0, '2025-03-31 22:34:03', '2025-03-31 22:34:03'),
-(48, 6, 1203, 15, 69, 0, 1, 0, '2025-04-02 16:03:34', '2025-04-02 16:03:34'),
-(49, 236, 1203, 15, 69, 0, 1, 0, '2025-04-02 16:03:34', '2025-04-02 16:03:34'),
-(50, 0, 0, 17, 70, 9, 1, 0, '0000-00-00 00:00:00', '2025-04-04 05:03:15'),
-(51, 107, 501, 17, 70, 0, 1, 0, '2025-04-04 03:09:05', '2025-04-04 03:09:05'),
-(52, 106, 501, 17, 70, 0, 1, 0, '2025-04-04 03:09:05', '2025-04-04 03:09:05'),
-(53, 6, 503, 12, 68, 0, 1, 0, '2025-04-04 03:27:38', '2025-04-04 03:27:38'),
-(54, 10, 503, 12, 68, 0, 1, 0, '2025-04-04 03:27:38', '2025-04-04 03:27:38'),
-(55, 236, 1200, 16, 69, 0, 1, 0, '2025-04-04 13:15:15', '2025-04-04 13:15:15'),
-(56, 0, 0, 18, 80, 9, 1, 0, '0000-00-00 00:00:00', '2025-04-08 17:02:51'),
-(57, 0, 0, 19, 81, 9, 1, 0, '0000-00-00 00:00:00', '2025-04-08 17:03:35'),
-(58, 233, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(59, 234, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(60, 235, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(61, 220, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(62, 221, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(63, 216, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(64, 165, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
-(65, 159, 204500, 19, 81, 0, 1, 1, '2025-04-08 15:06:43', '2025-04-08 15:06:43');
+INSERT INTO `tbl_analyse_payed` (`payed_analyse_id`, `prestation_id`, `montant_total`, `id_demande`, `patient_id`, `services_id`, `centre_id`, `treated`, `is_closed`, `date_paiement`, `updated_at`) VALUES
+(1, 10, 0, 1, 54, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:13'),
+(2, 232, 0, 2, 62, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:30'),
+(3, 229, 0, 3, 61, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-21 09:42:48'),
+(4, 10, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(5, 6, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(6, 232, 543, 1, 54, 0, 1, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(7, 231, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(8, 229, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(9, 228, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(10, 227, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(11, 226, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(12, 225, 543, 1, 54, 0, 1, 1, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(13, 222, 543, 1, 54, 0, 1, 0, 0, '2025-03-21 08:44:28', '2025-03-21 08:44:28'),
+(14, 24, 500, 3, 61, 0, 1, 0, 0, '2025-03-21 08:44:58', '2025-03-21 08:44:58'),
+(15, 0, 0, 4, 5, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-23 13:20:06'),
+(16, 6, 507, 4, 5, 0, 1, 0, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
+(17, 10, 507, 4, 5, 0, 1, 0, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
+(18, 106, 507, 4, 5, 0, 1, 0, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
+(19, 138, 507, 4, 5, 0, 1, 0, 0, '2025-03-23 12:23:16', '2025-03-23 12:23:16'),
+(20, 0, 0, 5, 64, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-23 13:29:23'),
+(21, 6, 7, 5, 64, 0, 1, 0, 0, '2025-03-23 12:33:38', '2025-03-23 12:33:38'),
+(22, 16, 7, 5, 64, 0, 1, 0, 0, '2025-03-23 12:33:38', '2025-03-23 12:33:38'),
+(23, 0, 0, 6, 65, 0, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-23 15:40:35'),
+(24, 0, 0, 7, 61, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-23 15:42:02'),
+(25, 10, 1003, 7, 61, 0, 1, 0, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
+(26, 6, 1003, 7, 61, 0, 1, 0, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
+(27, 24, 1003, 7, 61, 0, 1, 0, 0, '2025-03-23 14:45:09', '2025-03-23 14:45:09'),
+(28, 0, 0, 8, 2, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-27 22:08:19'),
+(29, 236, 1200, 8, 2, 0, 1, 0, 0, '2025-03-28 14:06:48', '2025-03-28 14:06:48'),
+(30, 236, 1200, 8, 2, 0, 1, 0, 0, '2025-03-28 14:06:59', '2025-03-28 14:06:59'),
+(31, 236, 1200, 8, 2, 0, 1, 0, 0, '2025-03-28 14:07:13', '2025-03-28 14:07:13'),
+(32, 0, 0, 9, 68, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-31 20:28:16'),
+(33, 0, 0, 10, 68, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-31 20:28:52'),
+(34, 236, 1200, 9, 68, 0, 1, 0, 0, '2025-03-31 19:31:31', '2025-03-31 19:31:31'),
+(35, 236, 1200, 9, 68, 0, 1, 0, 0, '2025-03-31 19:32:32', '2025-03-31 19:32:32'),
+(36, 236, 1200, 9, 68, 0, 1, 0, 0, '2025-03-31 19:33:40', '2025-03-31 19:33:40'),
+(37, 236, 1200, 10, 68, 0, 1, 0, 0, '2025-03-31 19:39:26', '2025-03-31 19:39:26'),
+(38, 0, 0, 11, 68, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-31 21:27:19'),
+(39, 138, 1208, 11, 68, 0, 1, 0, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
+(40, 139, 1208, 11, 68, 0, 1, 0, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
+(41, 236, 1208, 11, 68, 0, 1, 0, 0, '2025-03-31 20:29:41', '2025-03-31 20:29:41'),
+(42, 0, 0, 12, 68, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-31 23:31:02'),
+(43, 243, 0, 13, 68, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-03-31 23:31:22'),
+(44, 236, 1200, 13, 68, 0, 1, 0, 0, '2025-03-31 22:34:03', '2025-03-31 22:34:03'),
+(48, 6, 1203, 15, 69, 0, 1, 0, 0, '2025-04-02 16:03:34', '2025-04-02 16:03:34'),
+(49, 236, 1203, 15, 69, 0, 1, 0, 0, '2025-04-02 16:03:34', '2025-04-02 16:03:34'),
+(50, 0, 0, 17, 70, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-04-04 05:03:15'),
+(51, 107, 501, 17, 70, 0, 1, 0, 0, '2025-04-04 03:09:05', '2025-04-04 03:09:05'),
+(52, 106, 501, 17, 70, 0, 1, 0, 0, '2025-04-04 03:09:05', '2025-04-04 03:09:05'),
+(53, 6, 503, 12, 68, 0, 1, 0, 0, '2025-04-04 03:27:38', '2025-04-04 03:27:38'),
+(54, 10, 503, 12, 68, 0, 1, 0, 0, '2025-04-04 03:27:38', '2025-04-04 03:27:38'),
+(55, 236, 1200, 16, 69, 0, 1, 0, 0, '2025-04-04 13:15:15', '2025-04-04 13:15:15'),
+(56, 0, 0, 18, 80, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-04-08 17:02:51'),
+(57, 0, 0, 19, 81, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-04-08 17:03:35'),
+(58, 233, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(59, 234, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(60, 235, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(61, 220, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(62, 221, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(63, 216, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(64, 165, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(65, 159, 204500, 19, 81, 0, 1, 1, 0, '2025-04-08 15:06:43', '2025-04-08 15:06:43'),
+(66, 0, 0, 20, 82, 9, 1, 0, 1, '0000-00-00 00:00:00', '2025-04-11 08:44:51'),
+(67, 216, 12000, 20, 82, 0, 1, 1, 1, '2025-04-11 07:47:12', '2025-04-11 07:47:12'),
+(68, 226, 12000, 20, 82, 0, 1, 1, 1, '2025-04-11 07:47:12', '2025-04-11 07:47:12'),
+(69, 232, 12000, 20, 82, 0, 1, 1, 1, '2025-04-11 07:47:12', '2025-04-11 07:47:12'),
+(70, 138, 12000, 20, 82, 0, 1, 1, 1, '2025-04-11 07:47:12', '2025-04-11 07:47:12'),
+(71, 0, 0, 21, 83, 9, 1, 0, 1, '0000-00-00 00:00:00', '2025-04-11 11:22:15'),
+(72, 105, 7000, 21, 83, 0, 1, 1, 1, '2025-04-11 10:24:53', '2025-04-11 10:24:53'),
+(73, 226, 7000, 21, 83, 0, 1, 1, 1, '2025-04-11 10:24:53', '2025-04-11 10:24:53'),
+(74, 216, 7000, 21, 83, 0, 1, 1, 1, '2025-04-11 10:24:53', '2025-04-11 10:24:53'),
+(75, 0, 0, 22, 82, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-04-25 21:20:34'),
+(76, 213, 3500, 22, 82, 0, 1, 1, 0, '2025-04-26 11:07:56', '2025-04-26 11:07:56'),
+(77, 0, 0, 23, 82, 9, 1, 0, 0, '0000-00-00 00:00:00', '2025-04-27 09:21:18'),
+(78, 213, 3500, 23, 82, 0, 1, 1, 0, '2025-04-27 08:23:58', '2025-04-27 08:23:58'),
+(80, 105, 3500, 24, 82, 0, 1, 1, 1, '2025-04-27 08:43:44', '2025-04-27 08:43:44'),
+(81, 216, 3500, 24, 82, 0, 1, 1, 1, '2025-04-27 08:43:44', '2025-04-27 08:43:44');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_approvisionnement`
+-- Structure de la table `tbl_approvisionnement`
 --
 
 DROP TABLE IF EXISTS `tbl_approvisionnement`;
@@ -507,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `tbl_approvisionnement` (
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_approvisionnement`
+-- Déchargement des données de la table `tbl_approvisionnement`
 --
 
 INSERT INTO `tbl_approvisionnement` (`id`, `admin_id`, `product_id`, `stock`, `stock_defective`, `comments`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -522,7 +548,7 @@ INSERT INTO `tbl_approvisionnement` (`id`, `admin_id`, `product_id`, `stock`, `s
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_appro_reactif`
+-- Structure de la table `tbl_appro_reactif`
 --
 
 DROP TABLE IF EXISTS `tbl_appro_reactif`;
@@ -541,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `tbl_appro_reactif` (
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_appro_reactif`
+-- Déchargement des données de la table `tbl_appro_reactif`
 --
 
 INSERT INTO `tbl_appro_reactif` (`id`, `admin_id`, `reactif_id`, `stock`, `stock_defective`, `comments`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -557,7 +583,7 @@ INSERT INTO `tbl_appro_reactif` (`id`, `admin_id`, `reactif_id`, `stock`, `stock
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_caisse_prise_en_charge`
+-- Structure de la table `tbl_caisse_prise_en_charge`
 --
 
 DROP TABLE IF EXISTS `tbl_caisse_prise_en_charge`;
@@ -575,7 +601,7 @@ CREATE TABLE IF NOT EXISTS `tbl_caisse_prise_en_charge` (
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_caisse_prise_en_charge`
+-- Déchargement des données de la table `tbl_caisse_prise_en_charge`
 --
 
 INSERT INTO `tbl_caisse_prise_en_charge` (`id_caisse_prise_en_charge`, `id_prise_en_charge`, `user_id`, `user_role_id`, `frais_consultation`, `frais_hospitalisation`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -610,7 +636,7 @@ INSERT INTO `tbl_caisse_prise_en_charge` (`id_caisse_prise_en_charge`, `id_prise
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_cart_reactif`
+-- Structure de la table `tbl_cart_reactif`
 --
 
 DROP TABLE IF EXISTS `tbl_cart_reactif`;
@@ -628,7 +654,7 @@ CREATE TABLE IF NOT EXISTS `tbl_cart_reactif` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_category`
+-- Structure de la table `tbl_category`
 --
 
 DROP TABLE IF EXISTS `tbl_category`;
@@ -643,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `tbl_category` (
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_category`
+-- Déchargement des données de la table `tbl_category`
 --
 
 INSERT INTO `tbl_category` (`category_id`, `category_name`, `category_description`, `publication_status`, `updated_at`, `id_centre`) VALUES
@@ -658,12 +684,13 @@ INSERT INTO `tbl_category` (`category_id`, `category_name`, `category_descriptio
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_centre`
+-- Structure de la table `tbl_centre`
 --
 
 DROP TABLE IF EXISTS `tbl_centre`;
 CREATE TABLE IF NOT EXISTS `tbl_centre` (
   `id_centre` int NOT NULL AUTO_INCREMENT,
+  `code_centre` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `id_entite` int NOT NULL,
   `nom_centre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `Autorisation_decret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
@@ -676,18 +703,18 @@ CREATE TABLE IF NOT EXISTS `tbl_centre` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_centre`
+-- Déchargement des données de la table `tbl_centre`
 --
 
-INSERT INTO `tbl_centre` (`id_centre`, `id_entite`, `nom_centre`, `Autorisation_decret`, `adresse_centre`, `tel_centre`, `id_directeur`, `date_centre`, `updated_at`) VALUES
-(1, 1, 'CENTRE MEDICAL ASSAFWA \"LES ELITES\"', 'Aut.n°012/MS/DC/SGM/CCJ/DNSP/SRS/SA/016SGG21 du 12 Jan. 2021', 'Cotonou Fidjrossè von HOUDOU ALI 01 BP 2334', '+229 69 39 69 91', 2, '2024-10-08 16:11:52', '2024-11-13 21:19:34'),
-(2, 1, 'Centre Bohicon', NULL, NULL, '0', 4, '2024-10-08 16:11:52', '2024-11-13 21:19:34'),
-(3, 2, 'Centre Djougou', NULL, NULL, '0', 5, '2024-11-13 20:31:08', '2024-11-13 20:31:08');
+INSERT INTO `tbl_centre` (`id_centre`, `code_centre`, `id_entite`, `nom_centre`, `Autorisation_decret`, `adresse_centre`, `tel_centre`, `id_directeur`, `date_centre`, `updated_at`) VALUES
+(1, 'CM/AS/EL', 1, 'CENTRE MEDICAL ASSAFWA \"LES ELITES\"', 'Aut.n°012/MS/DC/SGM/CCJ/DNSP/SRS/SA/016SGG21 du 12 Jan. 2021', 'Cotonou Fidjrossè von HOUDOU ALI 01 BP 2334', '+229 69 39 69 91', 2, '2024-10-08 16:11:52', '2024-11-13 21:19:34'),
+(2, NULL, 1, 'Centre Bohicon', NULL, NULL, '0', 4, '2024-10-08 16:11:52', '2024-11-13 21:19:34'),
+(3, NULL, 2, 'Centre Djougou', NULL, NULL, '0', 5, '2024-11-13 20:31:08', '2024-11-13 20:31:08');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_chambre`
+-- Structure de la table `tbl_chambre`
 --
 
 DROP TABLE IF EXISTS `tbl_chambre`;
@@ -709,7 +736,7 @@ CREATE TABLE IF NOT EXISTS `tbl_chambre` (
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_chambre`
+-- Déchargement des données de la table `tbl_chambre`
 --
 
 INSERT INTO `tbl_chambre` (`id_chambre`, `libelle_chambre`, `etat_chambre`, `type_chambre`, `is_vip`, `patient_id`, `centre_id`, `services_id`, `created_at`, `updated_at`) VALUES
@@ -722,17 +749,17 @@ INSERT INTO `tbl_chambre` (`id_chambre`, `libelle_chambre`, `etat_chambre`, `typ
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_constantes`
+-- Structure de la table `tbl_constantes`
 --
 
 DROP TABLE IF EXISTS `tbl_constantes`;
 CREATE TABLE IF NOT EXISTS `tbl_constantes` (
   `constante_id` bigint NOT NULL AUTO_INCREMENT,
   `patient_id` bigint NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `valeur` int NOT NULL,
   `constante_count` int NOT NULL,
-  `unite` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `unite` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `id_prise_en_charge` bigint DEFAULT NULL,
   `id_consultation` bigint NOT NULL,
   `centre_id` int NOT NULL,
@@ -743,7 +770,7 @@ CREATE TABLE IF NOT EXISTS `tbl_constantes` (
 ) ENGINE=MyISAM AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_constantes`
+-- Déchargement des données de la table `tbl_constantes`
 --
 
 INSERT INTO `tbl_constantes` (`constante_id`, `patient_id`, `type`, `valeur`, `constante_count`, `unite`, `id_prise_en_charge`, `id_consultation`, `centre_id`, `user_id`, `created_at`, `updated_at`) VALUES
@@ -826,7 +853,7 @@ INSERT INTO `tbl_constantes` (`constante_id`, `patient_id`, `type`, `valeur`, `c
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_consultation`
+-- Structure de la table `tbl_consultation`
 --
 
 DROP TABLE IF EXISTS `tbl_consultation`;
@@ -850,7 +877,7 @@ CREATE TABLE IF NOT EXISTS `tbl_consultation` (
 ) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_consultation`
+-- Déchargement des données de la table `tbl_consultation`
 --
 
 INSERT INTO `tbl_consultation` (`id_consultation`, `id_prise_en_charge`, `user_id`, `user_role_id`, `diagnostic`, `new_temp`, `observation`, `is_hospitalisation`, `id_lit`, `fichier_joint`, `etat_traitement`, `conslt_created_at`, `conslt_updated_at`, `centre_id`) VALUES
@@ -924,7 +951,7 @@ INSERT INTO `tbl_consultation` (`id_consultation`, `id_prise_en_charge`, `user_i
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_demande_ext`
+-- Structure de la table `tbl_demande_ext`
 --
 
 DROP TABLE IF EXISTS `tbl_demande_ext`;
@@ -951,10 +978,10 @@ CREATE TABLE IF NOT EXISTS `tbl_demande_ext` (
   KEY `user_id` (`last_demande_user_id`),
   KEY `tbl_type_analyse` (`id_type_analyse`),
   KEY `tbl_prestation` (`prestation_id`(250))
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_demande_ext`
+-- Déchargement des données de la table `tbl_demande_ext`
 --
 
 INSERT INTO `tbl_demande_ext` (`id_demande`, `last_demande_user_id`, `services_id`, `prestation_id`, `id_type_analyse`, `user_id`, `centre_id`, `patient_id`, `user_role_id`, `is_payed`, `statut`, `created_at`, `updated_at`) VALUES
@@ -976,12 +1003,17 @@ INSERT INTO `tbl_demande_ext` (`id_demande`, `last_demande_user_id`, `services_i
 (16, 2, 9, '[\"236\"]', NULL, 1, 1, 69, 0, 1, 0, '2025-04-02 17:01:45', '2025-04-04 13:15:15'),
 (17, 2, 9, '[\"107\",\"106\"]', NULL, 1, 1, 70, 0, 1, 0, '2025-04-04 05:03:15', '2025-04-04 03:09:05'),
 (18, 2, 9, NULL, NULL, 1, 1, 80, 0, 0, 0, '2025-04-08 17:02:51', '2025-04-08 17:02:51'),
-(19, 2, 9, '[\"233\",\"234\",\"235\",\"220\",\"221\",\"216\",\"165\",\"159\"]', NULL, 1, 1, 81, 0, 1, 0, '2025-04-08 17:03:35', '2025-04-08 15:06:43');
+(19, 2, 9, '[\"233\",\"234\",\"235\",\"220\",\"221\",\"216\",\"165\",\"159\"]', NULL, 1, 1, 81, 0, 1, 0, '2025-04-08 17:03:35', '2025-04-08 15:06:43'),
+(20, 2, 9, '[\"216\",\"226\",\"232\",\"138\"]', NULL, 1, 1, 82, 0, 1, 0, '2025-04-11 08:44:51', '2025-04-11 07:47:12'),
+(21, 2, 9, '[\"105\",\"226\",\"216\"]', NULL, 1, 1, 83, 0, 1, 0, '2025-04-11 11:22:15', '2025-04-11 10:24:53'),
+(22, 2, 9, '[\"213\"]', NULL, 1, 1, 82, 0, 1, 0, '2025-04-25 21:20:34', '2025-04-26 11:07:56'),
+(23, 2, 9, '[\"213\"]', NULL, 1, 1, 82, 0, 1, 0, '2025-04-27 09:21:18', '2025-04-27 08:23:58'),
+(24, 2, 9, '[\"105\",\"216\"]', NULL, 1, 1, 82, 0, 1, 0, '2025-04-27 09:41:37', '2025-04-27 08:43:44');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_entite`
+-- Structure de la table `tbl_entite`
 --
 
 DROP TABLE IF EXISTS `tbl_entite`;
@@ -996,7 +1028,7 @@ CREATE TABLE IF NOT EXISTS `tbl_entite` (
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_entite`
+-- Déchargement des données de la table `tbl_entite`
 --
 
 INSERT INTO `tbl_entite` (`id_entite`, `nom_entite`, `rccm`, `directeur`, `date_entite`, `updated_at`) VALUES
@@ -1007,7 +1039,7 @@ INSERT INTO `tbl_entite` (`id_entite`, `nom_entite`, `rccm`, `directeur`, `date_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_frais_consutation`
+-- Structure de la table `tbl_frais_consutation`
 --
 
 DROP TABLE IF EXISTS `tbl_frais_consutation`;
@@ -1021,7 +1053,7 @@ CREATE TABLE IF NOT EXISTS `tbl_frais_consutation` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_frais_consutation`
+-- Déchargement des données de la table `tbl_frais_consutation`
 --
 
 INSERT INTO `tbl_frais_consutation` (`id_frais_consultation`, `nom_consultation`, `montant_consultation`, `etat`, `id_centre`) VALUES
@@ -1031,7 +1063,7 @@ INSERT INTO `tbl_frais_consutation` (`id_frais_consultation`, `nom_consultation`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_frais_hospitalisation`
+-- Structure de la table `tbl_frais_hospitalisation`
 --
 
 DROP TABLE IF EXISTS `tbl_frais_hospitalisation`;
@@ -1045,7 +1077,7 @@ CREATE TABLE IF NOT EXISTS `tbl_frais_hospitalisation` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_frais_hospitalisation`
+-- Déchargement des données de la table `tbl_frais_hospitalisation`
 --
 
 INSERT INTO `tbl_frais_hospitalisation` (`id_frais_hospital`, `nom_hospital`, `montant_hospital`, `etat`, `id_centre`) VALUES
@@ -1055,7 +1087,7 @@ INSERT INTO `tbl_frais_hospitalisation` (`id_frais_hospital`, `nom_hospital`, `m
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_guest`
+-- Structure de la table `tbl_guest`
 --
 
 DROP TABLE IF EXISTS `tbl_guest`;
@@ -1073,7 +1105,7 @@ CREATE TABLE IF NOT EXISTS `tbl_guest` (
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_guest`
+-- Déchargement des données de la table `tbl_guest`
 --
 
 INSERT INTO `tbl_guest` (`guest_id`, `guest_first_name`, `guest_last_name`, `guest_ifu`, `guest_country`, `guest_address`, `guest_mobile_number`, `guest_email`, `id_centre`) VALUES
@@ -1091,7 +1123,7 @@ INSERT INTO `tbl_guest` (`guest_id`, `guest_first_name`, `guest_last_name`, `gue
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_lits`
+-- Structure de la table `tbl_lits`
 --
 
 DROP TABLE IF EXISTS `tbl_lits`;
@@ -1110,7 +1142,7 @@ CREATE TABLE IF NOT EXISTS `tbl_lits` (
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_lits`
+-- Déchargement des données de la table `tbl_lits`
 --
 
 INSERT INTO `tbl_lits` (`id_lit`, `id_chambre`, `services_id`, `lit`, `statut`, `centre_id`, `created_at`, `updated_at`) VALUES
@@ -1135,7 +1167,7 @@ INSERT INTO `tbl_lits` (`id_lit`, `id_chambre`, `services_id`, `lit`, `statut`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_manufacture`
+-- Structure de la table `tbl_manufacture`
 --
 
 DROP TABLE IF EXISTS `tbl_manufacture`;
@@ -1151,7 +1183,7 @@ CREATE TABLE IF NOT EXISTS `tbl_manufacture` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_manufacture`
+-- Déchargement des données de la table `tbl_manufacture`
 --
 
 INSERT INTO `tbl_manufacture` (`manufacture_id`, `manufacture_name`, `manufacture_description`, `publication_status`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -1161,7 +1193,7 @@ INSERT INTO `tbl_manufacture` (`manufacture_id`, `manufacture_name`, `manufactur
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_order`
+-- Structure de la table `tbl_order`
 --
 
 DROP TABLE IF EXISTS `tbl_order`;
@@ -1183,7 +1215,7 @@ CREATE TABLE IF NOT EXISTS `tbl_order` (
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_order`
+-- Déchargement des données de la table `tbl_order`
 --
 
 INSERT INTO `tbl_order` (`order_id`, `transaction_id`, `customer_id`, `guest_id`, `shipping_id`, `payment_id`, `order_total`, `order_status`, `created_date`, `updated_at`, `order_statut`, `id_centre`) VALUES
@@ -1199,7 +1231,7 @@ INSERT INTO `tbl_order` (`order_id`, `transaction_id`, `customer_id`, `guest_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_order_details`
+-- Structure de la table `tbl_order_details`
 --
 
 DROP TABLE IF EXISTS `tbl_order_details`;
@@ -1222,7 +1254,7 @@ CREATE TABLE IF NOT EXISTS `tbl_order_details` (
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_order_details`
+-- Déchargement des données de la table `tbl_order_details`
 --
 
 INSERT INTO `tbl_order_details` (`order_details_id`, `user_id`, `order_id`, `product_id`, `category_id`, `taxe_id`, `product_name`, `product_price`, `product_size`, `product_sales_quantity`, `created_at`, `updated_at`, `command_statut`, `date_cloture`) VALUES
@@ -1242,7 +1274,7 @@ INSERT INTO `tbl_order_details` (`order_details_id`, `user_id`, `order_id`, `pro
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_ordo_consultation`
+-- Structure de la table `tbl_ordo_consultation`
 --
 
 DROP TABLE IF EXISTS `tbl_ordo_consultation`;
@@ -1257,7 +1289,7 @@ CREATE TABLE IF NOT EXISTS `tbl_ordo_consultation` (
 ) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_ordo_consultation`
+-- Déchargement des données de la table `tbl_ordo_consultation`
 --
 
 INSERT INTO `tbl_ordo_consultation` (`id_ordo_traitement`, `id_consultation`, `num_ordo`, `ordonnance_consultation`, `date_ordo`, `updated_at`) VALUES
@@ -1307,7 +1339,7 @@ INSERT INTO `tbl_ordo_consultation` (`id_ordo_traitement`, `id_consultation`, `n
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_panier`
+-- Structure de la table `tbl_panier`
 --
 
 DROP TABLE IF EXISTS `tbl_panier`;
@@ -1328,7 +1360,7 @@ CREATE TABLE IF NOT EXISTS `tbl_panier` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_patient`
+-- Structure de la table `tbl_patient`
 --
 
 DROP TABLE IF EXISTS `tbl_patient`;
@@ -1350,14 +1382,14 @@ CREATE TABLE IF NOT EXISTS `tbl_patient` (
   `adresse` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `gsang` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `id_centre` int NOT NULL,
-  `statut` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `statut` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`patient_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_patient`
+-- Déchargement des données de la table `tbl_patient`
 --
 
 INSERT INTO `tbl_patient` (`patient_id`, `dossier_numero`, `nom_patient`, `prenom_patient`, `nip`, `telephone`, `contact_urgence`, `email_patient`, `nationalite`, `sexe_patient`, `smatrimonial`, `datenais`, `pcreated_at`, `pupdated_at`, `adresse`, `gsang`, `id_centre`, `statut`, `created_at`, `updated_at`) VALUES
@@ -1441,12 +1473,14 @@ INSERT INTO `tbl_patient` (`patient_id`, `dossier_numero`, `nom_patient`, `preno
 (78, 'MED/2025/04/07/1035', 'ABOKI', 'Nadège', 8575474, '+22911111111', '+22911111111', 'ab@gmail.com', 'Bielorusse', 'M', 'Céb', '1996-05-07', '2025-04-07 09:35:35', '2025-04-07 09:35:35', 'etetet', 'B', 1, 'complet', '2025-04-07 09:35:35', '2025-04-07 09:38:20'),
 (79, 'MED/2025/04/07/1142', 'ETET', 'CDGCJD', 748788, '+2291121', '+2291121', 'hdhdhd@gmail.com', 'ETDE', 'M', 'DTD', '2024-11-20', '2025-04-07 10:42:17', '2025-04-07 10:42:17', 'hcdjcdcd', 'B', 1, 'complet', '2025-04-07 10:42:17', '2025-04-07 10:45:58'),
 (80, 'MED/2025/04/07/1756', 'Marley', 'Bob', 2147483647, '+2296864948464', '+2296864948464', 'ni@gmail.com', 'Jamaïcaine', 'F', 'Calé', '1973-04-06', '2025-04-07 16:56:09', '2025-04-07 16:56:09', 'Hdjxy jdh', 'O-', 1, 'complet', '2025-04-07 16:56:09', '2025-04-07 16:57:44'),
-(81, 'MED/2025/04/08/1803', 'Bieber', 'Justin', 788587485, '01254585', NULL, NULL, 'beninoise', 'F', NULL, '1993-05-03', '2025-04-08 17:03:35', '2025-04-08 17:03:35', NULL, NULL, 0, NULL, '2025-04-08 19:03:35', '2025-04-08 19:03:35');
+(81, 'MED/2025/04/08/1803', 'Bieber', 'Justin', 788587485, '01254585', NULL, NULL, 'beninoise', 'F', NULL, '1993-05-03', '2025-04-08 17:03:35', '2025-04-08 17:03:35', NULL, NULL, 0, NULL, '2025-04-08 19:03:35', '2025-04-08 19:03:35'),
+(82, 'MED/2025/04/11/0944', 'ENIANLOKO', 'Ornice', 4567890, '6766706290', NULL, NULL, 'beninoise', 'M', NULL, '2025-04-11', '2025-04-11 08:44:51', '2025-04-11 08:44:51', NULL, NULL, 0, NULL, '2025-04-11 09:44:51', '2025-04-11 09:44:51'),
+(83, 'MED/2025/04/11/1222', 'HOUGBEDJI', 'Léandre', 4567892, '0040123425', NULL, NULL, 'beninoise', 'M', NULL, '1997-04-03', '2025-04-11 11:22:15', '2025-04-11 11:22:15', NULL, NULL, 0, NULL, '2025-04-11 12:22:15', '2025-04-11 12:22:15');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_payment`
+-- Structure de la table `tbl_payment`
 --
 
 DROP TABLE IF EXISTS `tbl_payment`;
@@ -1461,7 +1495,7 @@ CREATE TABLE IF NOT EXISTS `tbl_payment` (
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_payment`
+-- Déchargement des données de la table `tbl_payment`
 --
 
 INSERT INTO `tbl_payment` (`payment_id`, `payment_method`, `payment_status`, `created_at`, `updated_at`, `id_centre`) VALUES
@@ -1477,271 +1511,275 @@ INSERT INTO `tbl_payment` (`payment_id`, `payment_method`, `payment_status`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_prestation`
+-- Structure de la table `tbl_prestation`
 --
 
 DROP TABLE IF EXISTS `tbl_prestation`;
 CREATE TABLE IF NOT EXISTS `tbl_prestation` (
   `prestation_id` int NOT NULL AUTO_INCREMENT,
-  `nom_prestation` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `nom_prestation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tarif` int NOT NULL,
   `prix_analyse_assure` int NOT NULL,
   `service` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'LABORATOIRE',
-  `category` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `category` enum('HEMATOLOGIE','PARASITOLOGIE','SEROLOGIE','BIOCHIMIE','IMMUNOLOGIE') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `centre_id` int NOT NULL,
   `user_id` bigint NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `result_params` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`prestation_id`),
   KEY `tbl_centre` (`centre_id`),
   KEY `users` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_prestation`
+-- Déchargement des données de la table `tbl_prestation`
 --
 
-INSERT INTO `tbl_prestation` (`prestation_id`, `nom_prestation`, `tarif`, `prix_analyse_assure`, `service`, `category`, `centre_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'Ablation sonde urinaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(2, 'Accouchement dirigé par sage fem', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(3, 'Accouchement-Encadré par Gynéco', 30000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(4, 'Accouchement-Gynécologue', 50000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(5, 'ACCOUChement sage femme', 16000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(6, 'ACIDE URIQUE', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(7, 'Acte cerclage', 80000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(8, 'Acte Médecine générale', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(9, 'Activités thérapeutiques', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(10, 'AKOP (Amibe Kyste Oeuf Parasite)', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(11, 'AMIU Gynécologue', 35000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(12, 'AMIU sage femme', 30000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(13, 'Anesthésie locale', 100, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(14, 'Anesthésie Médecin', 30000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(15, 'ANESTHESIE MEDECIN REANIMATEUR', 50000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(16, 'AntigèneHbs(AgHBs)', 4000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(17, 'Appendicectomie', 180000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(18, 'ASLO', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(19, 'Aspiration auriculaire par oreil', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(20, 'Aspiration nouveau-né', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(21, 'Atelle', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(22, 'Avis gynécologique/48h', 4000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(23, 'Bandage Elastique', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(24, 'Bandelette urinaire', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(25, 'Biopsie du col', 25000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(26, 'BLOC OPERATOIRE CAMP CHIRUGICAL', 70000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(27, 'Calcémie', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(28, 'Carnet CPN', 300, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(29, 'CARNET DE SOIN', 100, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(30, 'Carte infantile fille', 500, 0, 'VACCINATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(31, 'Certificat de coups et blessure', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(32, 'Certificat de décès', 5000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(33, 'Certificat de dispense de sport', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(34, 'Certificat de visite contre visi', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(35, 'Certificat de voyage sur grosses', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(36, 'Certificat Médical de repos', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(37, 'Certificat pour permis de condui', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(38, 'Certificat Prénuptial', 10000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(39, 'Césarienne (A.I.A)', 180000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(40, 'Cholestérol HDL', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(41, 'Cholestérol total', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(42, 'Circoncision', 35000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(43, 'CIRCONCISION ff', 60000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(44, 'Confection d\'un anneau de FANTON', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(45, 'Confection plâtre', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(46, 'Consultation anesthésique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(47, 'Consultation Cardio+ECG', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(48, 'Consultation cardiologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(49, 'Consultation chirurgicale', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(50, 'Consultation Chirurgie Pédiatriq', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(51, 'Consultation dermatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(52, 'Consultation gynécologique', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(53, 'Consultation gynécologique perso', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(54, 'Consultation Médecine Générale', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(55, 'Consultation Médicale Dr ODJO', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(56, 'Consultation Neurologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(57, 'Consultation ORL', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(58, 'Consultation Pédiatrique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(59, 'Consultation Rhumatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(60, 'Consultation Traumatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(61, 'Consultation Urologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(62, 'CONSULTATION VOYAGE', 1500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(63, 'Contrôle tension artérielle', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(64, 'Coup de sonde', 3000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(65, 'CPN (1ere consultation)', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(66, 'CPN (suivi)', 1100, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(67, 'CPON', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(68, 'Créatininémie', 2000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(69, 'CRP (C-Réactive Protéine)', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(70, 'Cystotomie', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(71, 'Decerclage', 25000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(72, 'Déclenchement (travail d\'accouch', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(73, 'Dossier Médical', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(74, 'DOUBLE MISE EN OBSERVATION VIP', 10000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(75, 'DUPLICATA FICHE DE NAISSANCE', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(76, 'ECBU', 10000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(77, 'ECG', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(78, 'Echo doppler Veineuse', 30000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(79, 'Echographie abdominale', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(80, 'Echographie abdominopelvienne', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(81, 'ECHOGRAPHIE ENDOVAGINALE/ T', 7500, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(82, 'Echographie mammaire', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(83, 'Echographie Partie molle', 20000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(84, 'Echographie pelvienne endovagina', 10000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(85, 'Echographie pelvienne gynécologu', 7000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(86, 'Echographie rénale', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(87, 'Echographie testiculaire', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(88, 'Echographie thyroïdienne', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(89, 'Echographie vésico-prostatique', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(90, 'Écho. obstétricale/pelvienne Tec', 6500, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(91, 'Electrophorèse de l\'hémoglobine', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(92, 'Enregistrement RCF', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(93, 'Episiotomie + suture', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(94, 'Expulsion de produit de concepti', 12000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(95, 'Extraction corps étranger ORL', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(96, 'Forfait bloc', 70000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(97, 'Forfait bloc DIRECT-AID', 50000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(98, 'FORFAIT CIRCONCISION', 90000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(99, 'FORFAIT GANTS', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(100, 'Forfait isoflurane (pour 2 heure', 10000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(101, 'FORFAIT NODULECTOMIE', 20000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(102, 'Forfait PLATRE', 45000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(103, 'Forfait plâtre Dr AHONONGA', 90400, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(104, 'Frénectomie', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(105, 'GEDP (Goutte épaisse)', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(106, 'Glycémie à jeun', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(107, 'Glycémie capillaire', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(108, 'GsRh (Groupage sanguin rhésus)', 2000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(109, 'Hémoglobine Glyqué', 12000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(110, 'Hospi. journalière urgences', 5000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(111, 'Hospitalisation journalière simp', 3000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(112, 'Hospitalisation journalière VIP', 15000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(113, 'Hospitalisation salle de réveil', 10000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(114, 'HSG (Hystérosalpingographie) + p', 27000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(115, 'Imagerie', 18500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(116, 'Infiltration du génou', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(117, 'Injection intramusculaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(118, 'Injection intraveineuse', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(119, 'Injection sous-cutanée', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(120, 'Injection VAT', 200, 0, 'VACCINATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(121, 'Ionogramme sanguin', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(122, 'K acte spécialisé', 1000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(123, 'Laboratoire', 125300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(124, 'Lavage auriculaire par oreille', 2000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(125, 'Lavage oculaire', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(126, 'Lavage rhinopharyngé (nasal) par', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(127, 'Lavement baryté', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(128, 'Magnesémie', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(129, 'Mise en observation horaire aux', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(130, 'Mise en observation VIP', 5000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(131, 'Monitoring horaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(132, 'Monitoring RCF horaire', 500, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(133, 'Mté Déclenchement travail d\'acco', 10000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(134, 'Myomectomie', 200000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(135, 'NB (Numération des blancs)', 1000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(136, 'Nébulisation par séance', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(137, 'Nécrosectomie', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(138, 'NFS', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(139, 'NFS + Plaquettes', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(140, 'Nodulectomie', 60000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(141, 'Oxygénothérapie horaire', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(142, 'Pansement par séance', 800, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(143, 'Pansement Quotidien (forfait)', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(144, 'Pansement quotidien (forfait+ GA', 700, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(145, 'PERITONITE AIGUE', 250000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(146, 'PF LAFIA INJECTABLE', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(147, 'PGS', 200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(148, 'Ponction articulaire', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(149, 'Pose cathéter pour patient exter', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(150, 'Pose de platre', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(151, 'Pose de sonde urinaire', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(152, 'Pose DIU', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(153, 'Pose DIU Gynécologue', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(154, 'Pose et surveillance de perfusio', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(155, 'Pose jadelle', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(156, 'Pose jadelle gynécologue', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(157, 'Prise de poids', 200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(158, 'Produits pharmaceutiques', 80200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(159, 'PSA', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(160, 'Rapport médical', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(161, 'Retrait DIU Gynécologue', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(162, 'Retrait jadelle', 2500, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(163, 'Retrait jadelle Gynécologue', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(164, 'Révision utérine', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(165, 'RUBEOLE', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(166, 'Rx ASP (Abdomen Sans Préparation', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(167, 'Rx Avant-bras face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(168, 'Rx Bassin de face', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(169, 'Rx Bassin face + 2 obliques', 18000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(170, 'Rx Bassin face + hanche profil', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(171, 'Rx Bras face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(172, 'Rx Calcanéus face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(173, 'Rx Cheville face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(174, 'Rx Clavicule face', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(175, 'Rx Coccyx face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(176, 'Rx Coude face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(177, 'Rx Crâne face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(178, 'Rx Doigt face/profil', 8500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(179, 'Rx Epaule face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(180, 'Rx Epaule f/p+rotation intern et', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(181, 'Rx Fémur face/profil', 12500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(182, 'Rx Genou face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(183, 'Rx Genou f/p + ¾', 12000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(184, 'Rx Grill costal face + oblique', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(185, 'Rx Grill costal (thorax osseux)', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(186, 'Rx Hanche face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(187, 'Rx Hirtz (crâne)', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(188, 'Rx Jambe face/profil', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(189, 'Rx Main face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(190, 'Rx Main f/p + oblique', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(191, 'Rx Mastoïde', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(192, 'Rx Maxillaire défilé deux côtés', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(193, 'Rx Maxillaire défilé un côté', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(194, 'Rx Membre inferieur avec mesure', 22000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(195, 'Rx Orteil face/profil', 8500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(196, 'Rx Os propres du nez', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(197, 'Rx Patella face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(198, 'Rx Pied face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(199, 'Rx Pied f/p + ¾', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(200, 'Rx Poignet face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(201, 'Rx Pulmonaire face', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(202, 'Rx Pulmonaire face/profil', 14500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(203, 'Rx pulmonaire voyageur (forfait)', 6500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(204, 'Rx Rachis cervical face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(205, 'Rx Rachis cervical f/p + ¾', 18000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(206, 'Rx Rachis dorsal face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(207, 'Rx Rachis lombaire face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(208, 'Rx Rachis lombaire f/p + ¾', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(209, 'Rx Rachis lombosacré face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(210, 'Rx Scapula face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(211, 'Rx Sinus Blondeau', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(212, 'Rx Sternum face/profil', 13500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(213, 'SDW (Séro Diagnostic de Widal)', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(214, 'Séance de kinésithérapie', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(215, 'SEROLOGIE HCV EXT', 14000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(216, 'Sérologie HIV', 2000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(217, 'Sérologie HVC', 14000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(218, 'Suture par unité de point', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(219, 'Taux d\'hémoglobine (Tx d\'Hb)', 1000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(220, 'TBG Sérique', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(221, 'TBG Urinaire', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(222, 'TCK', 5500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(223, 'Télécœur', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(224, 'TOGD (Transit oesogastroduodénal', 25500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(225, 'TOXOPLASMOSE', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(226, 'TPHA', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(227, 'TP (Temps de prothrombine)', 5500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(228, 'Transaminases ALAT (TGP)+ASAT(TG', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(229, 'Triglycérides', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(230, 'UCR (Urétrocystographieretrograd', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(231, 'Urée', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(232, 'VDRL', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(233, 'VITAMINE D', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(234, 'VS (Vitesse de sédimentation)', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30'),
-(235, 'Nom Analyse', 150000, 22155, 'LABORATOIRE', 'SEROLOGIE', 1, 2, '2025-04-04 17:15:03', '2025-04-04 17:15:03');
+INSERT INTO `tbl_prestation` (`prestation_id`, `nom_prestation`, `tarif`, `prix_analyse_assure`, `service`, `category`, `centre_id`, `user_id`, `created_at`, `updated_at`, `result_params`) VALUES
+(1, 'Ablation sonde urinaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(2, 'Accouchement dirigé par sage fem', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(3, 'Accouchement-Encadré par Gynéco', 30000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(4, 'Accouchement-Gynécologue', 50000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(5, 'ACCOUChement sage femme', 16000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(6, 'ACIDE URIQUE', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(7, 'Acte cerclage', 80000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(8, 'Acte Médecine générale', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(9, 'Activités thérapeutiques', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(10, 'AKOP (Amibe Kyste Oeuf Parasite)', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(11, 'AMIU Gynécologue', 35000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(12, 'AMIU sage femme', 30000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(13, 'Anesthésie locale', 100, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(14, 'Anesthésie Médecin', 30000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(15, 'ANESTHESIE MEDECIN REANIMATEUR', 50000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(16, 'AntigèneHbs(AgHBs)', 4000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(17, 'Appendicectomie', 180000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(18, 'ASLO', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(19, 'Aspiration auriculaire par oreil', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(20, 'Aspiration nouveau-né', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(21, 'Atelle', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(22, 'Avis gynécologique/48h', 4000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(23, 'Bandage Elastique', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(24, 'Bandelette urinaire', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(25, 'Biopsie du col', 25000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(26, 'BLOC OPERATOIRE CAMP CHIRUGICAL', 70000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(27, 'Calcémie', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(28, 'Carnet CPN', 300, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(29, 'CARNET DE SOIN', 100, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(30, 'Carte infantile fille', 500, 0, 'VACCINATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(31, 'Certificat de coups et blessure', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(32, 'Certificat de décès', 5000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(33, 'Certificat de dispense de sport', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(34, 'Certificat de visite contre visi', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(35, 'Certificat de voyage sur grosses', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(36, 'Certificat Médical de repos', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(37, 'Certificat pour permis de condui', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(38, 'Certificat Prénuptial', 10000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(39, 'Césarienne (A.I.A)', 180000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(40, 'Cholestérol HDL', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(41, 'Cholestérol total', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(42, 'Circoncision', 35000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(43, 'CIRCONCISION ff', 60000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(44, 'Confection d\'un anneau de FANTON', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(45, 'Confection plâtre', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(46, 'Consultation anesthésique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(47, 'Consultation Cardio+ECG', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(48, 'Consultation cardiologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(49, 'Consultation chirurgicale', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(50, 'Consultation Chirurgie Pédiatriq', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(51, 'Consultation dermatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(52, 'Consultation gynécologique', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(53, 'Consultation gynécologique perso', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(54, 'Consultation Médecine Générale', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(55, 'Consultation Médicale Dr ODJO', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(56, 'Consultation Neurologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(57, 'Consultation ORL', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(58, 'Consultation Pédiatrique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(59, 'Consultation Rhumatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(60, 'Consultation Traumatologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(61, 'Consultation Urologique', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(62, 'CONSULTATION VOYAGE', 1500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(63, 'Contrôle tension artérielle', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(64, 'Coup de sonde', 3000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(65, 'CPN (1ere consultation)', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(66, 'CPN (suivi)', 1100, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(67, 'CPON', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(68, 'Créatininémie', 2000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(69, 'CRP (C-Réactive Protéine)', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(70, 'Cystotomie', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(71, 'Decerclage', 25000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(72, 'Déclenchement (travail d\'accouch', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(73, 'Dossier Médical', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(74, 'DOUBLE MISE EN OBSERVATION VIP', 10000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(75, 'DUPLICATA FICHE DE NAISSANCE', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(76, 'ECBU', 10000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(77, 'ECG', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(78, 'Echo doppler Veineuse', 30000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(79, 'Echographie abdominale', 15000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(80, 'Echographie abdominopelvienne', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(81, 'ECHOGRAPHIE ENDOVAGINALE/ T', 7500, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(82, 'Echographie mammaire', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(83, 'Echographie Partie molle', 20000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(84, 'Echographie pelvienne endovagina', 10000, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(85, 'Echographie pelvienne gynécologu', 7000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(86, 'Echographie rénale', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(87, 'Echographie testiculaire', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(88, 'Echographie thyroïdienne', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(89, 'Echographie vésico-prostatique', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(90, 'Écho. obstétricale/pelvienne Tec', 6500, 0, 'ECHOGHRAPHIE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(91, 'Electrophorèse de l\'hémoglobine', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(92, 'Enregistrement RCF', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(93, 'Episiotomie + suture', 5000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(94, 'Expulsion de produit de concepti', 12000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(95, 'Extraction corps étranger ORL', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(96, 'Forfait bloc', 70000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(97, 'Forfait bloc DIRECT-AID', 50000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(98, 'FORFAIT CIRCONCISION', 90000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(99, 'FORFAIT GANTS', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(100, 'Forfait isoflurane (pour 2 heure', 10000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(101, 'FORFAIT NODULECTOMIE', 20000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(102, 'Forfait PLATRE', 45000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(103, 'Forfait plâtre Dr AHONONGA', 90400, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(104, 'Frénectomie', 10000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(105, 'GEDP (Goutte épaisse)', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(106, 'Glycémie à jeun', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(107, 'Glycémie capillaire', 500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(108, 'GsRh (Groupage sanguin rhésus)', 2000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(109, 'Hémoglobine Glyqué', 12000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(110, 'Hospi. journalière urgences', 5000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(111, 'Hospitalisation journalière simp', 3000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(112, 'Hospitalisation journalière VIP', 15000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(113, 'Hospitalisation salle de réveil', 10000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(114, 'HSG (Hystérosalpingographie) + p', 27000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(115, 'Imagerie', 18500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(116, 'Infiltration du génou', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(117, 'Injection intramusculaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(118, 'Injection intraveineuse', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(119, 'Injection sous-cutanée', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(120, 'Injection VAT', 200, 0, 'VACCINATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(121, 'Ionogramme sanguin', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(122, 'K acte spécialisé', 1000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(123, 'Laboratoire', 125300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(124, 'Lavage auriculaire par oreille', 2000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(125, 'Lavage oculaire', 300, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(126, 'Lavage rhinopharyngé (nasal) par', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(127, 'Lavement baryté', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(128, 'Magnesémie', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(129, 'Mise en observation horaire aux', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(130, 'Mise en observation VIP', 5000, 0, 'HOSPITALISATION', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(131, 'Monitoring horaire', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(132, 'Monitoring RCF horaire', 500, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(133, 'Mté Déclenchement travail d\'acco', 10000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(134, 'Myomectomie', 200000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(135, 'NB (Numération des blancs)', 1000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(136, 'Nébulisation par séance', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(137, 'Nécrosectomie', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(138, 'NFS', 3500, 0, 'LABORATOIRE', 'HEMATOLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(139, 'NFS + Plaquettes', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(140, 'Nodulectomie', 60000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(141, 'Oxygénothérapie horaire', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(142, 'Pansement par séance', 800, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(143, 'Pansement Quotidien (forfait)', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(144, 'Pansement quotidien (forfait+ GA', 700, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(145, 'PERITONITE AIGUE', 250000, 0, 'BLOC OPERATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(146, 'PF LAFIA INJECTABLE', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(147, 'PGS', 200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(148, 'Ponction articulaire', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(149, 'Pose cathéter pour patient exter', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(150, 'Pose de platre', 20000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(151, 'Pose de sonde urinaire', 1000, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(152, 'Pose DIU', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(153, 'Pose DIU Gynécologue', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(154, 'Pose et surveillance de perfusio', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(155, 'Pose jadelle', 1000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(156, 'Pose jadelle gynécologue', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(157, 'Prise de poids', 200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(158, 'Produits pharmaceutiques', 80200, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(159, 'PSA', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(160, 'Rapport médical', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(161, 'Retrait DIU Gynécologue', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(162, 'Retrait jadelle', 2500, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(163, 'Retrait jadelle Gynécologue', 8000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(164, 'Révision utérine', 2000, 0, 'MATERNITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(165, 'RUBEOLE', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(166, 'Rx ASP (Abdomen Sans Préparation', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(167, 'Rx Avant-bras face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(168, 'Rx Bassin de face', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(169, 'Rx Bassin face + 2 obliques', 18000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(170, 'Rx Bassin face + hanche profil', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(171, 'Rx Bras face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(172, 'Rx Calcanéus face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(173, 'Rx Cheville face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(174, 'Rx Clavicule face', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(175, 'Rx Coccyx face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(176, 'Rx Coude face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(177, 'Rx Crâne face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(178, 'Rx Doigt face/profil', 8500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(179, 'Rx Epaule face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(180, 'Rx Epaule f/p+rotation intern et', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(181, 'Rx Fémur face/profil', 12500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(182, 'Rx Genou face/profil', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(183, 'Rx Genou f/p + ¾', 12000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(184, 'Rx Grill costal face + oblique', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(185, 'Rx Grill costal (thorax osseux)', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(186, 'Rx Hanche face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(187, 'Rx Hirtz (crâne)', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(188, 'Rx Jambe face/profil', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(189, 'Rx Main face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(190, 'Rx Main f/p + oblique', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(191, 'Rx Mastoïde', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(192, 'Rx Maxillaire défilé deux côtés', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(193, 'Rx Maxillaire défilé un côté', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(194, 'Rx Membre inferieur avec mesure', 22000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(195, 'Rx Orteil face/profil', 8500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(196, 'Rx Os propres du nez', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(197, 'Rx Patella face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(198, 'Rx Pied face/profil', 8000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(199, 'Rx Pied f/p + ¾', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(200, 'Rx Poignet face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(201, 'Rx Pulmonaire face', 10500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(202, 'Rx Pulmonaire face/profil', 14500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(203, 'Rx pulmonaire voyageur (forfait)', 6500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(204, 'Rx Rachis cervical face/profil', 13000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(205, 'Rx Rachis cervical f/p + ¾', 18000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(206, 'Rx Rachis dorsal face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(207, 'Rx Rachis lombaire face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(208, 'Rx Rachis lombaire f/p + ¾', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(209, 'Rx Rachis lombosacré face/profil', 15000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(210, 'Rx Scapula face/profil', 9000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(211, 'Rx Sinus Blondeau', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(212, 'Rx Sternum face/profil', 13500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(213, 'SDW (Séro Diagnostic de Widal)', 3500, 0, 'LABORATOIRE', 'SEROLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', 'TO;AO;BO;CO;TH;AH;BH;CH'),
+(214, 'Séance de kinésithérapie', 5000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(215, 'SEROLOGIE HCV EXT', 14000, 0, 'SPECIALITE', 'SEROLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(216, 'Sérologie HIV', 2000, 0, 'LABORATOIRE', 'SEROLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(217, 'Sérologie HVC', 14000, 0, 'SPECIALITE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(218, 'Suture par unité de point', 500, 0, 'MEDECINE GENERALE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(219, 'Taux d\'hémoglobine (Tx d\'Hb)', 1000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(220, 'TBG Sérique', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(221, 'TBG Urinaire', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(222, 'TCK', 5500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(223, 'Télécœur', 10000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(224, 'TOGD (Transit oesogastroduodénal', 25500, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(225, 'TOXOPLASMOSE', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(226, 'TPHA', 3500, 0, 'LABORATOIRE', 'SEROLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(227, 'TP (Temps de prothrombine)', 5500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(228, 'Transaminases ALAT (TGP)+ASAT(TG', 5000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(229, 'Triglycérides', 3500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(230, 'UCR (Urétrocystographieretrograd', 25000, 0, 'RADIO', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(231, 'Urée', 1500, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(232, 'VDRL', 3000, 0, 'LABORATOIRE', 'SEROLOGIE', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(233, 'VITAMINE D', 15000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(234, 'VS (Vitesse de sédimentation)', 3000, 0, 'LABORATOIRE', '', 1, 0, '2025-04-04 18:27:30', '2025-04-04 18:27:30', NULL),
+(235, 'Nom Analyse', 150000, 22155, 'LABORATOIRE', 'SEROLOGIE', 1, 2, '2025-04-04 17:15:03', '2025-04-04 17:15:03', NULL),
+(236, 'SDW (Séro Diagnostic de Widal)', 3500, 0, 'LABORATOIRE', 'HEMATOLOGIE', 0, 0, '2025-04-26 13:01:05', '2025-04-26 13:01:05', 'TO;AO;BO;CO;TH;AH;BH;CH'),
+(237, 'SDW (Séro Diagnostic de Widal)', 3500, 0, 'LABORATOIRE', 'HEMATOLOGIE', 0, 0, '2025-04-26 13:04:39', '2025-04-26 13:04:39', 'TO;AO;BO;CO;TH;AH;BH;CH'),
+(238, 'SDW (Séro Diagnostic de Widal)', 3500, 0, 'LABORATOIRE', 'HEMATOLOGIE', 0, 0, '2025-04-26 13:04:43', '2025-04-26 13:04:43', 'TO;AO;BO;CO;TH;AH;BH;CH');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_prise_en_charge`
+-- Structure de la table `tbl_prise_en_charge`
 --
 
 DROP TABLE IF EXISTS `tbl_prise_en_charge`;
@@ -1767,7 +1805,7 @@ CREATE TABLE IF NOT EXISTS `tbl_prise_en_charge` (
 ) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_prise_en_charge`
+-- Déchargement des données de la table `tbl_prise_en_charge`
 --
 
 INSERT INTO `tbl_prise_en_charge` (`id_prise_en_charge`, `patient_id`, `user_role_id`, `last_consult_user_id`, `last_consult_user_role_id`, `user_id`, `maux`, `temp`, `etat_consultation`, `etat_observation`, `etat_hospitalisation`, `observation`, `ordonnance`, `created_at`, `updated_at`, `id_centre`, `etape`) VALUES
@@ -1845,7 +1883,7 @@ INSERT INTO `tbl_prise_en_charge` (`id_prise_en_charge`, `patient_id`, `user_rol
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_products`
+-- Structure de la table `tbl_products`
 --
 
 DROP TABLE IF EXISTS `tbl_products`;
@@ -1869,7 +1907,7 @@ CREATE TABLE IF NOT EXISTS `tbl_products` (
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_products`
+-- Déchargement des données de la table `tbl_products`
 --
 
 INSERT INTO `tbl_products` (`product_id`, `product_name`, `category_id`, `rayon_id`, `srayon_id`, `manufacture_id`, `product_description`, `product_price`, `product_image`, `image_un`, `publication_status`, `stock`, `stock_defective`, `updated_at`, `id_centre`) VALUES
@@ -1885,7 +1923,7 @@ INSERT INTO `tbl_products` (`product_id`, `product_name`, `category_id`, `rayon_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_rayon`
+-- Structure de la table `tbl_rayon`
 --
 
 DROP TABLE IF EXISTS `tbl_rayon`;
@@ -1900,7 +1938,7 @@ CREATE TABLE IF NOT EXISTS `tbl_rayon` (
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_rayon`
+-- Déchargement des données de la table `tbl_rayon`
 --
 
 INSERT INTO `tbl_rayon` (`rayon_id`, `category_id`, `rayon_name`, `rayon_description`, `publication_status`, `id_centre`) VALUES
@@ -1918,7 +1956,7 @@ INSERT INTO `tbl_rayon` (`rayon_id`, `category_id`, `rayon_name`, `rayon_descrip
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_reactif`
+-- Structure de la table `tbl_reactif`
 --
 
 DROP TABLE IF EXISTS `tbl_reactif`;
@@ -1933,7 +1971,7 @@ CREATE TABLE IF NOT EXISTS `tbl_reactif` (
 ) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_reactif`
+-- Déchargement des données de la table `tbl_reactif`
 --
 
 INSERT INTO `tbl_reactif` (`reactif_id`, `reactif_nom`, `description`, `stock`, `id_centre`) VALUES
@@ -1995,7 +2033,7 @@ INSERT INTO `tbl_reactif` (`reactif_id`, `reactif_nom`, `description`, `stock`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_reactif_used`
+-- Structure de la table `tbl_reactif_used`
 --
 
 DROP TABLE IF EXISTS `tbl_reactif_used`;
@@ -2011,7 +2049,7 @@ CREATE TABLE IF NOT EXISTS `tbl_reactif_used` (
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_reactif_used`
+-- Déchargement des données de la table `tbl_reactif_used`
 --
 
 INSERT INTO `tbl_reactif_used` (`id_reactif_used`, `reactif_id`, `id_analyse`, `qty`, `user_id`, `id_centre`, `date_used`) VALUES
@@ -2031,7 +2069,7 @@ INSERT INTO `tbl_reactif_used` (`id_reactif_used`, `reactif_id`, `id_analyse`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_receipt`
+-- Structure de la table `tbl_receipt`
 --
 
 DROP TABLE IF EXISTS `tbl_receipt`;
@@ -2050,7 +2088,7 @@ CREATE TABLE IF NOT EXISTS `tbl_receipt` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_receipt`
+-- Déchargement des données de la table `tbl_receipt`
 --
 
 INSERT INTO `tbl_receipt` (`receipt_id`, `user_id`, `order_id`, `uid`, `qr_code`, `code_me_ce_fdgi`, `counters`, `nim`, `date_time`, `id_centre`) VALUES
@@ -2061,7 +2099,7 @@ INSERT INTO `tbl_receipt` (`receipt_id`, `user_id`, `order_id`, `uid`, `qr_code`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_resultats_analyse`
+-- Structure de la table `tbl_resultats_analyse`
 --
 
 DROP TABLE IF EXISTS `tbl_resultats_analyse`;
@@ -2078,43 +2116,58 @@ CREATE TABLE IF NOT EXISTS `tbl_resultats_analyse` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `observation` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `date_validite` date DEFAULT NULL,
+  `date_prelevement` date DEFAULT NULL,
   PRIMARY KEY (`id_resultat`),
   KEY `tbl_demand_ext` (`id_demande`),
   KEY `tbl_prestation` (`prestation_id`),
   KEY `personnel` (`personnel_id`),
   KEY `user_roles` (`user_role_id`),
   KEY `tbl_centre` (`centre_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_resultats_analyse`
+-- Déchargement des données de la table `tbl_resultats_analyse`
 --
 
-INSERT INTO `tbl_resultats_analyse` (`id_resultat`, `id_demande`, `prestation_id`, `resultat`, `path`, `personnel_id`, `user_role_id`, `centre_id`, `date_resultat`, `updated_at`, `content`, `observation`) VALUES
-(1, 48, 6, 'TEST POSITIF', 'Resultat_1743618837_.pdf', 5, 4, 1, '2025-04-02 18:33:57', '2025-04-02 18:33:57', '[]', 'TEST'),
-(2, 49, 236, NULL, 'Resultat_1743621063_.pdf', 5, 4, 1, '2025-04-02 19:11:03', '2025-04-02 19:11:03', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL),
-(3, 49, 236, NULL, 'Resultat_1743621083_.pdf', 5, 4, 1, '2025-04-02 19:11:23', '2025-04-02 19:11:23', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL),
-(4, 49, 236, NULL, 'Resultat_1743621140_.pdf', 5, 4, 1, '2025-04-02 19:12:20', '2025-04-02 19:12:20', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL),
-(5, 49, 236, NULL, 'Resultat_1743621734_.pdf', 5, 4, 1, '2025-04-02 19:22:14', '2025-04-02 19:22:14', '[{\"element\":\"El\\u00e9ment\",\"result\":\"TEST\",\"norme\":\"testtest3\"}]', NULL),
-(6, 49, 236, NULL, 'Resultat_1743621751_.pdf', 5, 4, 1, '2025-04-02 19:22:31', '2025-04-02 19:22:31', '[{\"element\":\"El\\u00e9ment\",\"result\":\"TEST\",\"norme\":\"testtest3\"}]', NULL),
-(7, 49, 236, NULL, 'Resultat_1743742669_.pdf', 5, 4, 1, '2025-04-04 04:57:51', '2025-04-04 04:57:51', '[{\"element\":\"El\\u00e9ment\",\"result\":\"555\",\"norme\":\"testtest3\"}]', NULL),
-(8, 51, 107, 'TEST POSITIF', 'Resultat_1743743417_.pdf', 5, 4, 1, '2025-04-04 05:10:17', '2025-04-04 05:10:17', '[]', 'néanti'),
-(9, 52, 106, 'TEST NEGATIVE', 'Resultat_1743743460_.pdf', 5, 4, 1, '2025-04-04 05:11:00', '2025-04-04 05:11:00', '[]', 'kkkk'),
-(10, 34, 236, NULL, 'Resultat_1743744624_.pdf', 5, 4, 1, '2025-04-04 05:30:24', '2025-04-04 05:30:24', '[{\"element\":\"El\\u00e9ment\",\"result\":\"n\\u00e9ant\",\"norme\":\"testtest3\"}]', NULL),
-(11, 41, 236, NULL, 'Resultat_1743779828_.pdf', 5, 4, 1, '2025-04-04 15:17:08', '2025-04-04 15:17:08', '[{\"element\":\"El\\u00e9ment\",\"result\":\"Test de r\\u00e9sulta\",\"norme\":\"testtest3\"}]', NULL),
-(12, 65, 159, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:11:23', '2025-04-08 17:11:23', '[]', 'Résultat d\'analyse PSA'),
-(13, 63, 216, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:11:41', '2025-04-08 17:11:41', '[]', 'Résultat d\'analyse HIV'),
-(14, 58, 233, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:11:54', '2025-04-08 17:11:54', '[]', 'EGD'),
-(15, 62, 221, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:21', '2025-04-08 17:12:21', '[]', 'Oh lala'),
-(16, 60, 235, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:30', '2025-04-08 17:12:30', '[]', 'Résultat'),
-(17, 59, 234, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:36', '2025-04-08 17:12:36', '[]', 'TETE'),
-(18, 61, 220, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:12:57', '2025-04-08 17:12:57', '[]', 'iefiefe'),
-(19, 64, 165, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:13:03', '2025-04-08 17:13:03', '[]', 'iiefe');
+INSERT INTO `tbl_resultats_analyse` (`id_resultat`, `id_demande`, `prestation_id`, `resultat`, `path`, `personnel_id`, `user_role_id`, `centre_id`, `date_resultat`, `updated_at`, `content`, `observation`, `date_validite`, `date_prelevement`) VALUES
+(1, 48, 6, 'TEST POSITIF', 'Resultat_1743618837_.pdf', 5, 4, 1, '2025-04-02 18:33:57', '2025-04-02 18:33:57', '[]', 'TEST', NULL, NULL),
+(2, 49, 236, NULL, 'Resultat_1743621063_.pdf', 5, 4, 1, '2025-04-02 19:11:03', '2025-04-02 19:11:03', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(3, 49, 236, NULL, 'Resultat_1743621083_.pdf', 5, 4, 1, '2025-04-02 19:11:23', '2025-04-02 19:11:23', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(4, 49, 236, NULL, 'Resultat_1743621140_.pdf', 5, 4, 1, '2025-04-02 19:12:20', '2025-04-02 19:12:20', '[{\"element\":\"El\\u00e9ment\",\"result\":\"test\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(5, 49, 236, NULL, 'Resultat_1743621734_.pdf', 5, 4, 1, '2025-04-02 19:22:14', '2025-04-02 19:22:14', '[{\"element\":\"El\\u00e9ment\",\"result\":\"TEST\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(6, 49, 236, NULL, 'Resultat_1743621751_.pdf', 5, 4, 1, '2025-04-02 19:22:31', '2025-04-02 19:22:31', '[{\"element\":\"El\\u00e9ment\",\"result\":\"TEST\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(7, 49, 236, NULL, 'Resultat_1743742669_.pdf', 5, 4, 1, '2025-04-04 04:57:51', '2025-04-04 04:57:51', '[{\"element\":\"El\\u00e9ment\",\"result\":\"555\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(8, 51, 107, 'TEST POSITIF', 'Resultat_1743743417_.pdf', 5, 4, 1, '2025-04-04 05:10:17', '2025-04-04 05:10:17', '[]', 'néanti', NULL, NULL),
+(9, 52, 106, 'TEST NEGATIVE', 'Resultat_1743743460_.pdf', 5, 4, 1, '2025-04-04 05:11:00', '2025-04-04 05:11:00', '[]', 'kkkk', NULL, NULL),
+(10, 34, 236, NULL, 'Resultat_1743744624_.pdf', 5, 4, 1, '2025-04-04 05:30:24', '2025-04-04 05:30:24', '[{\"element\":\"El\\u00e9ment\",\"result\":\"n\\u00e9ant\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(11, 41, 236, NULL, 'Resultat_1743779828_.pdf', 5, 4, 1, '2025-04-04 15:17:08', '2025-04-04 15:17:08', '[{\"element\":\"El\\u00e9ment\",\"result\":\"Test de r\\u00e9sulta\",\"norme\":\"testtest3\"}]', NULL, NULL, NULL),
+(12, 65, 159, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:11:23', '2025-04-08 17:11:23', '[]', 'Résultat d\'analyse PSA', NULL, NULL),
+(13, 63, 216, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:11:41', '2025-04-08 17:11:41', '[]', 'Résultat d\'analyse HIV', NULL, NULL),
+(14, 58, 233, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:11:54', '2025-04-08 17:11:54', '[]', 'EGD', NULL, NULL),
+(15, 62, 221, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:21', '2025-04-08 17:12:21', '[]', 'Oh lala', NULL, NULL),
+(16, 60, 235, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:30', '2025-04-08 17:12:30', '[]', 'Résultat', NULL, NULL),
+(17, 59, 234, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:12:36', '2025-04-08 17:12:36', '[]', 'TETE', NULL, NULL),
+(18, 61, 220, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-08 17:12:57', '2025-04-08 17:12:57', '[]', 'iefiefe', NULL, NULL),
+(19, 64, 165, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-08 17:13:03', '2025-04-08 17:13:03', '[]', 'iiefe', NULL, NULL),
+(20, 12, 225, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-10 17:42:52', '2025-04-10 17:42:52', '[]', 'jk', NULL, NULL),
+(21, 6, 232, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-10 17:43:03', '2025-04-10 17:43:03', '[]', 'ghjk', NULL, NULL),
+(23, 67, 216, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-11 08:53:28', '2025-04-11 08:53:28', '[]', 'RAS', '2025-04-18', '2025-04-11'),
+(24, 68, 226, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-11 08:54:03', '2025-04-11 08:54:03', '[]', 'RAS', '2025-04-18', '2025-04-11'),
+(25, 69, 232, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-11 08:54:16', '2025-04-11 08:54:16', '[]', 'RAS', '2025-04-18', '2025-04-11'),
+(26, 70, 138, NULL, 'non défini', 5, 4, 1, '2025-04-11 09:04:19', '2025-04-11 09:04:19', '[{\"element\":\"Hb\",\"category\":\"LEUCOCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"1.5 \\u00e0 6 G\\/l\"},{\"element\":\"NGR\",\"category\":\"LEUCOCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"3 \\u00e0 8 G\\/l\"},{\"element\":\"NGR\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"4 \\u00e0 6 T\\/L\"},{\"element\":\"Hb\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"12 \\u00e0 16 g \\/dl\"},{\"element\":\"Hte\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"36 \\u00e0 49 %\"},{\"element\":\"VGM\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"80 \\u00e0 90 fi\"},{\"element\":\"CCMH\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"30 \\u00e0 36%\"},{\"element\":\"TCMH\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"25 \\u00e0 32 pg\"},{\"element\":\"N R\\u00e9ticulocytes\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"20 \\u00e0 80 G\\/l\"},{\"element\":\"VS 1ere heure\",\"category\":\"ERYTROCYTOMETRIE\",\"result\":\"TEST\",\"norme\":\"3 \\u00e0 7 mm\"}]', 'RAS', '2025-04-18', '2025-04-11'),
+(27, 72, 105, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-11 11:26:53', '2025-04-11 11:26:53', '[]', 'RAS, réactif  +', '2025-04-18', '2025-04-11'),
+(28, 73, 226, 'TEST POSITIF', 'non défini', 5, 4, 1, '2025-04-11 11:27:32', '2025-04-11 11:27:32', '[]', 'RAS', '2025-04-18', '2025-04-11'),
+(29, 74, 216, 'TEST NEGATIVE', 'non défini', 5, 4, 1, '2025-04-11 11:27:57', '2025-04-11 11:27:57', '[]', 'RAS', '2025-04-18', '2025-04-11'),
+(30, 76, 213, 'Test réalisé', 'non défini', 5, 4, 1, '2025-04-26 13:07:56', '2025-04-26 13:07:56', '[]', 'TO(12)\r\nAO(12)\r\nBO(12)\r\nCO(12)\r\nTH(12)\r\nAH(12)\r\nBH(12)\r\nCH(12)\r\nAnalyse effectuée', '2025-04-24', '2025-04-17'),
+(31, 78, 213, 'TO( )\r\nAO( )\r\nBO( )\r\nCO( )\r\nTH( )\r\nAH( )\r\nBH( )\r\nCH( )', 'non défini', 5, 4, 1, '2025-04-27 09:27:32', '2025-04-27 09:27:32', '[]', 'ras', '2025-05-04', '2025-04-27'),
+(32, 80, 105, 'Absence de trophozoite de Plasmodium/Présence de trophozoite de Plasmodium falciparum', 'non défini', 5, 4, 1, '2025-04-27 09:45:08', '2025-04-27 09:45:08', '[]', 'RAS', '2025-05-04', '2025-04-27'),
+(33, 81, 216, 'POSITIF', 'non défini', 5, 4, 1, '2025-04-27 09:45:29', '2025-04-27 09:45:29', '[]', 'RAS', '2025-05-04', '2025-04-27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_srayon`
+-- Structure de la table `tbl_srayon`
 --
 
 DROP TABLE IF EXISTS `tbl_srayon`;
@@ -2129,7 +2182,7 @@ CREATE TABLE IF NOT EXISTS `tbl_srayon` (
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_srayon`
+-- Déchargement des données de la table `tbl_srayon`
 --
 
 INSERT INTO `tbl_srayon` (`srayon_id`, `rayon_id`, `srayon_name`, `srayon_description`, `publication_statu`, `id_centre`) VALUES
@@ -2146,7 +2199,7 @@ INSERT INTO `tbl_srayon` (`srayon_id`, `rayon_id`, `srayon_name`, `srayon_descri
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_type_analyse`
+-- Structure de la table `tbl_type_analyse`
 --
 
 DROP TABLE IF EXISTS `tbl_type_analyse`;
@@ -2165,7 +2218,7 @@ CREATE TABLE IF NOT EXISTS `tbl_type_analyse` (
 ) ENGINE=MyISAM AUTO_INCREMENT=245 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_type_analyse`
+-- Déchargement des données de la table `tbl_type_analyse`
 --
 
 INSERT INTO `tbl_type_analyse` (`id_type_analyse`, `libelle_analyse`, `prix_analyse`, `prix_analyse_assure`, `service`, `category`, `centre_id`, `created_at`, `updated_at`) VALUES
@@ -2417,7 +2470,7 @@ INSERT INTO `tbl_type_analyse` (`id_type_analyse`, `libelle_analyse`, `prix_anal
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Structure de la table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -2437,7 +2490,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Déchargement des données de la table `users`
 --
 
 INSERT INTO `users` (`user_id`, `user_role_id`, `email`, `id_centre`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
@@ -2455,7 +2508,7 @@ INSERT INTO `users` (`user_id`, `user_role_id`, `email`, `id_centre`, `email_ver
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_roles`
+-- Structure de la table `user_roles`
 --
 
 DROP TABLE IF EXISTS `user_roles`;
@@ -2472,7 +2525,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 ) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 --
--- Dumping data for table `user_roles`
+-- Déchargement des données de la table `user_roles`
 --
 
 INSERT INTO `user_roles` (`user_role_id`, `designation`, `title`, `sup_code`, `sup_code_id`, `is_consult`, `created_at`, `updated_at`) VALUES

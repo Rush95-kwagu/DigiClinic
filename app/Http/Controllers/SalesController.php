@@ -316,7 +316,7 @@ class SalesController extends Controller
         try {
             $statusReponseDto = $apiInvoiceInstance->apiInvoiceGet();
             
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Exception when calling SfeInvoiceApi->apiInvoiceGet: ', $e->getMessage(), PHP_EOL;
         }
 
@@ -356,7 +356,7 @@ class SalesController extends Controller
         try {
             $invoiceResponseDto = $apiInvoiceInstance->apiInvoicePost($body);
             print_r($invoiceResponseDto);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Exception when calling SfeInvoiceApi->apiInvoicePost: ', $e->getMessage(), PHP_EOL;
         }
 
@@ -371,11 +371,11 @@ class SalesController extends Controller
                     try {
                         $securityElementsDto = $apiInvoiceInstance->apiInvoiceUidConfirmPut($uid);
                         print_r($securityElementsDto);
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         echo 'Exception when calling SfeInvoiceApi->apiInvoiceUidConfirmPut: ', $e->getMessage(), PHP_EOL;
                     }
                   
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                   echo 'Exception when calling SfeInvoiceApi->apiInvoiceUidConfirmPut: ', $e->getMessage(), PHP_EOL;
               }
 

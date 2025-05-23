@@ -79,11 +79,11 @@
                                              <th width="30px">&nbsp;</th>
                                              <th width="30px">N° Dossier</th>
                                              <th width="60px">Patient</th>
-                                             <th width="100px">Mal/Maux </th>
+                                             <th width="100px">Motif d'admission </th>
                                              <th width="100px">Sexe </th>
-                                             <th width="100px">nip/numero</th>
-                                             <th width="100px">Adresse</th>
-                                             <th width="100px">Naissance</th>
+                                             {{-- <th width="100px">nip/numero</th> --}}
+                                             {{-- <th width="100px">Adresse</th> --}}
+                                             {{-- <th width="100px">Naissance</th> --}}
                                              </th>
                                              <th width="100px">
                                              Observation
@@ -114,12 +114,12 @@
                                              </td>
                                              <td><h4><span class="badge bg-danger">{{$v_prisenc->maux}}</span></h4></td>
                                              <td><h4><span class="badge bg-success">{{$v_prisenc->sexe_patient}}</span></h4></td>
-                                             <td>{{$v_prisenc->telephone}}</td>
-                                             <td>{{$v_prisenc->adresse}}</td>
+                                             {{-- <td>{{$v_prisenc->telephone}}</td> --}}
+                                             {{-- <td>{{$v_prisenc->adresse}}</td> --}}
                                             
-                                             <td>
+                                             {{-- <td>
                                                {{$v_prisenc->datenais}}
-                                             </td>
+                                             </td> --}}
                                              <td><h4><span class="badge bg-success">{{$v_prisenc->observation}}</span></h4></td>
                                              
                                              <td>
@@ -151,11 +151,11 @@
                                              <?php 
 
                                                $all_specialiste=DB::table('user_roles')
-                                               ->join('users','user_roles.user_role_id','=','users.user_role_id')
-                                               ->join('personnel','users.email','=','personnel.email')
-                                               ->where('is_consult',3)
-                                               ->where('personnel.id_centre',$centre_id)
-                                               ->get(); 
+                                                              ->join('users','user_roles.user_role_id','=','users.user_role_id')
+                                                              ->join('personnel','users.email','=','personnel.email')
+                                                              ->where('is_consult',3)
+                                                              ->where('personnel.id_centre',$centre_id)
+                                                              ->get(); 
                                                foreach ($all_specialiste as $v_specialist){ ?>  
                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
                                                {{$v_specialist->prenom}}
@@ -166,18 +166,20 @@
                                               <optgroup label="Consultation">
                                               
                                              <?php 
-
                                                $all_specialiste=DB::table('user_roles')
                                                         ->join('users','user_roles.user_role_id','=','users.user_role_id')
                                                         ->join('personnel','users.email','=','personnel.email')
                                                         ->whereIn('is_consult',[1, 4])
                                                         ->where('personnel.id_centre',$centre_id)
                                                         ->get(); 
-                                               foreach ($all_specialiste as $v_specialist){ ?>  
+                                                       
+                                               foreach ($all_specialiste as $v_specialist)
+                                               { ?>  
                                                <option value="{{$v_specialist->user_id}}">{{$v_specialist->title}}
                                                {{$v_specialist->prenom}}
                                                {{$v_specialist->nom}}</option>
-                                             <?php } ?>
+                                             <?php } 
+                                             ?>
                                               </optgroup>
                                              </select>
                                            </form>

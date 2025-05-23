@@ -30,7 +30,10 @@
     <link rel="stylesheet" href="{{asset('/frontend/fonts/remix/remixicon.css')}}">
     <link rel="stylesheet" href="{{asset('/frontend/css/main.min.css')}}">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-
+    {{-- ckeditor --}}
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.css"/>
+<script src="https://cdn.ckeditor.com/ckeditor5/45.0.0/ckeditor5.umd.js"></script>
+    <!-- Add if you use premium features. -->
     <!-- *************
     ************ Vendor Css Files *************
   ************ -->
@@ -586,6 +589,9 @@
                 <ul class="treeview-menu">
                   <li>
                     <a href="{{URL::to('consultations')}}">Consultations</a>
+                  </li>
+                  <li>
+                    <a href="{{route('agendas.index')}}">Rendez-vous</a>
                   </li>
                 </ul>
               </li>

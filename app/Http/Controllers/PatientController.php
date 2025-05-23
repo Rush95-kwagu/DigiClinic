@@ -24,7 +24,7 @@ class PatientController extends Controller
      public function AdminAuthCheck()
      {
          $user_role_id=Session::get('user_role_id');
-         if($user_role_id ==10){
+         if($user_role_id !=10){
              return;
          }
          else
@@ -49,5 +49,16 @@ class PatientController extends Controller
             return redirect()->back()->with('error', 'Une erreur s\'est produite.');
         }
         return view('patient.patient-infos', compact('patient_datas'));
+    }
+
+    public function updatePatientDatas($id)
+    {
+        $this->AdminAuthCheck();
+        $this->UserAuthCheck();
+
+        $patient_datas = DB::table('tbl_patient')->where('patient_id',$id)->first();
+
+        return view('Patient.edit-patient', compact('patient_datas'));
+
     }
 }

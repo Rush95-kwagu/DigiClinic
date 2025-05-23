@@ -128,16 +128,33 @@
                       
                    <div class="col-md-4">
                     <label for="validationCustom05" class="form-label"><b>Nationalité</b> <span style="color: red">*</span></label>
-                    <input type="text" name="nationalite" class="form-control" id="validationCustom05"/>
+                    {{-- <input type="text" name="nationalite" class="form-control" id="validationCustom05"/> --}}
+                    <select name="nationalite" id="" class="form-control">
+                      <option value="">Sélectionner la nationalité</option>
+                      <option value="N/A">N/A</option>
+                      <option value="Béninoise">Béninoise</option>
+                      <option value="Burkinabé">Burkinabé</option>
+                      <option value="Camerounaise">Camerounaise</option>
+                      <option value="Ivoirienne">Ivoirienne</option>
+                      <option value="Ghanéenne">Ghanaenne</option>
+                      <option value="Guinéenne">Guinéenne</option>
+                      <option value="Malienne">Malienne</option>
+                      <option value="Nigerienne">Nigerienne</option>
+                      <option value="Nigeriane">Nigeriane</option>
+                      <option value="Koweïtienne">Kowetienne</option>
+                      <option value="Togolaise">Togolaise</option>
+                    </select>
                     <div class="invalid-feedback">
                       Entrez la nationnalité du patient.
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <label for="lnaii"><b>Personne à contacter</b><span style="color: red">*</span></label><br>
-                    <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_urgence" required="" />
-                    <input type="hidden" id='lnaii' name="contact_urgence">
+                    <label for="validationCustomUsername" class="form-label"><b>Profession</b> <span style="color: red"></span></label>
+                    <div class="input-group has-validation">
+                      <input type="text" name="profession" class="form-control" id="validationCustomUsername"/>
+                    </div>
                   </div>
+                  
                       <div class="col-md-4">
                         <label for="validationCustomUsername" class="form-label"><b>Email</b></label>
                         <div class="input-group has-validation">
@@ -149,6 +166,7 @@
                           </div>
                         </div>
                       </div>
+                      
                       <div class="col-md-4">
                         <label for="validationCustom03" class="form-label"><b>Adresse de résidence</b></label>
                         <input type="text" name="adresse" class="form-control" id="validationCustom03"/>
@@ -158,19 +176,71 @@
                       </div>
                       
                       <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label"><b>Groupe Sanguin</b><span style="color:red">*</span></label>
-                        <input type="text" name="gsang" class="form-control" id="validationCustom05"/>
+                        <label for="validationCustom05" class="form-label"><b>Groupe Sanguin</b></label>
+                        {{-- <input type="text" name="gsang" class="form-control" id="validationCustom05"/> --}}
+                        <select class="form-control" name="gsang" id="validationCustom05">
+                          <option value="">Sélectionner le groupe sanguin</option>
+                          <option value="N/A">N/A</option>
+                          <option value="A+">A+</option>
+                          <option value="A-">A-</option>
+                          <option value="B+">B+</option>
+                          <option value="B-">B-</option>
+                          <option value="AB+">AB+</option>
+                          <option value="AB-">AB-</option>
+                          <option value="O+">O+</option>
+                          <option value="O-">O-</option>
+                        </select>
                         <div class="invalid-feedback">
-                          Entrez le groupe sanguin du patient.
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <label for="validationCustom05" class="form-label"><b>Situation matrimoniale</b><span style="color: red">*</span></label>
-                        <input type="text" name="smatrimonial" class="form-control" id="validationCustom05"/>
-                        <div class="invalid-feedback">
-                          Entrez la situation matrimoniale du patient.
-                        </div>
+                        <label for="validationCustom05" class="form-label"><b>Situation matrimoniale</b></label>
+                        {{-- <input type="text" name="smatrimonial" class="form-control" id="validationCustom05"/> --}}
+                        <select name="smatrimonial" id="" class="form-control">
+                          <option value="">Sélectionner la situation matrimoniale</option>
+                          <option value="N/A">N/A</option>
+                          <option value="Célibataire">Célibataire</option>
+                          <option value="Marié(e)">Marié(e)</option>
+                          <option value="Divorcé(e)">Divorcé(e)</option>
+                          <option value="Veuf(ve)">Veuf(ve)</option>
+                          <option value="Séparé(e)">Séparé(e)</option>
+                        </select>
                       </div>
+                      <div class="col-md-4">
+                        <label for="validationCustom03" class="form-label"><b>Réligion</b></label>
+                        <input type="text" name="religion" class="form-control" id="validationCustom03"/>
+                      </div>
+                      
+                      <div class="col-md-4">
+                        <label for="validationCustom05" class="form-label"><b>Ethnie</b></label>
+                        <input type="text" name="ethnie" class="form-control" id="validationCustom05"/>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="validationCustom05" class="form-label"><b>Electrophorèse HB</b></label>
+                        <input type="text" name="electrophorese_Hb" class="form-control" id="validationCustom05"/>
+                      </div> <br>
+                      <br>
+                        <h3>Personne à contacter en cas d'urgence</h3>
+                        <div class="col-md-4">
+                          <label for="validationCustom01" class="form-label"><b>Nom</b><span style="color: red">*</span></label>
+                            <input type="text" name="nom_contact_urgence" class="form-control" id="validationCustom01" >
+                            <div class="valid-feedback">Données acceptées</div>
+                          </div>
+                          <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label"><b>Prénom</b><span style="color: red">*</span></label>
+                            <input type="text" name="prenom_contact_urgence" class="form-control" id="validationCustom02">
+                            <div class="valid-feedback">Données acceptées</div>
+                          </div>
+                        <div class="col-md-4">
+                          <label for="lnaii"><b>Personne à contacter</b><span style="color: red">*</span></label><br>
+                          <input type="tel" class="form-control" type="tel" placeholder="Personne à contacter en cas d'urgence" id="phone2" name="mobile_number" required="" />
+                          <input type="hidden" id='lnaii' name="contact_urgence">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="validationCustom02" class="form-label"><b>Liens</b>
+                          <input type="text" name="lien_contact_urgence" class="form-control" id="validationCustom02">
+                          
+                        </div>
                   <input type="hidden" id="constante-count" name="constante_count" value="0">
                       <button class="btn btn-primary" type="submit">
                         Enregistrer les données
