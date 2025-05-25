@@ -14,6 +14,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Redirect; 
 use Illuminate\Validation\ValidationException;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\AnalysPayed;
+use App\Models\AnalysPayedResult;
+use App\Models\Demand;
+use App\Models\Prestation;
 
 
 class ConsultationController extends Controller
@@ -246,88 +250,77 @@ class ConsultationController extends Controller
 
                 ->get(); 
 
-        $all_demand_p=DB::table('tbl_analyse_payed')
-                ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
-                ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
-                ->where('tbl_analyse_payed.centre_id',$centre_id)
-                ->where('tbl_analyse_payed.is_closed',false)
-                ->select(
-                    'tbl_analyse_payed.*',
-                    'tbl_patient.*',
-                    'tbl_prestation.*'
-                    )
-                ->get();  
+       
+               $all_demand_p = AnalysPayed::with(['patient', 'prestation'])
+                ->where('centre_id', $centre_id)
+                ->where('is_closed', false)
+                ->get();
 
-
-
-                $all_demand_pt=DB::table('tbl_analyse_payed')
-                ->join('tbl_patient','tbl_analyse_payed.patient_id','=','tbl_patient.patient_id')
-                ->join('tbl_prestation','tbl_analyse_payed.prestation_id','=','tbl_prestation.prestation_id')
-                ->where('tbl_analyse_payed.centre_id',$centre_id)
-                ->where('tbl_analyse_payed.is_closed',true)
-                ->select(
-                    'tbl_analyse_payed.*',
-                    'tbl_patient.*',
-                    'tbl_prestation.*'
-                    )
-                ->get();  
-                    $all_analyse_t= $all_analyse_t->merge($all_demand_pt);
+                $all_demand_pt = AnalysPayed::with(['patient', 'prestation'])
+                ->where('centre_id', $centre_id)
+                ->where('is_closed', true)
+                ->get();
+                            
+                    //$all_analyse_t= $all_analyse_t->merge($all_demand_pt);
 
         return view('Analys.gestion_analyse')->with(array(
                     'all_analyse_nt'=>$all_analyse_nt,             
                     // 'all_analyse_nt'=>$all_analyse_np,             
                     'all_analyse_t'=>$all_analyse_t,   
                     'all_demand_p'=>$all_demand_p,
+                    'all_demand_pt'=>$all_demand_pt,
                 ));;
     }
 
 
     function getPatientAnalyse($id,$id_demande){
         
-       // Récupérer les informations du patient
-            $data = DB::table('tbl_patient as p')
-            ->where('p.patient_id', $id)
-            ->select(
-                'p.patient_id',
-                'p.nom_patient as nom',
-                'p.prenom_patient as prenom'
-            )
-            ->first();
+       // Récupération des infos du patient via AnalysPayed
+        $patient = AnalysPayed::with(['patient:patient_id,nom_patient,prenom_patient'])
+        ->where('patient_id', $id)
+        ->first()
+        ?->patient;
 
-            // Récupérer les analyses du patient
-            $analyses = DB::table('tbl_analyse_payed as a')
-            ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
-            ->leftJoin('tbl_resultats_analyse as r', 'a.payed_analyse_id', '=', 'r.id_demande') // Ajout de la jointure
-            ->where('a.patient_id', $id)
-            ->where('a.id_demande', $id_demande)
-           ->where('a.is_closed', false)
-            ->select(
-                'a.payed_analyse_id as analyse_id',
-                'a.date_paiement',
-                'a.id_demande as idDemand',
-                'a.montant_total as montant',
-                'a.is_closed',
-                'pr.prestation_id',
-                'pr.nom_prestation as libelle_analyse',
-                'pr.tarif as prix',
-                'r.*',
-            )
-            ->get();
-
-            // Combiner les résultats
-            $result = [
-            'patient_id' => $data->patient_id,
-            'nom' => $data->nom,
-            'prenom' => $data->prenom,
-            'analyses' => $analyses,
+        // Récupération des analyses associées
+        $analyses = AnalysPayed::with(['prestation', 'resultat']) // resultats = relation vers AnalysPayedResult
+        ->where('patient_id', $id)
+        ->where('id_demande', $id_demande)
+       // ->where('is_closed', false)
+        ->get()
+        ->map(function ($analyse) {
+            return [
+                'analyse_id' => $analyse->payed_analyse_id,
+                'date_paiement' => $analyse->date_paiement,
+                'idDemand' => $analyse->id_demande,
+                'montant' => $analyse->montant_total,
+                'is_closed' => $analyse->is_closed,
+                'prestation_id' => $analyse->prestation->prestation_id ?? null,
+                'libelle_analyse' => $analyse->prestation->nom_prestation ?? null,
+                'prix' => $analyse->prestation->tarif ?? null,
+                'resultat' => $analyse->resultat, // résultats d'analyse
             ];
-        //  dd($result);
+        });
 
-        return view('Analys.patient_analyse_details')->with(array(
-            'patient'=>$result,
-            'is_closed' => $analyses->where('is_closed',false)->count() > 0?false:true,
-            'idDemand'=>$analyses->first()?->idDemand,
-        ));
+        // Résultat combiné
+        $result = [
+            'patient_id' => $patient->patient_id,
+            'nom' => $patient->nom_patient,
+            'prenom' => $patient->prenom_patient,
+            'analyses' => $analyses,
+        ];
+     $ids = $analyses->pluck('analyse_id')->all();
+     $hasResults = $analyses->contains(function ($analyse) {
+            return !empty($analyse['resultat']);
+        });
+     // dd($hasResults);
+    return view('Analys.patient_analyse_details')->with([
+        'patient' => $result,
+        'ids' => $ids,
+        'can_closed' => $hasResults && $analyses->where('is_closed', false)->count() !== 0,
+        'is_closed' => $analyses->where('is_closed', false)->count() === 0,
+        'idDemand' => $analyses->first()['idDemand'] ?? null,
+    ]);
+
     }
 
     function editAnalyseResult($id,$patient_id){
@@ -574,8 +567,10 @@ class ConsultationController extends Controller
             ->where('id_centre', $centre_id)
             ->select('tbl_entite.*', 'tbl_centre.*')
             ->first();
+            $qr_code_details= $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat;
+            Demand::find($id_demande)->update(['qr_code_details'=>$qr_code_details]);
 
-            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate( $infos->code_centre."/".date('Y')."/".$analyse[0]->demandId."/".$analyse[0]->id_resultat));
+            $qrCode = base64_encode(QrCode::format('png')->size(200)->generate($qr_code_details));
 
            // $qrCode ="QrCode ici";
             $pdf = Pdf::loadView('Resultat.pdf-ext', [
@@ -667,7 +662,7 @@ class ConsultationController extends Controller
             "data1"=>$data1,
             "data2"=>$data2,
             "qrCode"=>$qrCode,
-            "path"=>$id."/".$analyse_id."/".$id_demande,
+            "path"=>$id."/".$id_demande,
             ]);
     }
 

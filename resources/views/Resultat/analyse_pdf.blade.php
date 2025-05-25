@@ -318,7 +318,7 @@
 	<div class="btn btn-secondary" onclick="printDiv('printMe')"><button contenteditable class="btn btn-primary"> Imprimer </button>
     </div>
 
-    <a class="print" href="{{URL::to('/generate-analyses-result/'.$path)}}"><button content class="print btn btn-danger"> Fermer </button>
+    <a class="print" href="{{URL::to('/gestion-analyses/'.$path)}}"><button content class="print btn btn-danger"> Fermer </button>
     </a>
     <br>
 	<body>
@@ -353,10 +353,6 @@
     <p><strong>Patient :</strong> {{ $patient }}</p>
     <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
     <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p>
-
-
-			
-
 			<table>
 				<thead>
 					<tr>
@@ -364,7 +360,7 @@
 						<th>Elément</th>
 						<th>Résultat</th>
 						<th>Référence</th>
-						<th>Date Validité</th>
+						<!-- <th>Date Validité</th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -374,7 +370,7 @@
 						<td>{{ $d['element'] }}</td>
 						<td>{{ $d['decision'] }}</td>
 						<td>{{ $d['observation'] }}</td>
-						<td>{{ $d['date_validite'] }}</td>
+						<!-- <td>{{ $d['date_validite'] }}</td> -->
 					</tr>
 					@endforeach
 				</tbody>
