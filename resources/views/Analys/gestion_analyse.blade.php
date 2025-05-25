@@ -34,6 +34,11 @@
                           <a class="nav-link" id="tab-twoAAA" data-bs-toggle="tab" href="#twoAAA" role="tab"
                             aria-controls="twoAAA" aria-selected="false">Analyses traités</a>
                         </li>
+
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link" id="tab-twoAAAA" data-bs-toggle="tab" href="#twoAAAA" role="tab"
+                            aria-controls="twoAAAA" aria-selected="false">Analyses externes traitées</a>
+                        </li>
                         
                       </ul>
                       <div class="tab-content" id="customTabContent">
@@ -182,21 +187,79 @@
                                         @foreach($all_demand_p as $d_analyse) 
                                         <tr>
                                           <td>
-                                            @if($d_analyse->sexe_patient == 'F')
+                                            @if($d_analyse->patient?->sexe_patient == 'F')
                                             <img style="width:30px; height:30px;" src="{{asset('frontend/F.png')}}" alt="sexe')}}" class="rounded-circle img-3x">
                                             @else
                                             <img style="width:30px; height:30px;" src="{{asset('frontend/M.png')}}" alt="sexe" class="rounded-circle img-3x">
                                             @endif
                                           </td>
                                           <td>
-                                            {{$d_analyse->prenom_patient}}
-                                            {{$d_analyse->nom_patient}}
+                                            {{$d_analyse->patient?->prenom_patient}}
+                                            {{$d_analyse->patient?->nom_patient}}
                                           </td>
                                           <td>
-                                           <h4><span class="badge bg-danger"> {{$d_analyse->nom_prestation}}</span></h4>
+                                           <h4><span class="badge bg-danger"> {{$d_analyse->prestation?->nom_prestation}}</span></h4>
                                           <td>
                                             2
-                                          <td>{{$d_analyse->telephone}}</td>
+                                          <td>{{$d_analyse->patient?->telephone}}</td>
+                                         <td>
+                                            <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient?->patient_id.'/'.$d_analyse->id_demande)}}"                                                    >
+                                              <i class="ri-file-edit-fill"></i></a>                    
+                                         </td>
+                                        </tr>
+                                      @endforeach
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                          <!-- Row ends -->
+                        </div>
+                         <div class="tab-pane fade" id="twoAAAA" role="tabpanel">
+                          <!-- Row starts -->
+                          <div class="row gx-3">
+                          <div class="col-sm-12">
+                            <div class="card mb-3">
+                              <div class="card-header">
+                                <h5 class="card-title">Analyses externes traitées</h5>
+                              </div>
+                              <div class="card-body">
+                                <div class="table-outer">
+                                  <div class="table-responsive">
+                                    <table class="table table-striped truncate m-0" id="example2">
+                                      <thead>
+                                        <tr>
+                                          <th></th>
+                                          <th width="60px">Patient</th>
+                                          <th width="100px">Analyse </th>
+                                          <th width="100px">Statut </th>
+                                          <th width="100px">nip/numero</th>
+                                          <th width="100px">Actions</th>
+                                          
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      @foreach($all_demand_pt as $d_analyse)    
+                                          <tr>
+                                          <td>
+                                            @if($d_analyse->patient?->sexe_patient == 'F')
+                                            <img style="width:30px; height:30px;" src="{{asset('frontend/F.png')}}" alt="sexe')}}" class="rounded-circle img-3x">
+                                            @else
+                                            <img style="width:30px; height:30px;" src="{{asset('frontend/M.png')}}" alt="sexe" class="rounded-circle img-3x">
+                                            @endif
+                                          </td>
+                                          <td>
+                                            {{$d_analyse->patient?->prenom_patient}}
+                                            {{$d_analyse->patient?->nom_patient}}
+                                          </td>
+                                          <td>
+                                           <h4><span class="badge bg-danger"> {{$d_analyse->prestation?->nom_prestation}}</span></h4>
+                                          <td>
+                                            2
+                                          <td>{{$d_analyse->patient?->telephone}}</td>
                                          <td>
                                             <a title="Résultat d'analyse" class="btn btn-outline-success" href="{{ URL::to('gestion-analyses/'.$d_analyse->patient_id.'/'.$d_analyse->id_demande)}}"                                                    >
                                               <i class="ri-file-edit-fill"></i></a>                    
@@ -213,7 +276,6 @@
                           </div>
                           <!-- Row ends -->
                         </div>
-                        
                       </div>
                     </div>
                   </div>

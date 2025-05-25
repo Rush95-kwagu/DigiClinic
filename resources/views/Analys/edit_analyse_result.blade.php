@@ -76,6 +76,9 @@
         <input type="hidden" name="prestation_id" value="{{$analyse->prestation_id}}">
         <input type="hidden" name="user_id" value="{{$user_id}}">
         <input type="hidden" name="user_role_id" value="{{$user_role_id}}">
+        <input type="hidden" name="patient_id" value="{{$patient_id}}">
+        <input type="hidden" name="id_demande" value="{{$analyse->id_demande}}">
+
 
             <table class="table table-sm table-stripped table-hover">
               <thead>

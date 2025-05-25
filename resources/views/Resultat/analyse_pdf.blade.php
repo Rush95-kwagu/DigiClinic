@@ -118,7 +118,9 @@
 		border-bottom: 2px solid #ccc;
 		padding-bottom: 10px;
 		}
-
+	h1{
+		font-size:25px;
+	}
     .header .top-text {
       color: #0077cc;
       font-weight: bold;
@@ -190,7 +192,9 @@
       font-size: 14px;
       color: #005baa;
     }
-
+ 	.page-break {
+            page-break-before: always;
+        }
 			@media print {
 				* { -webkit-print-color-adjust: exact; }
 				html { background: none; padding: 0; }
@@ -318,7 +322,7 @@
 	<div class="btn btn-secondary" onclick="printDiv('printMe')"><button contenteditable class="btn btn-primary"> Imprimer </button>
     </div>
 
-    <a class="print" href="{{URL::to('/generate-analyses-result/'.$path)}}"><button content class="print btn btn-danger"> Fermer </button>
+    <a class="print" href="{{URL::to('/gestion-analyses/'.$path)}}"><button content class="print btn btn-danger"> Fermer </button>
     </a>
     <br>
 	<body>
@@ -349,14 +353,10 @@
 	<br><br>
 
 
-    <h1>Résultats des analyses</h1>
-    <p><strong>Patient :</strong> {{ $patient }}</p>
-    <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
-    <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p>
-
-
-			
-
+    <h1>Résultats des analyses</h1><br>
+    <p><strong>Patient :</strong> {{ $patient }}</p><br>
+    <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p><br>
+    <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p><br>
 			<table>
 				<thead>
 					<tr>
@@ -364,7 +364,7 @@
 						<th>Elément</th>
 						<th>Résultat</th>
 						<th>Référence</th>
-						<th>Date Validité</th>
+						<!-- <th>Date Validité</th> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -374,25 +374,27 @@
 						<td>{{ $d['element'] }}</td>
 						<td>{{ $d['decision'] }}</td>
 						<td>{{ $d['observation'] }}</td>
-						<td>{{ $d['date_validite'] }}</td>
+						<!-- <td>{{ $d['date_validite'] }}</td> -->
 					</tr>
 					@endforeach
 				</tbody>
 			</table>
 		
+			<br> <br>
 
 
 		@foreach ($data2 as $d )
+		
 		<div class="page-break">
 		@include('Resultat.pdf-header')
 		<hr>
-			<h1>Résultats des analyses</h1>
-			<p><strong>Patient :</strong> {{ $patient }}</p>
-			<p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p>
-			<p><strong>Catégorie :</strong> {{$d['categorie']}}</p>
-			<p><strong>Analyse :</strong> {{$d['element']}}</p>
-			<p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p>
-			<p><strong>Date Validité :</strong> {{$d['date_validite']}}</p>
+			<h1>Résultats des analyses</h1> <br>
+			<p><strong>Patient :</strong> {{ $patient }}</p><br>
+			<p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p><br>
+			<p><strong>Catégorie :</strong> {{$d['categorie']}}</p><br>
+			<p><strong>Analyse :</strong> {{$d['element']}}</p><br>
+			<p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p><br>
+			<p><strong>Date Validité :</strong> {{$d['date_validite']}}</p><br>
 
 		<table>
 				<thead>
@@ -430,6 +432,7 @@
 
 				<!-- <img src="data:image/png;base64,{{ $qrCode }}" alt="QR Code" style="width: 150px;"> -->
 			</div>
+			<br> <br>
 		@endforeach
 		<footer>
 		

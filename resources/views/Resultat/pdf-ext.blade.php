@@ -143,7 +143,7 @@
                 <th>Elément</th>
                 <th>Résultat</th>
                 <th>Référence</th>
-                <th>Date Validité</th>
+                <!-- <th>Date Validité</th> -->
             </tr>
         </thead>
         <tbody>
@@ -153,7 +153,7 @@
                 <td>{{ $d['element'] }}</td>
                 <td>{{ $d['decision'] }}</td>
                 <td>{{ $d['observation'] }}</td>
-                <td>{{ $d['date_validite'] }}</td>
+                <!-- <td>{{ $d['date_validite'] }}</td> -->
             </tr>
             @endforeach
         </tbody>
