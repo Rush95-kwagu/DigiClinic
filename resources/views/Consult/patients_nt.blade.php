@@ -377,9 +377,9 @@
             $(selectElement).val(''); 
         }
     });
-});
+    });
 
     </script>
     </script>
-    @endsection
+@endsection
 @endsection

@@ -140,6 +140,12 @@ Repertoire patient
 </div>
 
 @section('Datatable')
+    <script>
+      $(document).ready(function() {
+      
+      $("#example2").DataTable();
+    });
+    </script>
 <script>
   $(document).ready(function () {
       let selectedAnalyses = [];

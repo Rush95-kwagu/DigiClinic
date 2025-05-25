@@ -530,7 +530,7 @@ if($prisenc_en_cours){
 }
     public function saveStep1(Request $request)
  {
-//    dd($request->all());
+    //    dd($request->all());
     $this->UserAuthCheck(); 
     $this->AccueilAuthCheck();
     
@@ -615,7 +615,7 @@ if($prisenc_en_cours){
 
        public function saveStep2(Request $request)
     {
-//    dd($request->all());
+    //    dd($request->all());
 
         $this->UserAuthCheck();
         $this->AccueilAuthCheck();
@@ -655,7 +655,7 @@ if($prisenc_en_cours){
         'constantes.*.valeur' => 'required|numeric',
         'constantes.*.unite' => 'required|string',
     ]);
-// dd($request->all());
+    // dd($request->all());
     DB::beginTransaction();
 
     try {
@@ -1009,7 +1009,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                  ->first();
 
    
-    $centreWords = explode(' ', $userCentre->nom_centre); // Séparer les mots du nom du centre
+    $centreWords = explode(' ', $userCentre->nom_centre); 
     $centreAbbreviation = isset($centreWords[1]) 
         ? strtoupper(substr($centreWords[1], 0, 3)) 
         : strtoupper(substr($centreWords[0], 0, 3)); 
@@ -1156,6 +1156,7 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                     'id_consultation' => $id_consultation,
                     'centre_id'=>$request->centre_id,
                     'patient_id' => $patient_id,
+                    // 'id_prise_en_charge'=>$constante['id_prise_en_charge'],
                     'constante_count'=>$request->constante_count,
                     'user_id' => Session::get('user_id'),   
                     'type' => $constante['type'],

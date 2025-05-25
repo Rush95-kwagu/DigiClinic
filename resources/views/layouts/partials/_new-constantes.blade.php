@@ -80,7 +80,7 @@
 </div>
 @php
     $form_action = route('hospitalisation.saveTraitement', [
-        'id_consultation' => $id_consultation,
+        'id_consultation' => $patient->consultation_id,
         'patient_id' => $patient->patient_id
     ]);
 @endphp
@@ -97,13 +97,18 @@
 
                     <input type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge ?? '' }}">
                     <input type="hidden" name="patient_id" value="{{ $patient->patient_id ?? '' }}">
-                    <input type="hidden" name="id_consultation" value="{{ $patient->id_consultation ?? '' }}">
+                    <input type="hidden" name="id_consultation" value="{{$id_consultation}}">
                     <input type="hidden" name="centre_id" value="{{ $centre_id ?? '' }}">
-
+                    
                     <div class="col-auto">
-                        <label class="classItems"><b>Soins appliqués</b></label>
+                        <label class="form-label" for="type_soins"> <b>Type de soins</b> <span
+                            class="text-danger">*</span></label>
+                          <input type="text" class="form-control" id="a1" name="type_soins" placeholder="type_soins" required> <br>
+                      
+                        <label class="classItems"><b>Soins appliqués</b><span
+                            class="text-danger">*</span></label>
                         <div class="controls col-12" style="height: 200px;">
-                            <textarea name="libelle_soins" rows="4" class="form-control" required></textarea>
+                            <textarea name="description_soins" rows="8" id="editor" class="form-control" required></textarea>
                         </div>
                     </div>
 

@@ -8,10 +8,13 @@ Dossier médical
     $user_id = Session::get('user_id');
     $centre_id = Session::get('centre_id');
     $patient = $all_details->first() ?? null;
+    use Carbon\Carbon;
+
 @endphp
 
 
           <!-- App body starts -->
+          
           <div class="app-body">
 
             <!-- Row starts -->
@@ -19,14 +22,15 @@ Dossier médical
               <div class="col-sm-12">
                 <div class="card mb-3">
                   <div class="card-body">
-                 
                     <div class="d-flex ">
                       <!-- Stats starts -->
                       <div class="d-flex align-items-center flex-wrap gap-4">
                         <div class="d-flex align-items-center">
+                          
                           <div class="icon-box lg bg-primary rounded-5 me-2">
                             <i class="ri-account-circle-line fs-3"></i>
                           </div>
+                          
                           <div>
                             <h4 class="mb-1">{{ $patient->nom_patient}} {{ $patient->prenom_patient }}</h4>
                             <p class="m-0">Nom du patient</p>
@@ -63,12 +67,13 @@ Dossier médical
                             </div>
                           </div>
                         @endif
+          
                         <div class="d-flex align-items-center">
                           <div class="icon-box lg bg-secondary rounded-5 me-2">
                             <i class="ri-stethoscope-line fs-3 text-body"></i>
                           </div>
                           <div>
-                            <h4 class="mb-1">{{ $patient->user_id }}</h4>
+                            <h4 class="mb-1">Dr. {{ $patient->nom }} {{ $patient->prenom }}</h4>
                             <p class="m-0">Médécin traitant</p>
                           </div>
                         </div>
@@ -98,15 +103,12 @@ Dossier médical
                 Nouvelles Constantes
             </button>
           </div>
-              @foreach ($last_constance as $type => $constante)
-                              
+             @foreach ($last_constance as $type => $constantes)
               <div class="col-xxl-3 col-sm-4 col-12">
                 <div class="card mb-3">
-                  
                   <div class="card-body">
                     <div class="text-center">
                       <div class="icon-box md bg-info rounded-5 m-auto">
-                        {{-- <i class="ri-capsule-line fs-3"></i> --}}
                         <i class="ri-stethoscope-line fs-3"></i>
                       </div>
                       <div class="mt-3">
@@ -114,141 +116,25 @@ Dossier médical
                         <p class="m-0 opacity-50">3 dernières visites</p>
                       </div>
                     </div>
-                    
-                    <div id=""></div>
-                    <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>{{ $constante->created_at}}</div>
-                        <div>{{ $constante->valeur}} {{ $constante->unite}}</div>
-                      </li>
-                      {{-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>16/04/2024</div>
-                        <div>190</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>10/04/2024</div>
-                        <div>230</div>
-                      </li> --}}
+
+                    <ul class="list-group mt-3">
+                      @foreach (collect($constantes)->take(3) as $constante)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          <div>{{ Carbon::parse($constante->created_at)->translatedFormat('l d F \à H\hi') }}</div>
+                          <div>{{ $constante->valeur }} {{ $constante->unite }}</div>
+                        </li>
+                      @endforeach
                     </ul>
+
                   </div>
                 </div>
               </div>
-              @endforeach
-              {{-- <div class="col-xxl-3 col-sm-6 col-12">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="text-center">
-                      <div class="icon-box md bg-info rounded-5 m-auto">
-                        <i class="ri-contrast-drop-2-line fs-3"></i>
-                      </div>
-                      <div class="mt-3">
-                        <h5>Taux de sucre</h5>
-                        <p class="m-0 opacity-50">3 récentes visites</p>
-                      </div>
-                    </div>
-                    <div id="sugarLevels"></div>
-                    <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>24/04/2024</div>
-                        <div>140</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>16/04/2024</div>
-                        <div>190</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>10/04/2024</div>
-                        <div>230</div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xxl-3 col-sm-6 col-12">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="text-center">
-                      <div class="icon-box md bg-success rounded-5 m-auto">
-                        <i class="ri-heart-pulse-line fs-3"></i>
-                      </div>
-                      <div class="mt-3">
-                        <h5>Fréquence cardiaque</h5>
-                        <p class="m-0 opacity-50">3 dernières visites</p>
-                      </div>
-                    </div>
-                    <div id="heartRate"></div>
-                    <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>24/04/2024</div>
-                        <div>110</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>16/04/2024</div>
-                        <div>120</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>10/04/2024</div>
-                        <div>100</div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xxl-3 col-sm-6 col-12">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="text-center">
-                      <div class="icon-box md bg-warning rounded-5 m-auto">
-                        <i class="ri-flask-line fs-3"></i>
-                      </div>
-                      <div class="mt-3">
-                        <h5>Le cholestérol</h5>
-                        <p class="m-0 opacity-50">3 dernières visites</p>
-                      </div>
-                    </div>
-                    <div id="clolesterolLevels"></div>
-                    <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>24/04/2024</div>
-                        <div>180</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>16/04/2024</div>
-                        <div>220</div>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>10/04/2024</div>
-                        <div>230</div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div> --}}
-            </div>
+            @endforeach
+          </div>
             <!-- Row ends -->
 
             <!-- Row starts -->
             <div class="row gx-3">
-              {{-- <div class="col-xl-6 col-sm-12">
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <h5 class="card-title">Health Insurance Claims</h5>
-                  </div>
-                  <div class="card-body">
-                    <div id="insuranceClaims"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-6 col-sm-12">
-                <div class="card mb-3">
-                  <div class="card-header">
-                    <h5 class="card-title">My Medical Expenses</h5>
-                  </div>
-                  <div class="card-body">
-                    <div id="medicalExpenses"></div>
-                  </div>
-                </div>
-              </div> --}}
               <div class="col-xl-7 col-sm-12">
                 <div class="card mb-3">
                   <div class="card-header">
@@ -257,6 +143,7 @@ Dossier médical
                       Nouveau soins
                   </button></h5>
                   </div>
+                 
                   <div class="card-body">
                     <div class="table-outer">
                       <div class="table-responsive">
@@ -266,28 +153,25 @@ Dossier médical
                               <th>Infirmier</th>
                               <th>Type de soins</th>
                               <th>Date</th>
-                              {{-- <th>Date</th> --}}
                               <th>Actions</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>
-                                <a href="#!" class="link-primary text-truncate">Reports 1 clinical
-                                  documentation</a>
-                              </td>
-                              <td>May-28, 2024</td>
-                              <td>
-                                
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#viewReportsModal1">
-                                Voir
-                              </button>
-                                </div>
-                              </td>
-                            </tr>
-                           
+                            @foreach ($allsoins_apk as $soins_apk)
+                              <tr>
+                                <td>{{ $soins_apk->user_id }}</td>
+                                <td>
+                                  <a href="{{ $soins_apk->id_soins }}" class="link-primary text-truncate">{{ $soins_apk->type_soins }}</a>
+                                </td>
+                                <td>{{ Carbon::parse($soins_apk->created_at)->translatedFormat('l d F \à H\hi') }}</td>
+                                <td>
+                                  <button class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#viewReportsModal{{ $soins_apk->id_soins }}">
+                                    Voir
+                                  </button>
+                                </td>
+                              </tr>
+                            @endforeach
                           </tbody>
                         </table>
                       </div>
@@ -312,28 +196,30 @@ Dossier médical
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>
-                                <img src="assets/images/user1.png" class="img-3x rounded-2" alt="Medical Dashboard"> Dr.
-                                Hector
-                              </td>
-                              {{-- <td>20/05/2024</td> --}}
-                              <td>20/05/2024</td>
-                              
-                              <td>
-                                <div class="d-inline-flex gap-1">
-                                  <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#viewReportsModal1">
-                                    Voir
-                                  </button>
-                                  <button class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top"
-                                    data-bs-title="Télécharger">
-                                    <i class="ri-file-download-line"></i>
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                            
+                            @foreach ($all_ordo as $ordo_content)
+                              <tr>
+                                <td>
+                                  <img src="assets/images/user1.png" class="img-3x rounded-2" alt="Medical Dashboard"> Dr.
+                                  {{ $ordo_content->user_id }}
+                                </td>
+                                {{-- <td>20/05/2024</td> --}}
+                                <td>
+                                  {{ Carbon::parse($ordo_content->date_ordo)->translatedFormat('l d F \à H\hi') }}
+                                </td>
+                                <td>
+                                  <div class="d-inline-flex gap-1">
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                      data-bs-target="#viewReportsModal{{ $ordo_content->id_ordo_traitement }}">
+                                      Voir
+                                    </button>
+                                    {{-- <button class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                                      data-bs-title="Télécharger">
+                                      <i class="ri-file-download-line"></i>
+                                    </button> --}}
+                                  </div>
+                                </td>
+                              </tr>
+                            @endforeach
                           </tbody>
                         </table>
                       </div>
@@ -355,7 +241,7 @@ Dossier médical
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    Are you sure you want to delete this report?
+                   Voulez-vous vraiment supprimer l'élément sélectionné ?
                   </div>
                   <div class="modal-footer">
                     <div class="d-flex justify-content-end gap-2">
@@ -368,105 +254,53 @@ Dossier médical
             </div>
 
             <!-- Modal View All Reports -->
-            <div class="modal fade" id="viewReportsModal1" tabindex="-1" aria-labelledby="viewReportsModalLabel1"
-              aria-hidden="true">
-              <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="viewReportsModalLabel1">
-                      View Reports
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
+            
+            @foreach ($allsoins_apk as $soin)
+              <div class="modal fade" id="viewReportsModal{{ $soin->id_soins }}" tabindex="-1" aria-labelledby="viewReportsModalLabel{{ $soin->id_soins }}"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="viewReportsModalLabel{{ $soin->id_soins }}">
+                        Détails du soin
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row g-3">
+                        <div class="col-sm-3">
+                          <strong>Type de soin :</strong> {{ $soin->type_soins }}
+                        </div>
+                        <div class="col-sm-4">
+                          <strong>Description :</strong> {{ $soin->description_soins }}
+                        </div>
+                        <div class="col-sm-3">
+                          <strong>Infirmier :</strong> {{ $soin->email }}
+                        </div>
+                        <div class="col-sm-2">
+                          <strong>Date :</strong> {{ Carbon::parse($soin->created_at)->translatedFormat('l d F \à H\hi') }}
 
-                    <!-- Row starts -->
-                    <div class="row g-3">
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Clinical Report</h6>
-                          <p class="m-0 small">10/05/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Dentist Report</h6>
-                          <p class="m-0 small">20/06/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Glucose Report</h6>
-                          <p class="m-0 small">30/06/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">X-ray Report</h6>
-                          <p class="m-0 small">26/08/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Ultrasound Report</h6>
-                          <p class="m-0 small">21/08/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Hypothermia Report</h6>
-                          <p class="m-0 small">15/04/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Discharge Report</h6>
-                          <p class="m-0 small">22/07/2024</p>
-                        </a>
-                      </div>
-                      <div class="col-sm-2">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center"
-                          data-bs-target="#viewReportsModal2" data-bs-toggle="modal">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Diabetes Report</h6>
-                          <p class="m-0 small">17/05/2024</p>
-                        </a>
+                        </div>
                       </div>
                     </div>
-                    <!-- Row ends -->
-
                   </div>
                 </div>
               </div>
-            </div>
+            @endforeach
 
             <!-- Modal View Single Report -->
-            <div class="modal fade" id="viewReportsModal2" tabindex="-1" aria-labelledby="viewReportsModalLabel2"
+            <div class="modal fade" id="viewReportsModal{{ $ordo_content->id_ordo_traitement }}" tabindex="-1" aria-labelledby="viewReportsModalLabel{{ $ordo_content->id_ordo_traitement }}"
               aria-hidden="true">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="viewReportsModalLabel2">
+                    <h5 class="modal-title" id="viewReportsModalLabel{{ $ordo_content->id_ordo_traitement }}">
                       <div class="d-flex align-items-center">
-                        <a href="#!" class="btn btn-sm btn-outline-primary me-2" data-bs-target="#viewReportsModal1"
+                        <a href="#!" class="btn btn-sm btn-outline-primary me-2" data-bs-target="#viewReportsModal{{ $ordo_content->id_ordo_traitement }}"
                           data-bs-toggle="modal">
                           <i class="ri-arrow-left-wide-fill"></i>
                         </a>
-                        Clinical Report
+                        Détails de l'ordonnance
                       </div>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -476,11 +310,7 @@ Dossier médical
                     <!-- Row starts -->
                     <div class="row g-3">
                       <div class="col-sm-12">
-                        <a href="#" class="d-flex flex-column bg-light p-2 rounded-2 text-center">
-                          <img src="assets/images/report.svg" class="img-fluid rounded-2" alt="Medical Dashboards">
-                          <h6 class="mt-3 mb-1 text-truncate">Clinical Report</h6>
-                          <p class="m-0 small">10/05/2024</p>
-                        </a>
+                        {{ $ordo_content->ordonnance_consultation }}
                       </div>
                     </div>
                     <!-- Row ends -->
@@ -489,7 +319,7 @@ Dossier médical
                 </div>
               </div>
             </div>
-@include('layouts.partials._new-constantes')
+    @include('layouts.partials._new-constantes')
           </div>
           <!-- App body ends -->
           @push('js')

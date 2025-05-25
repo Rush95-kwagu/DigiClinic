@@ -14,130 +14,62 @@
         <div class="alert alert-danger m-3">Aucune donnée patient disponible</div>
     @else
         <!-- Row starts -->
-            <!-- Row starts -->
-            <div class="row gx-3">
-              <div class="col-sm-12">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="d-flex ">
-                      <!-- Stats starts -->
-                      <div class="d-flex align-items-center flex-wrap gap-4">
-                        <div class="d-flex align-items-center">
-                          
-                          <div class="icon-box lg bg-primary rounded-5 me-2">
-                            <i class="ri-account-circle-line fs-3"></i>
-                          </div>
-                          
-                          <div>
-                            <h4 class="mb-1">{{ $patient->nom_patient}} {{ $patient->prenom_patient }}</h4>
-                            <p class="m-0">Nom du patient</p>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                          <div class="icon-box lg bg-success rounded-5 me-2">
-                            <i class="ri-women-line fs-3"></i>
-                          </div>
-                          <div>
-                            <h4 class="mb-1">{{ $patient->sexe_patient }}</h4>
-                            <p class="m-0">Sexe</p>
-                          </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                          <div class="icon-box lg bg-primary rounded-5 me-2">
-                            <i class="ri-arrow-right-up-line fs-3"></i>
-                          </div>
-                          <div>
-                            <h4 class="mb-1">{{ $patient->age_formatted }}</h4>
-                              <p class="m-0">Âge du patient </p>
-                           
-                          </div>
-                        </div>
-                        @if($patient->gsang)
-
-                        <div class="d-flex align-items-center">
-                          <div class="icon-box lg bg-danger rounded-5 me-2">
-                            <i class="ri-contrast-drop-2-line fs-3"></i>
-                          </div>
-                            <div>
-                              <h4 class="mb-1">{{ $patient->gsang }}</h4>
-                              <p class="m-0">Groupe sanguin</p>
-                            </div>
-                          </div>
-                        @endif
-                        <div class="d-flex align-items-center">
-                          <div class="icon-box lg bg-danger rounded-5 me-2">
-                            <i class="ri-stethoscope-line fs-3 text-body"></i>
-                          </div>
-                          <div>
-                            <h4 class="mb-1">{{ $patient->maux }}</h4>
-                            <p class="m-0">Motif d'admission</p>
-                          </div>
-                          <div>
+        <div class="row gx-3">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title"><u>Données du patient</u></h5>
+                        
+                        <div style="position: absolute; left: 50%; top: 5px; transform: translateX(-80%);">
+                            <h5 class="card-title ">
+                                <u>Motif d'admission</u>: <br><br>
+                            </h5>
+                            <h4>
+                                <span class="badge bg-danger text-truncate" style="max-width: 400px;">{{ $patient->maux ?? 'Non spécifié' }}</span> 
+                            </h4>
                         </div>
                         
-                    </div>
-                    <button type="button" class="btn btn-light float-right" data-bs-toggle="modal" data-bs-target="#presc">
-                         Délivrer une ordonnance
-                     </button>
-                      </div>
-                      <!-- Stats ends -->
-                      @if($patient->sexe_patient == 'F')
-                        <img src="{{asset ('frontend/F.png') }}" class="img-7x rounded-circle ms-auto"
-                        alt="Patient Admin Template">
-                      @else
-                         <img src="{{asset ('frontend/F.png') }}" class="img-7x rounded-circle ms-auto"
-                        alt="Patient Admin Template">
-                      @endif
-                      
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-            <!-- Row ends -->
+                        <b>Nom</b>: <span style="color: green;">{{ $patient->prenom_patient ?? '' }} {{ $patient->nom_patient ?? '' }}</span><br>
+                        <b>Sexe</b>: {{ $patient->sexe_patient ?? 'Non renseigné' }} <br>
+                        <b>Âge</b>: {{ $patient->age_formatted ?? 'Non renseigné' }} <br>
+                        <b>Profession</b>: {{ $patient->profession ?? 'Non renseignée' }}
+                        
+                        <div style="position: absolute; left: 80%; top: 5px; transform: translateX(-80%);">
+                            <h5 class="card-title">
+                                <u>Constantes vitales</u>: <br><br>
+                            </h5>
+                            
+                            @forelse($last_constance as $constante)
+                                <b>{{ $constante->type }}</b>: {{ $constante->valeur }} {{ $constante->unite }} <br>
+                            @empty
+                                <span class="text-muted">Aucune constante disponible</span>
+                            @endforelse
+                        </div>
+                        
+                        @if(!empty($patient->new_temp))
+                            Actuellement: <span class="badge bg-primary">{{ $patient->new_temp }} °C</span>
+                        @endif 
+                        
+                        @if(!empty($patient->observation))
+                            <span class="badge bg-secondary">
+                                {{ $patient->observation }}
+                            </span>
+                        @endif
 
-            <!-- Row starts -->
-            <div class="row gx-3">
-             <div class="card-header">
-              <h5 class="card-title" style="text-align: center">Constantes relevées</h5> 
-            
-            
-          </div>
-          @if (!Empty($last_constance))
-           
-             @foreach ($last_constance as $type => $constantes)
-              <div class="col-xxl-3 col-sm-4 col-12">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="text-center">
-                      <div class="icon-box md bg-info rounded-5 m-auto">
-                        <i class="ri-stethoscope-line fs-3"></i>
-                      </div>
-                      <div class="mt-3">
-                        <h5>{{ $type }}</h5>
-                        <p class="m-0 opacity-50">3 dernières visites</p>
-                      </div>
+                        <br><br><br>
+                        
+                        @if($user_role_id != 0 && $user_role_id != 1 && $user_role_id != 10)
+                            @if ($patient->is_hospitalisation == 1)
+                                <button type="button" class="btn btn-light float-right" data-bs-toggle="modal" data-bs-target="#constantesModal">
+                                    Nouvelles Constantes
+                                </button>
+                            @endif
+
+                            <button type="button" class="btn btn-light float-right" data-bs-toggle="modal" data-bs-target="#presc">
+                                Délivrer une ordonnance
+                            </button>
+                        @endif
                     </div>
-
-                    <ul class="list-group mt-3">
-                      @foreach (collect($constantes)->take(3) as $constante)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                          <div>{{ Carbon::parse($constante->created_at)->translatedFormat('l d F \à H\hi') }}</div>
-                          <div>{{ $constante->valeur }} {{ $constante->unite }}</div>
-                        </li>
-                      @endforeach
-                    </ul>
-
-                  </div>
-                </div>
-              </div>
-            @endforeach
-            @else
-             <span class="text-muted">Aucune constante disponible</span>
-            
-            @endif
-          </div>
                     
                     <div class="card-body">
                         <div class="custom-tabs-container">
