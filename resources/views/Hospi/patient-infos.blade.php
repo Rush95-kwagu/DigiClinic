@@ -163,7 +163,7 @@ Dossier médical
                                 <td>
                                   <a href="{{ $soins_apk->id_soins }}" class="link-primary text-truncate">{{ $soins_apk->type_soins }}</a>
                                 </td>
-                                <td>{{ Carbon::parse($soins_apk->created_at)->translatedFormat('l d F \à H\hi') }}</td>
+                                <td>{{ Carbon::parse($soins_apk->create_at)->translatedFormat('l d F \à H\hi') }}</td>
                                 <td>
                                   <button class="btn btn-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#viewReportsModal{{ $soins_apk->id_soins }}">

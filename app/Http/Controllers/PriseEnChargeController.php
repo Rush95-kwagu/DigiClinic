@@ -1150,13 +1150,13 @@ $consultationExists = DB::table('tbl_prise_en_charge')
                     'message' => 'Incohérence dans les identifiants'
                 ], 400);
             }
-    
+            
             foreach ($validated['constantes'] as $constante) {
                 DB::table('tbl_constantes')->insert([
                     'id_consultation' => $id_consultation,
                     'centre_id'=>$request->centre_id,
                     'patient_id' => $patient_id,
-                    // 'id_prise_en_charge'=>$constante['id_prise_en_charge'],
+                    'id_prise_en_charge'=>$request->id_prise_en_charge,
                     'constante_count'=>$request->constante_count,
                     'user_id' => Session::get('user_id'),   
                     'type' => $constante['type'],

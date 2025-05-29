@@ -1,5 +1,14 @@
 @extends('layout')
 @section('admin_content')
+<style>
+        .editor-container {
+            margin-bottom: 200px;
+        }
+        .editor-title {
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+    </style>
 
 @php
     $user_role_id = Session::get('user_role_id');
@@ -173,32 +182,61 @@
                                                 <input id="idpa" type="hidden" name="patient_id" value="{{ $patient->patient_id }}">
                                             
                                                 <div class="form-row">
-                                                    <!-- Champs communs -->
-                                                    {{-- <div class="contaire mt-8">
-                                                        <textarea name="" id="" cols="80" rows="10"></textarea>
-                                                        <textarea name="" id="" cols="80" rows="10"></textarea>
-                                                    </div> --}}
-                                                    <div class="col-md-12 mb-3">
-                                                        <label class="control-label">Votre diagnostic</label>
-                                                        <textarea class="form-control" name="diagnostic" rows="3" required></textarea>
+                                                    
+                                                    <div class="col-md-6 mb-3">
+                                                        <div class="editor-editor-container">
+                                                        <div class="editor-title">Interrogatoire</div>
+                                                        <textarea class="form-control" id="editor1" name="interrogatoire" required></textarea>
+                                                    </div>
                                                     </div>
                                             
-                                                    <div class="col-md-10 mb-3">
-                                                        <label>Observation</label>
-                                                        <input type="text" class="form-control" name="observation">
+                                                    <div class="col-md-6 mb-3">
+                                                          <div class="editor-editor-container">
+                                                        <div class="editor-title">Examens physique</div>
+                                                        <textarea class="form-control" id="editor2" name="observation" rows="8" required></textarea>
+                                                    </div>
                                                     </div>
                                             
-                                                    <div class="col-md-12 mb-3">
-                                                        <label>Pièce jointe</label>
+                                                    <div class="file col-md-6 mb-3">
+                                                        <label class="control-label editor-title">Pièce jointe</label>
                                                         <input type="file" class="form-control" name="fichier_joint" accept="application/pdf">
                                                         <div class="text-success small mt-1">PDF supporté</div>
                                                     </div>
+                                                    
                                             
                                                     <!-- Bloc décision (masqué si clôture) -->
-                                                    <div class="affect col-md-12 mb-3">
-                                                        <label class="control-label">Décision</label>
-                                                        <select id="decisionSelect" class="form-select" name="specialiste">
+                                                    {{-- <div class="analys col-md-6 mb-3">
+                                                        <label class="control-label editor-title">Examens Paracliniques</label>
+                                                        <select id="" class="form-select" name="examen">
                                                             <option value="" selected>Choisir une action</option>
+                                                            
+                                                            <optgroup label="Analyses médicales">
+                                                                <option value="3">Analyse</option>
+                                                                
+                                                            </optgroup>
+                                                            <optgroup label="Imagerie médicale">
+                                                                <option value="4">Scanner</option>
+                                                                <option value="5">Radio</option>
+                                                                
+                                                            </optgroup>
+                                                        </select>
+                                                    </div> --}}
+                                                     <div class="diagnostic col-md-6 mb-3">
+                                                          <div class="editor-editor-container">
+                                                        <div class="editor-title">Diagnostics</div>
+                                                        <textarea class="form-control" id="editor3" name="diagnostic" rows="8" required></textarea>
+                                                    </div>
+                                                    </div>
+                                                     <div class="advise col-md-6 mb-3">
+                                                          <div class="editor-editor-container">
+                                                        <div class="editor-title">Conduites à tenir</div>
+                                                        <textarea class="form-control" id="editor4" name="recommandation" rows="8" required></textarea>
+                                                    </div>
+                                                    </div>
+                                                    <div class="affect col-md-12 mb-3">
+                                                        <label class="control-label editor-title">Affecter</label>
+                                                        <select id="decisionSelect" class="form-select" name="specialiste">
+                                                            <option value="" selected>Envoyer vers</option>
                                                             <optgroup label="Hospitalisation">
                                                                 <option value="0">Mise en Hospitalisation</option>
                                                             </optgroup>
@@ -212,18 +250,16 @@
                                                                     </option>
                                                                 @endforeach
                                                             </optgroup>
-                                                            <optgroup label="Analyse/Scanner">
-                                                                <option value="3">Analyse / Scanner</option>
-                                                                
-                                                            </optgroup>
+                                                            
                                                         </select>
                                                     </div>
                                             
                                                     <!-- Bloc ordonnance (visible seulement si clôture) -->
-                                                    <div class="ordo col-md-12 mb-3" style="display: none;">
-                                                        <label class="control-label">Ordonnance</label>
-                                                        <div id="quill_editor"></div>
-                                                        <textarea name="ordonnance" id="textar" hidden></textarea>
+                                                    <div class="ordo col-md-6 mb-3" style="display: none;">
+                                                        <div class="editor-editor-container">
+                                                            <label class="control-label editor-title">Ordonnance de fin de traitement</label>
+                                                            <textarea class="form-control" rows="8" name="ordonnance" id="editor5" hidden></textarea>
+                                                        </div>
                                                     </div>
                                             
                                                     <!-- Switch clôture -->
@@ -234,7 +270,7 @@
                                                     </div>
                                                 </div>
                                             
-                                                <button type="submit" class="btn btn-primary btn-pill mr-2">Valider</button>
+                                                <button type="submit" class="btn btn-primary btn-pill mr-2">Validation</button>
                                                 <button type="reset" class="btn btn-light btn-pill">Annuler</button>
                                             </form>
                                         </div>
@@ -407,7 +443,7 @@
                     <div class="control-group hidden-phone">
                         <label class="control-label" for="textarea2"></label>
                         <br>
-                        <div id="editor2" style="height: 200px;"></div>
+                        <div id="editor6" style="height: 200px;"></div>
                         <input type="hidden" name="ordonnance_consultation" id="ordonnance_consultation" required>
                     </div>
                 </div>
@@ -510,96 +546,151 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-<!-- Initialize Quill editor -->
-<script>
-    const quill = new Quill('#editor2', {
-        theme: 'snow'
-    });
-    
-    quill.on('text-change', function() {
-        document.getElementById('ordonnance_consultation').value = quill.root.innerHTML;
-    });
-</script>
+  <script>
+        ClassicEditor
+            .create(document.querySelector('#editor1'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 1 :', error);
+            });
 
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-  
-    const quill = new Quill('#quill_editor', {
-        theme: 'snow'
-    });
-    quill.on('text-change', function() {
-        document.getElementById('textar').value = quill.root.innerHTML;
-    });
+        ClassicEditor
+            .create(document.querySelector('#editor2'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 2 :', error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor3'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 3 :', error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor4'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 4 :', error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor5'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 5 :', error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#editor6'))
+            .catch(error => {
+                console.error('Erreur sur l’éditeur 6 :', error);
+            });
 
-    
-    const clotureSwitch = document.getElementById('clotureSwitch');
-    const affectDiv = document.querySelector('.affect');
-    const ordoDiv = document.querySelector('.ordo');
-
-    clotureSwitch.addEventListener('change', function() {
-        if(this.checked) {
-            affectDiv.style.display = 'none';
-            ordoDiv.style.display = 'block';
-            document.getElementById('etatHospitalisation').value = '1';
-        } else {
-            affectDiv.style.display = 'block';
-            ordoDiv.style.display = 'none';
-            document.getElementById('etatHospitalisation').value = '0';
-        }
-    });
-
-    // Confirmation avant soumission
-    document.getElementById('traitementForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const decision = clotureSwitch.checked ? 'cloture' : 
-                        document.getElementById('decisionSelect').value;
-        
-        let confirmText, confirmTitle;
-        
-        switch(decision) {
-            case '0':
-                confirmTitle = "Confirmer l'hospitalisation";
-                confirmText = "Voulez-vous vraiment hospitaliser ce patient?";
-                break;
-            case '2':
-                confirmTitle = "Confirmer la mise en observation";
-                confirmText = "Voulez-vous vraiment mettre ce patient en observation?";
-                break;
-            case 'cloture':
-                confirmTitle = "Confirmer la clôture";
-                confirmText = "Voulez-vous vraiment clôturer ce traitement?";
-                break;
-            default:
-                if(decision) { // Transfert spécialiste
-                    const specialisteText = document.getElementById('decisionSelect')
-                        .options[document.getElementById('decisionSelect').selectedIndex].text;
-                    confirmTitle = "Confirmer le transfert";
-                    confirmText = `Voulez-vous vraiment transférer ce patient à ${specialisteText}?`;
-                } else {
-                    Swal.fire('Erreur', 'Veuillez sélectionner une action', 'error');
-                    return;
-                }
-        }
-
-        Swal.fire({
-            title: confirmTitle,
-            text: confirmText,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Oui, confirmer',
-            cancelButtonText: 'Annuler'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                e.target.submit();
-            }
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const editor1Data = document.querySelector('#editor1').value;
+            const editor2Data = document.querySelector('#editor2').value;
+            const editor3Data = document.querySelector('#editor3').value;
+            const editor4Data = document.querySelector('#editor4').value;
+            const editor5Data = document.querySelector('#editor5').value;
+            const editor6Data = document.querySelector('#editor6').value;
+            
+            document.getElementById('output').innerHTML = `
+                <h3>Contenu de l’éditeur 1 :</h3>
+                <div>${editor1Data}</div>
+                <h3>Contenu de l’éditeur 2 :</h3>
+                <div>${editor2Data}</div>
+                <h3>Contenu de l’éditeur 3 :</h3>
+                <div>${editor3Data}</div>
+                <h3>Contenu de l’éditeur 4 :</h3>
+                <div>${editor4Data}</div>
+                <h3>Contenu de l’éditeur 5 :</h3>
+                <div>${editor5Data}</div>
+                <h3>Contenu de l’éditeur 6 :</h3>
+                <div>${editor6Data}</div>
+            `;
         });
-    });
-});
-</script>
+  </script>
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        
+            const clotureSwitch = document.getElementById('clotureSwitch');
+            const affectDiv     = document.querySelector('.affect');
+            const ordoDiv       = document.querySelector('.ordo');
+            const analysDiv     = document.querySelector('.analys');
+            const adviseDiv     = document.querySelector('.advise');
+            const diagnosticDiv = document.querySelector('.diagnostic');
+            const fileDiv       = document.querySelector('.file')
+            
+
+            clotureSwitch.addEventListener('change', function() {
+                if(this.checked) {
+                    affectDiv.style.display     = 'none';
+                    ordoDiv.style.display       = 'block';
+                    analysDiv.style.display     ='none';
+                    adviseDiv.style.display     ='block';
+                    diagnosticDiv.style.display ='none';
+                    fileDiv.style.display       ='none'
+                    document.getElementById('etatHospitalisation').value = '1';
+                } else {
+                    affectDiv.style.display     = 'block';
+                    ordoDiv.style.display       = 'none';
+                    analysDiv.style.display     ='block';
+                    adviseDiv.style.display     ='block';
+                    diagnosticDiv.style.display ='block';
+                    fileDiv.style.display       ='block'
+                    document.getElementById('etatHospitalisation').value = '0';
+                }
+            });
+
+            // Confirmation avant soumission
+            document.getElementById('traitementForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const decision = clotureSwitch.checked ? 'cloture' : 
+                                document.getElementById('decisionSelect').value;
+                
+                let confirmText, confirmTitle;
+                
+                switch(decision) {
+                    case '0':
+                        confirmTitle = "Confirmer l'hospitalisation";
+                        confirmText = "Voulez-vous vraiment hospitaliser ce patient?";
+                        break;
+                    case '2':
+                        confirmTitle = "Confirmer la mise en observation";
+                        confirmText = "Voulez-vous vraiment mettre ce patient en observation?";
+                        break;
+                    case '3':
+                        confirmTitle = "Confirmer l'envoie du patient pour analyse paraclinique";
+                        confirmText = "Voulez-vous vraiment envoyer ce patient en examen ?";
+                        break;
+                    case 'cloture':
+                        confirmTitle = "Confirmer la clôture";
+                        confirmText = "Voulez-vous vraiment clôturer ce traitement?";
+                        break;
+                    default:
+                        if(decision) { // Transfert spécialiste
+                            const specialisteText = document.getElementById('decisionSelect')
+                                .options[document.getElementById('decisionSelect').selectedIndex].text;
+                            confirmTitle = "Confirmer le transfert";
+                            confirmText = `Voulez-vous vraiment transférer ce patient à ${specialisteText}?`;
+                        } else {
+                            Swal.fire('Erreur', 'Veuillez sélectionner une action', 'error');
+                            return;
+                        }
+                }
+
+                Swal.fire({
+                    title: confirmTitle,
+                    text: confirmText,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, confirmer',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        e.target.submit();
+                    }
+                });
+            });
+        });
+  </script>
 
 @push('js')
 <script>

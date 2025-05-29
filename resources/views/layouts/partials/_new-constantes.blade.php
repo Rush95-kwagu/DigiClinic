@@ -5,12 +5,13 @@
               <h5 class="modal-title" id="constantesModalLabel">Gestion des constantes <br><span style="color: rgb(6, 156, 243)"><u>Nom</u></span>  : {{ $patient->nom_patient }};   <span style="color: rgb(6, 156, 243)"><u>Prénoms</u></span> : {{ $patient->prenom_patient }} <br><span style="color: rgb(6, 156, 243)"><u> Âge</u></span> : {{ $patient->age_formatted }}   <span style="color: rgb(6, 156, 243)"><u>Sexe </u></span> {{ $patient->sexe_patient }}</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+         
           <div class="modal-body">
               <form id="constantesForm">
                   @csrf
                   <div class="row">
                       <div class="col-md-4 mb-3">
-                          <input type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge ?? '' }}">
+                          <input type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge}}">
                           <input type="hidden" name="patient_id" value="{{ $patient->patient_id ?? '' }}">
                           <input type="hidden" name="centre_id" value="{{ $centre_id }}">
                           <input type="hidden" name="id_consultation" value="{{ $id_consultation }}">
@@ -95,7 +96,7 @@
               <form action="{{ $form_action }}" method="POST">
                     @csrf
 
-                    <input type="hidden" name="id_prise_en_charge" value="{{ $patient->id_prise_en_charge ?? '' }}">
+                    <input type="hidden" name="id_prise_en_charge" value="{{$patient->id_prise_en_charge}}">
                     <input type="hidden" name="patient_id" value="{{ $patient->patient_id ?? '' }}">
                     <input type="hidden" name="id_consultation" value="{{$id_consultation}}">
                     <input type="hidden" name="centre_id" value="{{ $centre_id ?? '' }}">

@@ -19,7 +19,6 @@ use App\Models\AnalysPayedResult;
 use App\Models\Demand;
 use App\Models\Prestation;
 
-
 class ConsultationController extends Controller
 {
     public function UserAuthCheck()
@@ -985,6 +984,8 @@ class ConsultationController extends Controller
     
         $consultData = array_merge([
             'diagnostic' => $request->diagnostic,
+            'recommandation'=>$request->recommandation,
+            'interrogatoire'=>$request->interrogatoire,
             'observation' => $request->observation,
             'conslt_updated_at' => now()
         ], $fileData);
@@ -1258,6 +1259,7 @@ class ConsultationController extends Controller
 
         public function traitement_hospitalisation($id_consultation,$patient_id)
         {
+           
             $this->UserAuthCheck();
             $this->SpecialisteAuthCheck();
             $user = Session::get('user_id');
@@ -1304,13 +1306,16 @@ class ConsultationController extends Controller
                 'last_constance'  => $last_constance,
                 'specialistes'    => $specialistes,
                 'allsoins_apk'    => $allsoins_apk,
-                'all_ordo'       => $all_ordo, 
+                'all_ordo'        => $all_ordo, 
                 'patient'         => $patient_data->first() 
             ]);
         }
 
-        public function save_soins_traitement(Request $request, $id_consultation, $patient_id)
+        public function save_soins_traitement(Request $request, $id_consultation)
         {
+            $patient_id=$request->patient_id;
+            $id_consultation=$request->id_consultation;
+            $id_prise_en_charge=$request->id_prise_en_charge;
             $this->UserAuthCheck();
             $this->InfAuthCheck();
             $validated = $request->validate([
@@ -1329,14 +1334,13 @@ class ConsultationController extends Controller
             DB::table('tbl_soins_apk')->insert([
                 'id_consultation'    => $id_consultation,
                 'patient_id'         => $patient_id,
-                'id_prise_en_charge' => $validated['id_prise_en_charge'],
+                'id_prise_en_charge' => $id_prise_en_charge,
                 'description_soins'  => strip_tags($validated['description_soins']),
                 'type_soins'         => strip_tags($validated['type_soins']),
                 'user_id'            => Session::get('user_id'),
                 'centre_id'          => Session::get('centre_id'),
                 'user_role_id'       => Session::get('user_role_id'),
-                'created_at'         => now(),
-                'updated_at'         => now(),
+
             ]);
 
             return redirect()->back()->with('success', 'Traitement enregistré avec succès.');
