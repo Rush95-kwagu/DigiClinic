@@ -276,7 +276,7 @@ class ConsultationController extends Controller
     function getPatientAnalyse($id,$id_demande){
         
        // Récupération des infos du patient via AnalysPayed
-        $patient = AnalysPayed::with(['patient:patient_id,nom_patient,prenom_patient'])
+        $patient = AnalysPayed::with(['patient:patient_id,nom_patient,prenom_patient,sexe_patient,datenais'])
         ->where('patient_id', $id)
         ->first()
         ?->patient;
@@ -304,22 +304,28 @@ class ConsultationController extends Controller
         // Résultat combiné
         $result = [
             'patient_id' => $patient->patient_id,
+            'datenais' => $patient->datenais,
+            'sexe_patient' => $patient->sexe_patient,
             'nom' => $patient->nom_patient,
             'prenom' => $patient->prenom_patient,
             'analyses' => $analyses,
         ];
      $ids = $analyses->pluck('analyse_id')->all();
-     $hasResults = $analyses->contains(function ($analyse) {
+   $hasResults = $analyses->contains(function ($analyse) {
             return !empty($analyse['resultat']);
         });
-     // dd($hasResults);
-    return view('Analys.patient_analyse_details')->with([
-        'patient' => $result,
-        'ids' => $ids,
-        'can_closed' => $hasResults && $analyses->where('is_closed', false)->count() !== 0,
-        'is_closed' => $analyses->where('is_closed', false)->count() === 0,
-        'idDemand' => $analyses->first()['idDemand'] ?? null,
-    ]);
+
+        $canClosed = $analyses->every(function ($analyse) {
+            return !empty($analyse['resultat']);
+        });
+
+        return view('Analys.patient_analyse_details')->with([
+            'patient' => $result,
+            'ids' => $ids,
+            'can_closed' => $canClosed,
+            'is_closed' => $analyses->where('is_closed', false)->count() === 0,
+            'idDemand' => $analyses->first()['idDemand'] ?? null 
+        ]);
 
     }
 
@@ -589,6 +595,7 @@ class ConsultationController extends Controller
         ->leftJoin('tbl_prestation as pr', 'a.prestation_id', '=', 'pr.prestation_id')
         ->leftJoin('tbl_patient as p', 'a.patient_id', '=', 'p.patient_id')
         ->leftJoin('tbl_resultats_analyse as r', 'pr.prestation_id', '=', 'r.prestation_id')        // Jointure avec la table des patients
+        ->leftJoin('tbl_demande_ext as d', 'a.id_demande', '=', 'd.id_demande')        // Jointure avec la table des patients
         ->whereIn('a.payed_analyse_id', explode(',',$analyse_id))
         ->where('a.treated', true)
         ->where('a.patient_id', $id)
@@ -598,8 +605,11 @@ class ConsultationController extends Controller
             // Informations du patient
             'p.patient_id as patient_id',
             'a.id_demande  as demandId',
+            'd.created_at  as dateDemand',
             'p.nom_patient',
             'p.prenom_patient',
+            'p.sexe_patient',
+            'p.datenais',
 
             // Informations de l'analyse
             'a.payed_analyse_id as analyse_id',
@@ -658,7 +668,11 @@ class ConsultationController extends Controller
 
              return view ('Resultat.analyse_pdf')
                 ->with([
-            "patient"=>$analyse[0]->nom_patient. " ".$analyse[0]->prenom_patient,
+            "patient_nom"=>$analyse[0]->nom_patient,
+            "patient_prenoms"=>$analyse[0]->prenom_patient,
+            "dateDemand"=>$analyse[0]->dateDemand,
+            "sex"=>$analyse[0]->sexe_patient,
+            "age"=>calculerAge($analyse[0]->datenais),
             "data1"=>$data1,
             "data2"=>$data2,
             "qrCode"=>$qrCode,
