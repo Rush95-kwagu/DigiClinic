@@ -2,7 +2,7 @@
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
-		<title>Ordonnance</title>
+		<title>Résultat Analyse</title>
 		<link rel="stylesheet" href="style.css">
 		<link rel="license" href="https://www.opensource.org/licenses/mit-license/">
 
@@ -111,9 +111,29 @@
 			.cut { -webkit-transition: opacity 100ms ease-in; }
 
 			tr:hover .cut { opacity: 1; }
+	
+			   .container {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .col-6 {
+            width: 50%;
+            box-sizing: border-box;
+            padding: 5px 10px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
 
 
-			 .header {
+	.header {
 		text-align: center;
 		border-bottom: 2px solid #ccc;
 		padding-bottom: 10px;
@@ -310,6 +330,9 @@
             page-break-before: always;
         }
 
+		.mb-3{
+			margin-bottom:25px;
+		}
 
        
 
@@ -351,12 +374,24 @@
     @include('Resultat.pdf-header')
     <hr>
 	<br><br>
-
-
     <h1>Résultats des analyses</h1><br>
-    <p><strong>Patient :</strong> {{ $patient }}</p><br>
-    <p><strong>Date :</strong> {{ now()->format('d/m/Y H:i') }}</p><br>
-    <p><strong>Laboratin :</strong> {{$userInfo->nom}} {{$userInfo->prenom}}</p><br>
+
+	 <div class="container">
+        <div class="row mb-3">
+			<div class="col-6"><span class="label">Service Prescripteur :</span> ----------</div>
+            <div class="col-6"><span class="label">Nom :</span> {{ $patient_nom }}</div>
+
+			<div class="col-6"><span class="label">Date demande :</span> {{ $dateDemand }}</div>
+            <div class="col-6"><span class="label">Prénom :</span> {{ $patient_prenoms}}</div>
+
+			<div class="col-6"><span class="label">Date prélèvement :</span> {{ $dateDemand}}</div>
+            <div class="col-6"><span class="label">Sexe :</span> {{ $sex =="M" ? "Homme":"Femme" }}</div>
+            
+			<div class="col-6"><span class="label">N° Dossier:</span> ------</div>
+			<div class="col-6"><span class="label">Âge :</span> {{ $age }} ans </div>
+        </div>
+    </div>
+
 			<table>
 				<thead>
 					<tr>
@@ -434,6 +469,16 @@
 			</div>
 			<br> <br>
 		@endforeach
+
+
+
+		<div style="width: 100%; margin-top: 50px; text-align: right;">
+				<div style="display: inline-block; text-align: center;">
+					<p style="margin-bottom: 60px;">Fait à Cotonou, le {{ \Carbon\Carbon::now()->format('d/m/Y') }}</p>
+					<p style="font-weight: bold;">{{$userInfo->nom}} {{$userInfo->prenom}}</p>
+					<p style="margin-top: 60px;">Signature</p>
+				</div>
+			</div>
 		<footer>
 		
 			<h1><span>Notre devise</span></h1>
